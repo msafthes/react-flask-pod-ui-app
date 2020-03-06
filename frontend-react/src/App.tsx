@@ -2,12 +2,6 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-declare global {
-  interface Window {
-      token:String;
-  }
-}
-
 function App() {
   return (
     <div className="App">
@@ -16,7 +10,6 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
-        <p>My Token = {window.token}</p>
         <a
           className="App-link"
           href="https://reactjs.org"
