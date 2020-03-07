@@ -30,8 +30,8 @@ def get_stores():
     print(process.stdout)
 
     process2 = subprocess.run(['ls'],
-                             stdout=subprocess.PIPE,
-                             universal_newlines=True)
+                              stdout=subprocess.PIPE,
+                              universal_newlines=True)
     print("process2:")
     print(process2.stdout)
 
@@ -42,8 +42,8 @@ def get_stores():
     # print(process3.stdout)
 
     process4 = subprocess.run(['ls', '-a'],
-                             stdout=subprocess.PIPE,
-                             universal_newlines=True)
+                              stdout=subprocess.PIPE,
+                              universal_newlines=True)
 
     # print("process4: " + process4.stdout)
     # print(type(process4.stdout))
@@ -55,7 +55,15 @@ def get_stores():
     test = ' '.join(test)
     print("test: " + test)
 
-    return f"Main Page for Flask Backend, test message: {process.stdout} | ls: {process2.stdout} | ls -a: {process4.stdout} | > done"
+    process4 = subprocess.run(['podman', 'images'],
+                              stdout=subprocess.PIPE,
+                              universal_newlines=True)
+
+    podman_images = process4.stdout.split()
+    podman_images = ' '.join(podman_images)
+    print("podman_images: " + podman_images)
+
+    return f"Main Page for Flask Backend, test message: {process.stdout} | ls: {process2.stdout} | ls -a: {process4.stdout} | podman images: {podman_images} > done"
 
 
 # GET /store
