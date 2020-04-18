@@ -3,6 +3,8 @@ from flask_cors import CORS
 
 import subprocess
 
+from flask import jsonify
+
 app = Flask("__main__")
 CORS(app)
 
@@ -45,30 +47,6 @@ def get_stores():
     #                           stdout=subprocess.PIPE,
     #                           universal_newlines=True)
 
-    # # print("process4: " + process4.stdout)
-    # # print(type(process4.stdout))
-    # print("testing" + process4.stdout + "length:" + str(len(process4.stdout)))
-    # for char in process4.stdout:
-    #     print("char " + str(ord(char)) + " = " + char)
-
-    # test = process4.stdout.split()
-    # test = ' '.join(test)
-    # print("test: " + test)
-
-    process4 = subprocess.run(['podman', 'images --format "{{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}|"'],
-                              stdout=subprocess.PIPE,
-                              universal_newlines=True)
-
-    # podman_images = process4.stdout.split()
-    # podman_images = ' '.join(podman_images)
-    # print("podman_images: " + podman_images)
-
-    # return f"Main Page for Flask Backend, test message: {process.stdout} | ls: {process2.stdout} | ls -a: {process4.stdout} | podman images: {podman_images} > done"
-
-    # test_images_output = "REPOSITORY TAG IMAGE ID CREATED SIZE docker.io/library/nginx latest 6678c7c2e56c 4 weeks ago 131 MB docker.io/library/alpine latest e7d92cdc71fe 2 months ago 5.86 MB | podman images: REPOSITORY TAG IMAGE ID CREATED SIZE docker.io/library/nginx latest 6678c7c2e56c 4 weeks ago 131 MB docker.io/library/alpine latest e7d92cdc71fe 2 months ago 5.86 MB"
-    # images_info = test_images_output
-    # images_info = test_images_output.split("SIZE ")[1]
-
     # REPOSITORY    TAG      IMAGE ID    CREATED    SIZE
     # podman images --format "{{.Repository}} {{.Tag}} {{.ID}} {{.Created}} {{.Size}}|"
     # podman images --format "{{}}"
@@ -76,11 +54,35 @@ def get_stores():
     # podman images --format "{{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}|"
 
     # "docker.io/library/nginx latest 6678c7c2e56c 4 weeks ago 131 MB|" "docker.io/library/alpine latest e7d92cdc71fe 2 months ago 5.86 MB|"
-    images_info = "docker.io/library/nginx#latest#6678c7c2e56c#4 weeks ago #131 MB|" "docker.io/library/alpine#latest#e7d92cdc71fe#2 months ago#5.86 MB|"
-    images_info = images_info.split("|")[0]
-    images_info = images_info.split("#")
 
-    return f"{images_info}"
+    # Example:
+    # "docker.io/library/nginx#latest#6678c7c2e56c#4 weeks ago #131 MB|" "docker.io/library/alpine#latest#e7d92cdc71fe#2 months ago#5.86 MB|"
+
+    process4 = subprocess.run(['podman', 'images --format "{{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}|"'],
+                              stdout=subprocess.PIPE,
+                              universal_newlines=True)
+
+    podman_images_array = process4.stdout.split("|")
+    podman_images_array.pop()  # Removing the last '' empty part after split
+
+    images = {}
+
+    index = 0
+    for item in podman_images_array:
+        image_parts = item.split("#")
+
+        image = {
+            'repository': image_parts[0],
+            'tag': image_parts[1],
+            'id': image_parts[2],
+            'created': image_parts[3],
+            'size': image_parts[4]
+        }
+
+        images[index] = image
+        index += 1
+
+    return jsonify(images)
 
 
 # GET /store
