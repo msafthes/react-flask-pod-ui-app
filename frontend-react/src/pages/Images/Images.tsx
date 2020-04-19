@@ -1,20 +1,34 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import css from './Images.module.css';
 
-import axios from 'axios';
+// import axios from 'axios';
 
-const Images = (props) => {
-    const [images, setImages] = useState([]);
+import { connect } from 'react-redux';
+import * as actions from './../../store/actions/index';
+
+
+const Images = props => {
+    const { fetchImages, imagesData } = props;
 
     useEffect(() => {
-        const fetchData = async () => {
-            const result = await axios(
-                'http://127.0.0.1:5000/images',
-            );
-            setImages(result.data);
-        };
-        fetchData();
-    }, []);
+        fetchImages();
+    }, [fetchImages]);
+
+
+    const [images, setImages] = useState([]);
+
+    console.log("props:");
+    console.log(props);
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const result = await axios(
+    //             'http://127.0.0.1:5000/images',
+    //         );
+    //         setImages(result.data);
+    //     };
+    //     fetchData();
+    // }, []);
 
     const imagesTitleClasses = [css.Content, css.Heading];
 
@@ -31,7 +45,7 @@ const Images = (props) => {
                         <div className={css.Created}>Created</div>
                         <div className={css.Size}>Size</div>
                     </div>
-                    {props.imagesData.map((image, i) => {
+                    {/* {props.imagesData.map((image, i) => {
                         return <div className={css.Content} key={image.key}>
                             <div className={css.Repository}>{image.repository}</div>
                             <div className={css.Tag}>{image.tag}</div>
@@ -39,8 +53,8 @@ const Images = (props) => {
                             <div className={css.Created}>{image.created}</div>
                             <div className={css.Size}>{image.size}</div>
                         </div>
-                    })}
-                    {props.images && props.images.map((image, i) => {
+                    })} */}
+                    {props.images && props.images.length && props.images.map((image, i) => {
                         return <div className={css.Content} key={image.key}>
                             <div className={css.Repository}>{image.repository}</div>
                             <div className={css.Tag}>{image.tag}</div>
@@ -55,4 +69,19 @@ const Images = (props) => {
     );
 };
 
-export default Images;
+const mapStateToProps = state => {
+    return {
+        images: state.images
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchImages: () => dispatch(actions.fetchImages())
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Images);

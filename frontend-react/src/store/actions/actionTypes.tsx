@@ -1,0 +1,2 @@
+export const FETCH_IMAGES = 'FETCH_IMAGES';
+export const FETCH_IMAGES_FAILED = 'FETCH_IMAGES_FAILED';
