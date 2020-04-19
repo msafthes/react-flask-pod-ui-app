@@ -14,11 +14,10 @@ const Images = props => {
         fetchImages();
     }, [fetchImages]);
 
+    const images = props.images.images;
 
-    const [images, setImages] = useState([]);
 
-    console.log("props:");
-    console.log(props);
+    // const [setImages] = useState([]);
 
     // useEffect(() => {
     //     const fetchData = async () => {
@@ -54,7 +53,7 @@ const Images = props => {
                             <div className={css.Size}>{image.size}</div>
                         </div>
                     })} */}
-                    {props.images && props.images.length && props.images.map((image, i) => {
+                    {images && images.length && images.map((image, i) => {
                         return <div className={css.Content} key={image.key}>
                             <div className={css.Repository}>{image.repository}</div>
                             <div className={css.Tag}>{image.tag}</div>
