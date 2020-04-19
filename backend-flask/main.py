@@ -23,9 +23,8 @@ def get_stores():
     podman_images_array = process4.stdout.split('\n')
     podman_images_array.pop()  # Removing the last '' empty part after split
 
-    images = {}
+    images = {"images:" []}
 
-    index = 0
     for item in podman_images_array:
 
         image_parts = item.split("#")
@@ -38,9 +37,9 @@ def get_stores():
             'size': image_parts[4]
         }
 
-        images[index] = image
-        index += 1
+        images["images"].append(image)
 
     return jsonify(images)
+
 
 app.run(debug=True)
