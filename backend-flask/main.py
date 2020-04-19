@@ -8,7 +8,7 @@ app = Flask("__main__")
 CORS(app)
 
 
-# GET /
+# GET /images
 @app.route('/images', methods=['GET', 'POST'])
 def get_stores():
 
@@ -23,7 +23,7 @@ def get_stores():
     podman_images_array = process4.stdout.split('\n')
     podman_images_array.pop()  # Removing the last '' empty part after split
 
-    images = {"images:" []}
+    images = {"images": []}
 
     for item in podman_images_array:
 
@@ -41,5 +41,10 @@ def get_stores():
 
     return jsonify(images)
 
+# GET /
+@app.route('/', methods=['GET', 'POST'])
+def get_hello():
+
+    return "Podman REST API"
 
 app.run(debug=True)
