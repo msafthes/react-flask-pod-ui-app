@@ -1,0 +1,10 @@
+.Layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #181818;
+    font-size: calc(4px + 2vmin);
+    font-family: 'Roboto', sans-serif;
+    color: white;
+  }
+  

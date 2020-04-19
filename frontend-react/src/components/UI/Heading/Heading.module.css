@@ -1,0 +1,27 @@
+@import '../../../Variables.css';
+
+.Heading {
+    align-self: center;
+    color: var(--color-purple);
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+.SmallFont {
+    font-size: 1.3rem;
+}
+
+.SmallMargin {
+    margin-top: 0.7rem;
+    margin-bottom: 0.5rem;
+}
+
+.Left {
+    align-self: flex-start;
+}
+
+@media (min-width: 1000px) {
+    .Heading {
+        font-size: 1.7rem;
+    }
+}

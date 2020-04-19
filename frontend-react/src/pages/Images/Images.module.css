@@ -1,0 +1,106 @@
+@import '../../Variables.css';
+
+.Images {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 6rem;
+}
+
+.Wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: black;
+    border-radius: 0.5rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    margin-bottom: 3rem;
+}
+.Info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+.Content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.Heading {
+    color: var(--color-purple);
+}
+
+/* IMAGES */
+.Repository {
+    width: 23%;
+}
+.Tag {
+    width: 27%;
+}
+.Id {
+    width: 20%;
+}
+.Created {
+    width: 15%;
+}
+.Size {
+    width: 15%;
+}
+
+.Headline {
+    color: var(--color-purple);
+}
+
+.Images h1,
+.Images h2 {
+    font-weight: 500;
+}
+
+.Images h1 {
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+}
+
+.Images h2 {
+    font-size: 1.6rem;
+}
+
+.Images p {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+@media (min-width: 1000px) {
+    .Images {
+        margin-top: 10rem;
+    }
+
+    .Wrapper {
+        width: 90%;
+        padding: 4.5rem 2rem 5rem 2rem;
+    }
+    .Info {
+        flex-direction: column;
+        justify-content: space-around;
+        margin-top: 4rem;
+    }
+
+    .Images h1 {
+        font-size: 2.5rem;
+    }
+
+    .Images p {
+        margin-bottom: 1rem;
+    }
+}
