@@ -1,33 +1,35 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
+
+import { configureStore } from './store';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
-import promise from 'redux-promise-middleware'
 
-import imagesReducer from './store/reducers/images';
-
-
-const composeEnhancers = compose;
-
-const rootReducer = combineReducers({
-    images: imagesReducer
-});
-
-const store = createStore(rootReducer, composeEnhancers(
-    applyMiddleware(promise)
-));
+const store = configureStore();
+const persistor = persistStore(store)
 
 const app = (
     <Provider store={store}>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </PersistGate>
     </Provider>
 );
 
-ReactDOM.render(app, document.getElementById('root'));
+ReactDOM.render(
+    <React.StrictMode>
+        {app}
+    </React.StrictMode>,
+    document.getElementById('root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
