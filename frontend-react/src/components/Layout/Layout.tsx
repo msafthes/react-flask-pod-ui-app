@@ -1,51 +1,43 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import css from './Layout.module.css';
 
 import Toolbar from '../Navigation/Toolbar/Toolbar';
 import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
 
-type MyProps = { isDesktop: boolean };
-type MyState = { showSideDrawer: boolean };
-// class App extends React.Component<MyProps, MyState> {
-//     ...
-// }
 
-// class Layout extends Component {
-class Layout extends React.Component<MyProps, MyState> {
-    state = {
-        showSideDrawer: false,
+type LayoutProps = {
+    isDesktop: boolean,
+    children: React.ReactNode,
+};
+
+const Layout = (props: LayoutProps) => {
+    const [showSideDrawer, setShowSideDrawer] = useState<boolean>(false);
+
+    const sideDrawerClosedHandler = () => {
+        setShowSideDrawer(false);
     };
 
-    sideDrawerClosedHandler = () => {
-        this.setState({ showSideDrawer: false });
+    const sideDrawerToggleHandler = () => {
+        setShowSideDrawer(!showSideDrawer);
     };
 
-    sideDrawerToggleHandler = () => {
-        this.setState(prevState => {
-            return { showSideDrawer: !prevState.showSideDrawer };
-        });
-    };
+    return (
+        <React.Fragment>
+            <Toolbar
+                isDesktop={props.isDesktop}
+                drawerToggleClicked={sideDrawerToggleHandler}
+            />
 
-    render() {
-        const { isDesktop } = this.props;
-
-        return (
-            <React.Fragment>
-                <Toolbar
-                    isDesktop={isDesktop}
-                    drawerToggleClicked={this.sideDrawerToggleHandler}
+            {!props.isDesktop && (
+                <SideDrawer
+                    open={showSideDrawer}
+                    closed={sideDrawerClosedHandler}
                 />
-                {!isDesktop && (
-                    <SideDrawer
-                        open={this.state.showSideDrawer}
-                        closed={this.sideDrawerClosedHandler}
-                    />
-                )}
+            )}
 
-                <main className={css.Layout}>{this.props.children}</main>
-            </React.Fragment>
-        );
-    }
+            <main className={css.Layout}>{props.children}</main>
+        </React.Fragment>
+    );
 }
 
 export default Layout;
