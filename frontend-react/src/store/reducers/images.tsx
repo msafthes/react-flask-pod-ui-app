@@ -1,41 +1,34 @@
-import * as actionTypes from '../actions/actionTypes';
+import {
+    IImagesState,
+    FETCH_IMAGES_START, FETCH_IMAGES_SUCCESS, FETCH_IMAGES_FAIL,
+    IFetchImagesStartAction, IFetchImagesSuccessAction, IFetchImagesFailAction,
+    FetchImagesTypes
+} from '../actions/actionTypes';
 
-const initialState = {
-    images: []
+
+const initialState: IImagesState = {
+    images: [],
+    error: '',
+    loading: false,
 };
 
-const updateObject = (oldObject, updatedProperties) => {
-    return {
-        ...oldObject,
-        ...updatedProperties
-    };
+const fetchImagesStart = (state: IImagesState, action: IFetchImagesStartAction): IImagesState => {
+    return { ...state, error: '', loading: true }
 };
 
-const setImages = (state, action) => {
-    return updateObject(state, {
-        images: [...action.payload.images],
-        error: false
-    });
+const fetchImagesSuccess = (state: IImagesState, action: IFetchImagesSuccessAction): IImagesState => {
+    return { ...state, images: action.images, error: '', loading: false }
 };
 
-const fetchImagesFailed = (state, action) => {
-    return updateObject(state, { error: true });
+const fetchImagesFail = (state: IImagesState, action: IFetchImagesFailAction): IImagesState => {
+    return { ...state, error: action.error, loading: false }
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: FetchImagesTypes): IImagesState => {
     switch (action.type) {
-        case `${actionTypes.FETCH_IMAGES}_PENDING`:
-            return state;
-
-        case `${actionTypes.FETCH_IMAGES}_FULFILLED`:
-            return setImages(state, action);
-        // return {
-        //     images: action.payload.message,
-        // }
-
-        case `${actionTypes.FETCH_IMAGES}_REJECTED`:
-            return fetchImagesFailed(state, action);
-
+        case FETCH_IMAGES_START: return fetchImagesStart(state, action);
+        case FETCH_IMAGES_SUCCESS: return fetchImagesSuccess(state, action);
+        case FETCH_IMAGES_FAIL: return fetchImagesFail(state, action);
         default: return state;
     }
 };
