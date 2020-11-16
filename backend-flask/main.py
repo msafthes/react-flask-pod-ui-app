@@ -61,7 +61,7 @@ def get_containers():
         container_parts = item.split("#")
 
         container = {
-            'id': container_parts[0],
+            'containerId': container_parts[0],
             'image': container_parts[1],
             'command': container_parts[2],
             'created': container_parts[3],
