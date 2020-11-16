@@ -7,7 +7,7 @@ const Intro = () => {
         <div className={css.Intro}>
             <div className={css.Content}>
                 <h1>Welcome to Podman Web UI Demo!</h1>
-                <h2>podman images command is ready for testing</h2>
+                <h2>commands ready for testing: podman images | podman ps</h2>
                 <NavLink to="/images" className={css.Link}>
                     Try it!
                 </NavLink>

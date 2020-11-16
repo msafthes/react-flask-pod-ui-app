@@ -35,6 +35,15 @@ const NavigationItems = props => (
                 Images
             </NavLink>
         </li>
+        <li className={css.Item}>
+            <NavLink
+                to="/containers"
+                className={css.Link}
+                activeClassName={css.active}
+            >
+                Containers
+            </NavLink>
+        </li>
     </ul>
 );
 

@@ -14,6 +14,10 @@ const Images = React.lazy(() => {
   return import('./pages/Images/Images');
 });
 
+const Containers = React.lazy(() => {
+  return import('./pages/Containers/Containers');
+});
+
 interface IAppProps {
   isAuthenticated: boolean
 }
@@ -70,6 +74,7 @@ const App = (props: IAppProps) => {
     <Switch>
       <Route path="/" exact component={Intro} />
       <Route path="/images/" render={() => <Images imagesData={imagesDataTest} />} />
+      <Route path="/containers/" render={() => <Containers />} />
       <Redirect to="/" />
     </Switch>
   );

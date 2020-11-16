@@ -49,7 +49,7 @@ const Images = (props: IImagesProps) => {
                 <div className={css.Info}>
                     <div className={imagesTitleClasses.join(' ')}>
                         <div className={css.Repository}>Repository</div>
-                        <div className={css.Tag}> Tag</div>
+                        <div className={css.Tag}>Tag</div>
                         <div className={css.Id}>ID</div>
                         <div className={css.Created}>Created</div>
                         <div className={css.Size}>Size</div>

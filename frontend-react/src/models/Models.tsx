@@ -6,3 +6,13 @@ export interface Image {
     size: string,           // "131 MB"
     tag: string             // "1.17.10-alpine-perl"
 }
+
+export interface Container {
+    key: number,            // 0
+    containerId: string,    // "5ae4a214e530"
+    image: string,          // "registry.fedoraproject.org/f29/httpd:latest"
+    command: string,        // "/usr/bin/run-http..."
+    created: string,        // "4 minutes ago"
+    ports: string,          // "0.0.0.0:8080->8080/tcp"
+    names: string           // "cool_kalam"
+}

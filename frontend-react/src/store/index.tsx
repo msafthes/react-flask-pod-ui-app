@@ -4,6 +4,7 @@ import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
 import imagesReducer from './reducers/images';
+import containersReducer from './reducers/containers';
 
 
 declare global {
@@ -20,7 +21,8 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-    images: imagesReducer
+    images: imagesReducer,
+    containers: containersReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
