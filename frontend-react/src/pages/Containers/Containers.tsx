@@ -13,7 +13,9 @@ import { Container } from '../../models/Models';
 interface IContainersProps {
     containers: Container[],
     loading: boolean,
-    fetchContainers: Function
+    fetchContainers: Function,
+
+    containersDataTest: Container[]
 }
 
 const Containers = (props: IContainersProps) => {
@@ -23,6 +25,7 @@ const Containers = (props: IContainersProps) => {
         fetchContainers();
     }, [fetchContainers]);
 
+    // const containers = props.containersDataTest
 
     const containersTitleClasses = [css.Content, css.Heading];
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>

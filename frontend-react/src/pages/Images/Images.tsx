@@ -13,7 +13,9 @@ import { Image } from '../../models/Models';
 interface IImagesProps {
     images: Image[],
     loading: boolean,
-    fetchImages: Function
+    fetchImages: Function,
+
+    imagesDataTest: Image[]
 }
 
 const Images = (props: IImagesProps) => {
@@ -23,6 +25,7 @@ const Images = (props: IImagesProps) => {
         fetchImages();
     }, [fetchImages]);
 
+    // const images = props.imagesDataTest
 
     const imagesTitleClasses = [css.Content, css.Heading];
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>

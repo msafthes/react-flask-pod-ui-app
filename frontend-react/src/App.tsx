@@ -70,11 +70,32 @@ const App = (props: IAppProps) => {
     }
   ];
 
+  const containersDataTest = [
+    {
+      key: 0,                                               // 0
+      containerId: "5ae4a214e530",                          // "5ae4a214e530"
+      image: "registry.fedoraproject.org/f29/httpd:latest", // "registry.fedoraproject.org/f29/httpd:latest"
+      command: "/usr/bin/run-http...",                      // "/usr/bin/run-http..."
+      created: "4 minutes ago",                             // "4 minutes ago"
+      ports: "0.0.0.0:8080->8080/tcp",                      // "0.0.0.0:8080->8080/tcp"
+      names: "cool_kalam"                                   // "cool_kalam"
+    },
+    {
+      key: 1,                                               // 0
+      containerId: "1235ae4a214e530123",                    // "5ae4a214e530"
+      image: "second.fedoraproject.org/second",             // "registry.fedoraproject.org/f29/httpd:latest"
+      command: "test/test/usr/bin/run-http...",             // "/usr/bin/run-http..."
+      created: "21 minutes ago",                            // "4 minutes ago"
+      ports: "1.1.1.1:8080->8080/tcp",                      // "0.0.0.0:8080->8080/tcp"
+      names: "test_name"                                    // "cool_kalam"
+    },
+  ];
+
   let routes = (
     <Switch>
       <Route path="/" exact component={Intro} />
-      <Route path="/images/" render={() => <Images imagesData={imagesDataTest} />} />
-      <Route path="/containers/" render={() => <Containers />} />
+      <Route path="/images/" render={() => <Images imagesDataTest={imagesDataTest} />} />
+      <Route path="/containers/" render={() => <Containers containersDataTest={containersDataTest} />} />
       <Redirect to="/" />
     </Switch>
   );
