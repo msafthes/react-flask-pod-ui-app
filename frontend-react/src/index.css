@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+/* Material UI changes */
+.MuiCheckbox-root {
+  color: #3f51b5 !important;
+}
