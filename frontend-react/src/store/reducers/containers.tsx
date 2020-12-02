@@ -3,9 +3,9 @@ import {
     FETCH_CONTAINERS_START, FETCH_CONTAINERS_SUCCESS, FETCH_CONTAINERS_FAIL,
     IFetchContainersStartAction, IFetchContainersSuccessAction, IFetchContainersFailAction,
     FetchContainersTypes,
-    KILL_CONTAINERS_START, KILL_CONTAINERS_SUCCESS, KILL_CONTAINERS_FAIL,
-    IKillContainersStartAction, IKillContainersSuccessAction, IKillContainersFailAction,
-    KillContainersTypes
+    REMOVE_CONTAINERS_START, REMOVE_CONTAINERS_SUCCESS, REMOVE_CONTAINERS_FAIL,
+    IRemoveContainersStartAction, IRemoveContainersSuccessAction, IRemoveContainersFailAction,
+    RemoveContainersTypes
 } from '../actions/actionTypes';
 
 
@@ -28,27 +28,27 @@ const fetchContainersFail = (state: IContainersState, action: IFetchContainersFa
     return { ...state, error: action.error, loading: false }
 };
 
-// Kill
-const killContainersStart = (state: IContainersState, action: IKillContainersStartAction): IContainersState => {
+// Remove
+const removeContainersStart = (state: IContainersState, action: IRemoveContainersStartAction): IContainersState => {
     return { ...state, error: '', loading: true }
 };
 
-const killContainersSuccess = (state: IContainersState, action: IKillContainersSuccessAction): IContainersState => {
+const removeContainersSuccess = (state: IContainersState, action: IRemoveContainersSuccessAction): IContainersState => {
     return { ...state, containers: action.containers, error: '', loading: false }
 };
 
-const killContainersFail = (state: IContainersState, action: IKillContainersFailAction): IContainersState => {
+const removeContainersFail = (state: IContainersState, action: IRemoveContainersFailAction): IContainersState => {
     return { ...state, error: action.error, loading: false }
 };
 
-const reducer = (state = initialState, action: FetchContainersTypes | KillContainersTypes): IContainersState => {
+const reducer = (state = initialState, action: FetchContainersTypes | RemoveContainersTypes): IContainersState => {
     switch (action.type) {
         case FETCH_CONTAINERS_START: return fetchContainersStart(state, action);
         case FETCH_CONTAINERS_SUCCESS: return fetchContainersSuccess(state, action);
         case FETCH_CONTAINERS_FAIL: return fetchContainersFail(state, action);
-        case KILL_CONTAINERS_START: return killContainersStart(state, action);
-        case KILL_CONTAINERS_SUCCESS: return killContainersSuccess(state, action);
-        case KILL_CONTAINERS_FAIL: return killContainersFail(state, action);
+        case REMOVE_CONTAINERS_START: return removeContainersStart(state, action);
+        case REMOVE_CONTAINERS_SUCCESS: return removeContainersSuccess(state, action);
+        case REMOVE_CONTAINERS_FAIL: return removeContainersFail(state, action);
         default: return state;
     }
 };

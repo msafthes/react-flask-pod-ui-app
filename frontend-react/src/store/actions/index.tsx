@@ -5,5 +5,5 @@ export {
 
 export {
     fetchContainers,
-    killContainers
+    removeContainers
 } from './containers';

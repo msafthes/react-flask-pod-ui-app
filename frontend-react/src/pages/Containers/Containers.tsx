@@ -21,13 +21,13 @@ interface IContainersProps {
     containers: Container[],
     loading: boolean,
     fetchContainers: Function,
-    killContainers: Function,
+    removeContainers: Function,
 
     containersDataTest: Container[]
 }
 
 const Containers = (props: IContainersProps) => {
-    const { fetchContainers, killContainers, containers } = props;
+    const { fetchContainers, removeContainers, containers } = props;
 
     const defaultSelectedContainers = {};
 
@@ -89,7 +89,7 @@ const Containers = (props: IContainersProps) => {
         setSelectedContainers(updated);
         console.log(selectedContainers);
 
-        killContainers(containerIds);
+        removeContainers(containerIds);
     };
 
     const selectAll = () => {
@@ -154,7 +154,7 @@ const Containers = (props: IContainersProps) => {
                 <h1 className={css.Headline}>Podman Containers</h1>
                 <p>Showing information about Containers based on the `podman ps` command</p>
                 <ButtonGroup className={classes.buttonGroup}>
-                    <Button color="secondary" startIcon={<DeleteIcon />} onClick={() => handleSelectedContainersOperation(selectedContainers)}>Kill</Button>
+                    <Button color="secondary" startIcon={<DeleteIcon />} onClick={() => handleSelectedContainersOperation(selectedContainers)}>Remove</Button>
                 </ButtonGroup>
 
                 <div className={css.Info}>
@@ -184,8 +184,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
         fetchContainers: () =>
             dispatch(actions.fetchContainers()),
-        killContainers: (selectedContainers) =>
-            dispatch(actions.killContainers(selectedContainers))
+        removeContainers: (selectedContainers) =>
+            dispatch(actions.removeContainers(selectedContainers))
     };
 };
 

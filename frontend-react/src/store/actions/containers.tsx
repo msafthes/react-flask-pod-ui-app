@@ -4,7 +4,7 @@ import { AnyAction } from 'redux';
 import { Container } from '../../models/Models';
 import {
     FETCH_CONTAINERS_START, FETCH_CONTAINERS_SUCCESS, FETCH_CONTAINERS_FAIL,
-    KILL_CONTAINERS_START, KILL_CONTAINERS_SUCCESS, KILL_CONTAINERS_FAIL
+    REMOVE_CONTAINERS_START, REMOVE_CONTAINERS_SUCCESS, REMOVE_CONTAINERS_FAIL
 } from './actionTypes';
 
 
@@ -51,45 +51,49 @@ export const fetchContainers = () => {
     };
 };
 
-// Kill
-export const killContainersStart = () => {
+// Remove
+export const removeContainersStart = () => {
     return {
-        type: KILL_CONTAINERS_START
+        type: REMOVE_CONTAINERS_START
     };
 };
 
-export const killContainersSuccess = (containers: Container) => {
+export const removeContainersSuccess = (containers: Container) => {
     return {
-        type: KILL_CONTAINERS_SUCCESS,
+        type: REMOVE_CONTAINERS_SUCCESS,
         containers: containers
     };
 };
 
-export const killContainersFail = (error: string) => {
+export const removeContainersFail = (error: string) => {
     return {
-        type: KILL_CONTAINERS_FAIL,
+        type: REMOVE_CONTAINERS_FAIL,
         error: error
     };
 };
 
-export const killContainers = (containerIds: Array<String>) => {
+export const removeContainers = (containerIds: Array<String>) => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("killContainers() containerIds:");
+        console.log("removeContainers() containerIds:");
         console.log(containerIds);
-        dispatch(killContainersStart());
+        dispatch(removeContainersStart());
 
-        const url = `http://127.0.0.1:5000/container/delete`;
+        const url = `http://127.0.0.1:5000/containers`;
 
         const headers = {
             'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
         }
 
-        axios.post(url, { IDs: containerIds })
-            .then(response => {
-                dispatch(killContainersSuccess(response.data.containers));
-            })
-            .catch(err => {
-                dispatch(killContainersFail(err.response.data));
-            });
+        axios.delete(url, {
+            headers: headers,
+            data: {
+                IDs: containerIds
+            }
+        }).then(response => {
+            dispatch(removeContainersSuccess(response.data.containers));
+        }).catch(err => {
+            dispatch(removeContainersFail(err.response.data));
+        });
     };
 };

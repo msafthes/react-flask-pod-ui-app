@@ -78,18 +78,21 @@ export const removeImages = (imageIds: Array<String>) => {
         console.log(imageIds);
         dispatch(removeImagesStart());
 
-        const url = `http://127.0.0.1:5000/images/delete`;
+        const url = `http://127.0.0.1:5000/images`;
 
         const headers = {
             'Content-Type': 'application/json',
         }
 
-        axios.post(url, { IDs: imageIds })
-            .then(response => {
-                dispatch(removeImagesSuccess(response.data.images));
-            })
-            .catch(err => {
-                dispatch(removeImagesFail(err.response.data));
-            });
+        axios.delete(url, {
+            headers: headers,
+            data: {
+                IDs: imageIds
+            }
+        }).then(response => {
+            dispatch(removeImagesSuccess(response.data.images));
+        }).catch(err => {
+            dispatch(removeImagesFail(err.response.data));
+        });
     };
 };
