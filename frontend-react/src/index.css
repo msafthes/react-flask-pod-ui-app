@@ -16,4 +16,10 @@ code {
 /* Material UI changes */
 .MuiCheckbox-root {
   color: #3f51b5 !important;
+  color: rgba(255,255,255,1) !important;
+  opacity: 0.30;
+}
+
+.MuiCheckbox-root:hover, .MuiCheckbox-root:focus {
+  opacity: 1;
 }

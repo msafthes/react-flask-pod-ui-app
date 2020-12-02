@@ -1,5 +1,6 @@
 export {
-    fetchImages
+    fetchImages,
+    removeImages
 } from './images';
 
 export {
