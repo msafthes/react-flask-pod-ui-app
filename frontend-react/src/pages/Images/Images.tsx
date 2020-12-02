@@ -51,12 +51,6 @@ const Images = (props: IImagesProps) => {
         fetchImages();
     }, [fetchImages]);
 
-    // useEffect(() => {
-    //     for (const [key, value] of Object.entries(images)) {
-    //         selectedImages[value.id] = false
-    //     }
-    // }, []);
-
     console.log(selectedImages);
 
     const handleCheckboxChange = changeEvent => {
@@ -121,7 +115,6 @@ const Images = (props: IImagesProps) => {
 
         setSelectedImages(updated);
         console.log(selectedImages);
-
     };
 
     const imagesTitleClasses = [css.Content, css.Heading];

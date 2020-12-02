@@ -4,5 +4,6 @@ export {
 } from './images';
 
 export {
-    fetchContainers
+    fetchContainers,
+    killContainers
 } from './containers';

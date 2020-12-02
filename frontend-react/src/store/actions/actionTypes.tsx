@@ -12,6 +12,10 @@ export const FETCH_CONTAINERS_START = 'FETCH_CONTAINERS_START';
 export const FETCH_CONTAINERS_SUCCESS = 'FETCH_CONTAINERS_SUCCESS';
 export const FETCH_CONTAINERS_FAIL = 'FETCH_CONTAINERS_FAIL';
 
+export const KILL_CONTAINERS_START = 'KILL_CONTAINERS_START';
+export const KILL_CONTAINERS_SUCCESS = 'KILL_CONTAINERS_SUCCESS';
+export const KILL_CONTAINERS_FAIL = 'KILL_CONTAINERS_FAIL';
+
 ////////////////////////////////////////////
 // Images
 
@@ -64,6 +68,7 @@ export interface IContainersState {
     loading: boolean
 }
 
+// Fetch
 export interface IFetchContainersStartAction {
     type: typeof FETCH_CONTAINERS_START
 }
@@ -79,5 +84,22 @@ export interface IFetchContainersFailAction {
 }
 
 export type FetchContainersTypes = IFetchContainersStartAction | IFetchContainersSuccessAction | IFetchContainersFailAction;
+
+// Kill
+export interface IKillContainersStartAction {
+    type: typeof KILL_CONTAINERS_START
+}
+
+export interface IKillContainersSuccessAction {
+    type: typeof KILL_CONTAINERS_SUCCESS,
+    containers: Container[]
+}
+
+export interface IKillContainersFailAction {
+    type: typeof KILL_CONTAINERS_FAIL,
+    error: string
+}
+
+export type KillContainersTypes = IKillContainersStartAction | IKillContainersSuccessAction | IKillContainersFailAction;
 
 ////////////////////////////////////////////
