@@ -3,6 +3,7 @@ from flask_cors import CORS
 
 import subprocess
 
+import json
 
 app = Flask("__main__")
 CORS(app)
@@ -71,9 +72,24 @@ def podman_ps():
     
     return containers
 
+def podman_volumes():
+    command = "podman volume inspect -a"
+
+    volumes = subprocess.run("{0}".format(command), shell=True, capture_output=True).stdout
+    volumes = json.loads(volumes)
+
+    volumes_object = {
+        'volumes': volumes
+    }
+
+    return volumes_object
+
 ############################################################################################################################################################
 # REST API
 ############################################################################################################################################################
+
+############################################################################################################################################################
+# Images
 
 # GET /images
 @app.route('/images', methods=['GET'])
@@ -83,7 +99,7 @@ def get_images():
 
     return jsonify(images)
 
-# POST /images
+# DELETE /images
 @app.route('/images', methods=['DELETE'])
 def remove_images():
     image_ids = request.get_json().get("IDs")
@@ -122,6 +138,10 @@ def remove_images():
 
     return jsonify(images)
 
+
+############################################################################################################################################################
+# Containers
+
 # GET /containers
 @app.route('/containers', methods=['GET'])
 def get_containers():
@@ -155,6 +175,21 @@ def remove_containers():
     containers = podman_ps()
 
     return jsonify(containers)
+
+
+############################################################################################################################################################
+# Volumes
+
+# GET /volumes
+@app.route('/volumes', methods=['GET'])
+def get_volumes():
+    volumes = podman_volumes()
+
+    return jsonify(volumes)
+
+
+############################################################################################################################################################
+
 
 # GET /
 @app.route('/', methods=['GET', 'POST'])
