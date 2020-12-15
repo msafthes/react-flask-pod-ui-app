@@ -44,6 +44,15 @@ const NavigationItems = props => (
                 Containers
             </NavLink>
         </li>
+        <li className={css.Item}>
+            <NavLink
+                to="/volumes"
+                className={css.Link}
+                activeClassName={css.active}
+            >
+                Volumes
+            </NavLink>
+        </li>
     </ul>
 );
 

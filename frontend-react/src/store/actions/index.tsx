@@ -7,3 +7,7 @@ export {
     fetchContainers,
     removeContainers
 } from './containers';
+
+export {
+    fetchVolumes,
+} from './volumes';

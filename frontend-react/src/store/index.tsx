@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 
 import imagesReducer from './reducers/images';
 import containersReducer from './reducers/containers';
+import volumesReducer from './reducers/volumes';
 
 
 declare global {
@@ -23,6 +24,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
     images: imagesReducer,
     containers: containersReducer,
+    volumes: volumesReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

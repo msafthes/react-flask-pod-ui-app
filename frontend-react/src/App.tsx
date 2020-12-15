@@ -18,6 +18,10 @@ const Containers = React.lazy(() => {
   return import('./pages/Containers/Containers');
 });
 
+const Volumes = React.lazy(() => {
+  return import('./pages/Volumes/Volumes');
+});
+
 interface IAppProps {
   isAuthenticated: boolean
 }
@@ -91,11 +95,39 @@ const App = (props: IAppProps) => {
     },
   ];
 
+  const volumesDataTest = [
+    {
+      Anonymous: false,
+      CreatedAt: "2020-12-14T11:56:14.6300363+01:00",
+      Driver: "local",
+      GID: 0,
+      Labels: {},
+      Mountpoint: "/home/thesis/.local/share/containers/storage/volumes/my-vol-1/_data",
+      Name: "my-vol-1",
+      Options: {},
+      Scope: "local",
+      UID: 0
+    },
+    {
+      Anonymous: false,
+      CreatedAt: "2020-12-14T11:56:20.1633446+01:00",
+      Driver: "local",
+      GID: 0,
+      Labels: {},
+      Mountpoint: "/home/thesis/.local/share/containers/storage/volumes/my-vol-2/_data",
+      Name: "my-vol-2",
+      Options: {},
+      Scope: "local",
+      UID: 0
+    },
+  ];
+
   let routes = (
     <Switch>
       <Route path="/" exact component={Intro} />
       <Route path="/images/" render={() => <Images imagesDataTest={imagesDataTest} />} />
       <Route path="/containers/" render={() => <Containers containersDataTest={containersDataTest} />} />
+      <Route path="/volumes/" render={() => <Volumes volumesDataTest={volumesDataTest} />} />
       <Redirect to="/" />
     </Switch>
   );

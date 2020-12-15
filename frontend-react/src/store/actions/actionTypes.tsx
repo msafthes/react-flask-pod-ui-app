@@ -1,4 +1,4 @@
-import { Image, Container } from "../../models/Models";
+import { Image, Container, Volume } from "../../models/Models";
 
 export const FETCH_IMAGES_START = 'FETCH_IMAGES_START';
 export const FETCH_IMAGES_SUCCESS = 'FETCH_IMAGES_SUCCESS';
@@ -15,6 +15,11 @@ export const FETCH_CONTAINERS_FAIL = 'FETCH_CONTAINERS_FAIL';
 export const REMOVE_CONTAINERS_START = 'REMOVE_CONTAINERS_START';
 export const REMOVE_CONTAINERS_SUCCESS = 'REMOVE_CONTAINERS_SUCCESS';
 export const REMOVE_CONTAINERS_FAIL = 'REMOVE_CONTAINERS_FAIL';
+
+export const FETCH_VOLUMES_START = 'FETCH_VOLUMES_START';
+export const FETCH_VOLUMES_SUCCESS = 'FETCH_VOLUMES_SUCCESS';
+export const FETCH_VOLUMES_FAIL = 'FETCH_VOLUMES_FAIL';
+
 
 ////////////////////////////////////////////
 // Images
@@ -59,6 +64,8 @@ export interface IRemoveImagesFailAction {
 
 export type RemoveImagesTypes = IRemoveImagesStartAction | IRemoveImagesSuccessAction | IRemoveImagesFailAction;
 
+
+
 ////////////////////////////////////////////
 // Containers
 
@@ -101,5 +108,34 @@ export interface IRemoveContainersFailAction {
 }
 
 export type RemoveContainersTypes = IRemoveContainersStartAction | IRemoveContainersSuccessAction | IRemoveContainersFailAction;
+
+
+
+////////////////////////////////////////////
+// Volumes
+
+export interface IVolumesState {
+    volumes: Volume[],
+    error: string,
+    loading: boolean
+}
+
+// Fetch
+export interface IFetchVolumesStartAction {
+    type: typeof FETCH_VOLUMES_START
+}
+
+export interface IFetchVolumesSuccessAction {
+    type: typeof FETCH_VOLUMES_SUCCESS,
+    volumes: Volume[]
+}
+
+export interface IFetchVolumesFailAction {
+    type: typeof FETCH_VOLUMES_FAIL,
+    error: string
+}
+
+export type FetchVolumesTypes = IFetchVolumesStartAction | IFetchVolumesSuccessAction | IFetchVolumesFailAction;
+
 
 ////////////////////////////////////////////

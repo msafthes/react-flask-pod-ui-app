@@ -16,3 +16,16 @@ export interface Container {
     ports: string,          // "0.0.0.0:8080->8080/tcp"
     names: string           // "cool_kalam"
 }
+
+export interface Volume {
+    Anonymous: boolean,     // false
+    CreatedAt: string,      // "2020-12-14T11:56:14.6300363+01:00"
+    Driver: string,         // "local"
+    GID: number,            // 0
+    Labels: Object,         // {}
+    Mountpoint: string,     // "/home/thesis/.local/share/containers/storage/volumes/my-vol-1/_data"
+    Name: string,           // "my-vol-1"
+    Options: Object,        // {}
+    Scope: string,          // "local"
+    UID: number,            // 0
+}
