@@ -7,7 +7,7 @@ import { AppState } from '../../store';
 
 import css from './Images.module.css';
 import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
-import { Image } from '../../models/Models';
+import { Image, Container } from '../../models/Models';
 
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -15,6 +15,8 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import { Typography } from '@material-ui/core';
 
 
 interface IImagesProps {
@@ -23,11 +25,13 @@ interface IImagesProps {
     fetchImages: Function,
     removeImages: Function,
 
-    imagesDataTest: Image[]
+    imagesDataTest: Image[],
+    containers: Container[],
+    fetchContainers: Function,
 }
 
 const Images = (props: IImagesProps) => {
-    const { fetchImages, removeImages, images } = props;
+    const { fetchImages, removeImages, images, containers, fetchContainers } = props;
 
     const defaultSelectedImages = {};
 
@@ -36,6 +40,8 @@ const Images = (props: IImagesProps) => {
     }
 
     const [selectedImages, setSelectedImages] = useState<any>({ ...defaultSelectedImages });
+    const [showError, setShowError] = useState<boolean>(false);
+    const [errorInfo, setErrorInfo] = useState<string>("");
 
     let allTrue = true;
     for (const [key, value] of Object.entries(selectedImages)) {
@@ -49,7 +55,8 @@ const Images = (props: IImagesProps) => {
 
     useEffect(() => {
         fetchImages();
-    }, [fetchImages]);
+        fetchContainers();
+    }, [fetchImages, fetchContainers]);
 
     console.log(selectedImages);
 
@@ -70,6 +77,36 @@ const Images = (props: IImagesProps) => {
     const handleSelectedImagesOperation = selectedImages => {
         console.log("triggered handleSelectedImagesOperation(), selectedImages:");
         console.log(selectedImages);
+
+
+
+        console.log("selectAll(), selectedImages:");
+        console.log(selectedImages);
+
+        console.log("images");
+        console.log(images);
+
+        const usedImages = [];
+        const usedImagesNames = [];
+
+        images.forEach((image) => {
+            console.log(image);
+            if (selectedImages[image.id] === true) {
+                const imageRepoTag = (image.tag === '') ? `${image.repository}` : `${image.repository}:${image.tag}`;
+                console.log(`imageRepoTag: ${imageRepoTag}`);
+                containers.forEach((container) => {
+                    console.log(container);
+                    if (container.image === imageRepoTag) {
+                        console.log("FOUND USED IMAGE!");
+                        usedImages.push(image);
+                        usedImagesNames.push(imageRepoTag);
+                    }
+                });
+            }
+        });
+
+        console.log(usedImages);
+
         const imageIds = [];
         for (const [key, value] of Object.entries(selectedImages)) {
             if (value === true) {
@@ -89,8 +126,19 @@ const Images = (props: IImagesProps) => {
         setSelectedImages(updated);
         console.log(selectedImages);
 
-        removeImages(imageIds);
+        if (usedImages.length > 0) {
+            console.log("SELECTION INVALID - there are used images");
+            console.log(usedImages);
+            console.log(usedImagesNames);
+            setShowError(true);
+            setErrorInfo(usedImagesNames.join(" "));
+        } else {
+            console.log("Ready for deletion");
+            removeImages(imageIds);
+        }
     };
+
+    console.log(`===> errorInfo: ${errorInfo}`);
 
     const selectAll = () => {
         console.log("selectAll(), selectedImages:");
@@ -156,6 +204,24 @@ const Images = (props: IImagesProps) => {
                     <Button color="secondary" startIcon={<DeleteIcon />} onClick={() => handleSelectedImagesOperation(selectedImages)}>Remove</Button>
                 </ButtonGroup>
 
+                {showError &&
+                    <Alert severity="error" onClose={() => { setShowError(!showError) }}>
+                        <AlertTitle><strong>Error</strong></AlertTitle>
+                        The following images are being used and cannot be deleted:
+
+                        {(errorInfo.length > 0) ?
+                            (errorInfo.split(' ').map((name, i) => {
+                                return <Typography variant="body1" component="div" align="left">
+                                    <strong>image: {name}</strong><strong></strong>
+                                </Typography>
+                            }))
+                            :
+                            ''
+                        }
+                    </Alert>
+                }
+
+
                 <div className={css.Info}>
                     <div className={imagesTitleClasses.join(' ')}>
                         <Checkbox color="primary" onClick={selectAll} checked={allTrue} />
@@ -175,6 +241,7 @@ const Images = (props: IImagesProps) => {
 const mapStateToProps = (state: AppState) => {
     return {
         images: state.images.images,
+        containers: state.containers.containers,
     };
 };
 
@@ -183,7 +250,9 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         fetchImages: () =>
             dispatch(actions.fetchImages()),
         removeImages: (selectedImages) =>
-            dispatch(actions.removeImages(selectedImages))
+            dispatch(actions.removeImages(selectedImages)),
+        fetchContainers: () =>
+            dispatch(actions.fetchContainers()),
     };
 };
 
