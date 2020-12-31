@@ -44,14 +44,42 @@ def podman_images():
 
 def podman_ps():
     # Example: separating each info with #
-    # 54a48d41f6d9#registry.fedoraproject.org/f29/httpd:latest#/usr/bin/run-http...#2 minutes ago#0.0.0.0:8080->8080/tcp#laughing_bassi
+    # 54a48d41f6d9#registry.fedoraproject.org/f29/httpd:latest#/usr/bin/run-http...#2 minutes ago#0.0.0.0:8080->8080/tcp#laughing_bassi#Running
 
-    process4 = subprocess.run(['podman', 'ps', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}'],
-                              stdout=subprocess.PIPE,
-                              universal_newlines=True)
+    # podman ps --format "{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}"
 
-    podman_containers_array = process4.stdout.split('\n')
+    # process4 = subprocess.run(['podman', 'ps', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'],
+    #                           stdout=subprocess.PIPE,
+    #                           universal_newlines=True)
+
+    command = 'podman ps -a --format "{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}"'
+
+    # process4 = subprocess.run(['podman ps -a --format "{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}"'],
+    #                           stdout=subprocess.PIPE,
+    #                           universal_newlines=True)
+
+    # output = subprocess.run(['podman', 'ps', '-a', '--format "{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}"'], 
+    #                         stdout=subprocess.PIPE).stdout
+    #                         # .decode('utf-8')
+
+    output = subprocess.run("{0}".format(command), shell=True, capture_output=True).stdout.decode('utf-8')
+    
+
+    # process4 = subprocess.run("{0}".format(command), shell=True, capture_output=True)
+
+    # print("output:")
+    # print(output)
+
+
+    # podman_containers_array = process4.split('\n')
+    # podman_containers_array = process4.stdout.split('\n')
+
+    podman_containers_array = output.split('\n')
+    # podman_containers_array = process.stdout.split('\n')
     podman_containers_array.pop()  # Removing the last '' empty part after split
+
+    print("podman_containers_array:")
+    print(podman_containers_array)
 
     containers = {"containers": []}
 
@@ -65,12 +93,14 @@ def podman_ps():
             'command': container_parts[2],
             'created': container_parts[3],
             'ports': container_parts[4],
-            'names': container_parts[5]
+            'names': container_parts[5],
+            'status': container_parts[6]
         }
 
         containers["containers"].append(container)
     
     return containers
+    # return []
 
 def podman_volumes():
     command = "podman volume inspect -a"
@@ -133,6 +163,20 @@ def remove_images():
 
     if count != 0:
         subprocess.run("{0}".format(command), shell=True, capture_output=True).stdout
+    
+    images = podman_images()
+
+    return jsonify(images)
+
+
+# DELETE /images/prune
+@app.route('/images/prune', methods=['DELETE'])
+def prune_images():
+    command = "podman image prune -a -f"
+    print("command:")
+    print(command)
+
+    subprocess.run("{0}".format(command), shell=True, capture_output=True).stdout
     
     images = podman_images()
 
