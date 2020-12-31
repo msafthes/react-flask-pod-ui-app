@@ -45,19 +45,22 @@
     width: 10%;
 }
 .Image {
-    width: 28%;
+    width: 25.5%;
 }
 .Command {
-    width: 15%;
+    width: 11.5%;
 }
 .Created {
-    width: 12%;
+    width: 9.5%;
 }
 .Ports {
-    width: 18%;
+    width: 15.5%;
 }
 .Names {
-    width: 10%;
+    width: 12%;
+}
+.Status {
+    width: 13.5%
 }
 
 .Headline {

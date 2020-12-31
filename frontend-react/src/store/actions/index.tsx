@@ -1,11 +1,12 @@
 export {
     fetchImages,
-    removeImages
+    removeImages,
+    pruneImages,
 } from './images';
 
 export {
     fetchContainers,
-    removeContainers
+    removeContainers,
 } from './containers';
 
 export {

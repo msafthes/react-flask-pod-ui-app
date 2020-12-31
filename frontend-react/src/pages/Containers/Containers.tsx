@@ -117,6 +117,23 @@ const Containers = (props: IContainersProps) => {
         console.log(selectedContainers);
     };
 
+    const isSelectedAny = () => {
+        console.log("isSelectedAny(), selectedContainers:");
+        console.log(selectedContainers);
+
+        for (const [key, value] of Object.entries(selectedContainers)) {
+            if (value === true) {
+                console.log("TRUE - selected container found");
+                return true
+            }
+        }
+
+        console.log("FALSE - no selected container found");
+        return false;
+    };
+
+    const isSelected = isSelectedAny();
+
     const containersTitleClasses = [css.Content, css.Heading];
     const useStyles = makeStyles({
         buttonGroup: {
@@ -139,6 +156,7 @@ const Containers = (props: IContainersProps) => {
                         <Grid className={css.Created}>{container.created}</Grid>
                         <Grid className={css.Ports}>{container.ports}</Grid>
                         <Grid className={css.Names}>{container.names}</Grid>
+                        <Grid className={css.Status}>{container.status}</Grid>
                     </Grid>
 
                 }))
@@ -154,7 +172,7 @@ const Containers = (props: IContainersProps) => {
                 <h1 className={css.Headline}>Podman Containers</h1>
                 <p>Showing information about Containers based on the `podman ps` command</p>
                 <ButtonGroup className={classes.buttonGroup}>
-                    <Button color="secondary" startIcon={<DeleteIcon />} onClick={() => handleSelectedContainersOperation(selectedContainers)}>Remove</Button>
+                    <Button disabled={!isSelected} color="secondary" startIcon={<DeleteIcon />} onClick={() => handleSelectedContainersOperation(selectedContainers)}>Remove</Button>
                 </ButtonGroup>
 
                 <div className={css.Info}>
@@ -166,6 +184,7 @@ const Containers = (props: IContainersProps) => {
                         <div className={css.Created}>Created</div>
                         <div className={css.Ports}>Ports</div>
                         <div className={css.Names}>Names</div>
+                        <div className={css.Status}>Status</div>
                     </div>
                     {content}
                 </div>

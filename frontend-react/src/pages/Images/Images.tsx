@@ -24,6 +24,7 @@ interface IImagesProps {
     loading: boolean,
     fetchImages: Function,
     removeImages: Function,
+    pruneImages: Function,
 
     imagesDataTest: Image[],
     containers: Container[],
@@ -31,7 +32,7 @@ interface IImagesProps {
 }
 
 const Images = (props: IImagesProps) => {
-    const { fetchImages, removeImages, images, containers, fetchContainers } = props;
+    const { fetchImages, removeImages, pruneImages, images, containers, fetchContainers } = props;
 
     const defaultSelectedImages = {};
 
@@ -165,13 +166,31 @@ const Images = (props: IImagesProps) => {
         console.log(selectedImages);
     };
 
+    const isSelectedAny = () => {
+        console.log("isSelectedAny(), selectedImages:");
+        console.log(selectedImages);
+
+        for (const [key, value] of Object.entries(selectedImages)) {
+            if (value === true) {
+                console.log("TRUE - selected image found");
+                return true
+            }
+        }
+
+        console.log("FALSE - no selected image found");
+        return false;
+    };
+
+    const isSelected = isSelectedAny();
+
     const imagesTitleClasses = [css.Content, css.Heading];
     const useStyles = makeStyles({
         buttonGroup: {
-            alignSelf: "flex-start"
+            alignSelf: "flex-start",
         }
     });
     const classes = useStyles();
+
 
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>
 
@@ -201,7 +220,8 @@ const Images = (props: IImagesProps) => {
                 <h1 className={css.Headline}>Podman Images</h1>
                 <p>Showing information about images based on the `podman images` command</p>
                 <ButtonGroup className={classes.buttonGroup}>
-                    <Button color="secondary" startIcon={<DeleteIcon />} onClick={() => handleSelectedImagesOperation(selectedImages)}>Remove</Button>
+                    <Button disabled={!isSelected} color="secondary" startIcon={<DeleteIcon />} onClick={() => handleSelectedImagesOperation(selectedImages)}>Remove</Button>
+                    <Button color="secondary" startIcon={<DeleteIcon />} onClick={() => pruneImages()}>Remove unused images</Button>
                 </ButtonGroup>
 
                 {showError &&
@@ -249,8 +269,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
         fetchImages: () =>
             dispatch(actions.fetchImages()),
-        removeImages: (selectedImages) =>
+        removeImages: (selectedImages: String[]) =>
             dispatch(actions.removeImages(selectedImages)),
+        pruneImages: () =>
+            dispatch(actions.pruneImages()),
         fetchContainers: () =>
             dispatch(actions.fetchContainers()),
     };

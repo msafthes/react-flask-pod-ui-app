@@ -14,7 +14,8 @@ export interface Container {
     command: string,        // "/usr/bin/run-http..."
     created: string,        // "4 minutes ago"
     ports: string,          // "0.0.0.0:8080->8080/tcp"
-    names: string           // "cool_kalam"
+    names: string,          // "cool_kalam"
+    status: string,         // "Running"
 }
 
 export interface Volume {

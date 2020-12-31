@@ -4,7 +4,8 @@ import { AnyAction } from 'redux';
 import { Image } from '../../models/Models';
 import {
     FETCH_IMAGES_START, FETCH_IMAGES_SUCCESS, FETCH_IMAGES_FAIL,
-    REMOVE_IMAGES_START, REMOVE_IMAGES_SUCCESS, REMOVE_IMAGES_FAIL
+    REMOVE_IMAGES_START, REMOVE_IMAGES_SUCCESS, REMOVE_IMAGES_FAIL,
+    PRUNE_IMAGES_START, PRUNE_IMAGES_SUCCESS, PRUNE_IMAGES_FAIL,
 } from './actionTypes';
 
 
@@ -93,6 +94,48 @@ export const removeImages = (imageIds: Array<String>) => {
             dispatch(removeImagesSuccess(response.data.images));
         }).catch(err => {
             dispatch(removeImagesFail(err.response.data));
+        });
+    };
+};
+
+// Prune
+export const pruneImagesStart = () => {
+    return {
+        type: PRUNE_IMAGES_START
+    };
+};
+
+export const pruneImagesSuccess = (images: Image) => {
+    return {
+        type: PRUNE_IMAGES_SUCCESS,
+        images: images
+    };
+};
+
+export const pruneImagesFail = (error: string) => {
+    return {
+        type: PRUNE_IMAGES_FAIL,
+        error: error
+    };
+};
+
+export const pruneImages = () => {
+    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+        console.log("pruneImages()");
+        dispatch(pruneImagesStart());
+
+        const url = `http://127.0.0.1:5000/images/prune`;
+
+        const headers = {
+            'Content-Type': 'application/json',
+        }
+
+        axios.delete(url, {
+            headers: headers,
+        }).then(response => {
+            dispatch(pruneImagesSuccess(response.data.images));
+        }).catch(err => {
+            dispatch(pruneImagesFail(err.response.data));
         });
     };
 };

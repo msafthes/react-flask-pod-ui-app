@@ -8,6 +8,10 @@ export const REMOVE_IMAGES_START = 'REMOVE_IMAGES_START';
 export const REMOVE_IMAGES_SUCCESS = 'REMOVE_IMAGES_SUCCESS';
 export const REMOVE_IMAGES_FAIL = 'REMOVE_IMAGES_FAIL';
 
+export const PRUNE_IMAGES_START = 'PRUNE_IMAGES_START';
+export const PRUNE_IMAGES_SUCCESS = 'PRUNE_IMAGES_SUCCESS';
+export const PRUNE_IMAGES_FAIL = 'PRUNE_IMAGES_FAIL';
+
 export const FETCH_CONTAINERS_START = 'FETCH_CONTAINERS_START';
 export const FETCH_CONTAINERS_SUCCESS = 'FETCH_CONTAINERS_SUCCESS';
 export const FETCH_CONTAINERS_FAIL = 'FETCH_CONTAINERS_FAIL';
@@ -63,6 +67,23 @@ export interface IRemoveImagesFailAction {
 }
 
 export type RemoveImagesTypes = IRemoveImagesStartAction | IRemoveImagesSuccessAction | IRemoveImagesFailAction;
+
+// Prune
+export interface IPruneImagesStartAction {
+    type: typeof PRUNE_IMAGES_START
+}
+
+export interface IPruneImagesSuccessAction {
+    type: typeof PRUNE_IMAGES_SUCCESS,
+    images: Image[]
+}
+
+export interface IPruneImagesFailAction {
+    type: typeof PRUNE_IMAGES_FAIL,
+    error: string
+}
+
+export type PruneImagesTypes = IPruneImagesStartAction | IPruneImagesSuccessAction | IPruneImagesFailAction;
 
 
 
