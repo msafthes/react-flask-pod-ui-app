@@ -4,7 +4,8 @@ import { AnyAction } from 'redux';
 import { Container } from '../../models/Models';
 import {
     FETCH_CONTAINERS_START, FETCH_CONTAINERS_SUCCESS, FETCH_CONTAINERS_FAIL,
-    REMOVE_CONTAINERS_START, REMOVE_CONTAINERS_SUCCESS, REMOVE_CONTAINERS_FAIL
+    REMOVE_CONTAINERS_START, REMOVE_CONTAINERS_SUCCESS, REMOVE_CONTAINERS_FAIL,
+    UPDATE_CONTAINER_LOG,
 } from './actionTypes';
 
 
@@ -97,3 +98,11 @@ export const removeContainers = (containerIds: Array<String>) => {
         });
     };
 };
+
+// Update Container Log
+export const updateContainerLogs = (containerLogs) => {
+    return {
+        type: UPDATE_CONTAINER_LOG,
+        containerLogs: containerLogs
+    }
+}

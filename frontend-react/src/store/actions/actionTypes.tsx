@@ -24,6 +24,8 @@ export const FETCH_VOLUMES_START = 'FETCH_VOLUMES_START';
 export const FETCH_VOLUMES_SUCCESS = 'FETCH_VOLUMES_SUCCESS';
 export const FETCH_VOLUMES_FAIL = 'FETCH_VOLUMES_FAIL';
 
+export const UPDATE_CONTAINER_LOG = "UPDATE_CONTAINER_LOG";
+
 
 ////////////////////////////////////////////
 // Images
@@ -93,7 +95,8 @@ export type PruneImagesTypes = IPruneImagesStartAction | IPruneImagesSuccessActi
 export interface IContainersState {
     containers: Container[],
     error: string,
-    loading: boolean
+    loading: boolean,
+    containerLogs: any
 }
 
 // Fetch
@@ -130,7 +133,11 @@ export interface IRemoveContainersFailAction {
 
 export type RemoveContainersTypes = IRemoveContainersStartAction | IRemoveContainersSuccessAction | IRemoveContainersFailAction;
 
-
+// Update Container Log
+export interface IUpdateContainerLogsAction {
+    type: typeof UPDATE_CONTAINER_LOG,
+    containerLogs: string
+}
 
 ////////////////////////////////////////////
 // Volumes

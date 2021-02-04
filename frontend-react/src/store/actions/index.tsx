@@ -7,6 +7,7 @@ export {
 export {
     fetchContainers,
     removeContainers,
+    updateContainerLogs,
 } from './containers';
 
 export {

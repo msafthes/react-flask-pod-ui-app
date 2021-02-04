@@ -1,0 +1,97 @@
+@import '../../Variables.css';
+
+.ContainerLogs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 6rem;
+}
+
+.Wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* background: black; */
+    /* background: rgba(0,0,0,0.8); */
+    background: #111;
+    border-radius: 0.5rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    margin-bottom: 3rem;
+}
+.Info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+.Content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.Heading {
+    color: var(--color-purple);
+}
+
+/* Container Log */
+.ContainerLog {
+    margin-bottom: 1em;
+    font-size: 1rem;
+}
+
+.Headline {
+    color: var(--color-purple);
+}
+
+.ContainerLogs h1,
+.ContainerLogs h2 {
+    font-weight: 500;
+}
+
+.ContainerLogs h1 {
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+}
+
+.ContainerLogs h2 {
+    font-size: 1.6rem;
+}
+
+.ContainerLogs p {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+@media (min-width: 1000px) {
+    .ContainerLogs {
+        margin-top: 10rem;
+    }
+
+    .Wrapper {
+        width: 90%;
+        padding: 4.5rem 2rem 5rem 2rem;
+    }
+    .Info {
+        flex-direction: column;
+        justify-content: space-around;
+        margin-top: 4rem;
+    }
+
+    .ContainerLogs h1 {
+        font-size: 2.5rem;
+    }
+
+    .ContainerLogs p {
+        margin-bottom: 1rem;
+    }
+}

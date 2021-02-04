@@ -14,7 +14,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import DeleteIcon from '@material-ui/icons/Delete';
+import PageviewIcon from '@material-ui/icons/Pageview';
 import { makeStyles } from '@material-ui/core/styles';
+
+import { Link } from 'react-router-dom';
+
 
 
 interface IContainersProps {
@@ -36,6 +40,8 @@ const Containers = (props: IContainersProps) => {
     }
 
     const [selectedContainers, setSelectedContainers] = useState<any>({ ...defaultSelectedContainers });
+
+    // const [selectedContainer, setSelectedContainer] = useState<String>(null);
 
     let allTrue = true;
     for (const [key, value] of Object.entries(selectedContainers)) {
@@ -59,6 +65,11 @@ const Containers = (props: IContainersProps) => {
 
         for (const [key, value] of Object.entries(old)) {
             if (id === key) {
+                // TEMP getting container ID for logs
+                // if (value === true) {
+                //     console.log(`getting ID for logs: ${id}`);
+                //     setSelectedContainer(id);
+                // }
                 old[key] = !old[key];
             }
         }
@@ -132,7 +143,27 @@ const Containers = (props: IContainersProps) => {
         return false;
     };
 
+    const isSelectedOne = () => {
+        console.log("isSelectedOne(), selectedContainers:");
+        console.log(selectedContainers);
+
+        let count = 0;
+
+        for (const [key, value] of Object.entries(selectedContainers)) {
+            if (value === true) {
+                // console.log(`TRUE - selected container found, total: ${count}`);
+                count++;
+            }
+        }
+
+        // console.log(`final selected count: ${count}`);
+        return count === 1;
+    };
+
     const isSelected = isSelectedAny();
+    const isSelectedSingle = isSelectedOne();
+
+    // console.log(`selectedContainer: ${selectedContainer}`);
 
     const containersTitleClasses = [css.Content, css.Heading];
     const useStyles = makeStyles({
@@ -148,16 +179,26 @@ const Containers = (props: IContainersProps) => {
         content = <Grid container direction="column">
             {(containers && containers.length) ?
                 (containers.map((container, i) => {
-                    return <Grid item container className={css.Content} key={container.containerId}>
-                        <Checkbox color="primary" onClick={handleCheckboxChange} id={container.containerId} checked={selectedContainers[container.containerId]} />
-                        <Grid className={css.ContainerId}>{container.containerId}</Grid>
-                        <Grid className={css.Image}>{container.image}</Grid>
-                        <Grid className={css.Command}>{container.command}</Grid>
-                        <Grid className={css.Created}>{container.created}</Grid>
-                        <Grid className={css.Ports}>{container.ports}</Grid>
-                        <Grid className={css.Names}>{container.names}</Grid>
-                        <Grid className={css.Status}>{container.status}</Grid>
-                    </Grid>
+                    return <React.Fragment>
+                        <Grid item container className={css.Content} key={container.containerId}>
+                            <Checkbox color="primary" onClick={handleCheckboxChange} id={container.containerId} checked={selectedContainers[container.containerId]} />
+                            <Grid className={css.ContainerId}>{container.containerId}</Grid>
+                            <Grid className={css.Image}>{container.image}</Grid>
+                            <Grid className={css.Command}>{container.command}</Grid>
+                            <Grid className={css.Created}>{container.created}</Grid>
+                            <Grid className={css.Ports}>{container.ports}</Grid>
+                            <Grid className={css.Names}>{container.names}</Grid>
+                            <Grid className={css.Status}>{container.status}</Grid>
+                        </Grid>
+                        <Link to={`/containers/${container.containerId}`} style={{ textDecoration: 'none', marginLeft: '2.5%' }}>
+                            <Button
+                                color="secondary"
+                                startIcon={<PageviewIcon />}
+                                onClick={() => console.log(`oops ID: ${container.containerId}`)}>
+                                Logs
+                            </Button>
+                        </Link>
+                    </React.Fragment>
 
                 }))
                 :
@@ -170,9 +211,17 @@ const Containers = (props: IContainersProps) => {
         <div className={css.Containers}>
             <div className={css.Wrapper}>
                 <h1 className={css.Headline}>Podman Containers</h1>
-                <p>Showing information about Containers based on the `podman ps` command</p>
+                <p>Showing information about Containers and offering various operations with them</p>
                 <ButtonGroup className={classes.buttonGroup}>
-                    <Button disabled={!isSelected} color="secondary" startIcon={<DeleteIcon />} onClick={() => handleSelectedContainersOperation(selectedContainers)}>Remove</Button>
+                    <Button disabled={!isSelected}
+                        color="secondary"
+                        startIcon={<DeleteIcon />}
+                        onClick={() => handleSelectedContainersOperation(selectedContainers)}>
+                        Remove
+                    </Button>
+
+
+
                 </ButtonGroup>
 
                 <div className={css.Info}>

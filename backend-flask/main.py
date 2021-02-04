@@ -5,8 +5,11 @@ import subprocess
 
 import json
 
+from flask_socketio import SocketIO, emit, disconnect
+
 app = Flask("__main__")
 CORS(app)
+
 
 ############################################################################################################################################################
 # Functions
@@ -42,6 +45,7 @@ def podman_images():
 
     return images
 
+
 def podman_ps():
     # Example: separating each info with #
     # 54a48d41f6d9#registry.fedoraproject.org/f29/httpd:latest#/usr/bin/run-http...#2 minutes ago#0.0.0.0:8080->8080/tcp#laughing_bassi#Running
@@ -58,18 +62,17 @@ def podman_ps():
     #                           stdout=subprocess.PIPE,
     #                           universal_newlines=True)
 
-    # output = subprocess.run(['podman', 'ps', '-a', '--format "{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}"'], 
+    # output = subprocess.run(['podman', 'ps', '-a', '--format "{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}"'],
     #                         stdout=subprocess.PIPE).stdout
     #                         # .decode('utf-8')
 
-    output = subprocess.run("{0}".format(command), shell=True, capture_output=True).stdout.decode('utf-8')
-    
+    output = subprocess.run("{0}".format(
+        command), shell=True, capture_output=True).stdout.decode('utf-8')
 
     # process4 = subprocess.run("{0}".format(command), shell=True, capture_output=True)
 
     # print("output:")
     # print(output)
-
 
     # podman_containers_array = process4.split('\n')
     # podman_containers_array = process4.stdout.split('\n')
@@ -98,14 +101,62 @@ def podman_ps():
         }
 
         containers["containers"].append(container)
-    
+
     return containers
     # return []
+
+
+def podman_logs(id):
+    print("ID from Front End:")
+    print(id)
+
+    if(len(id) == 0):
+        return ''
+
+    command = "podman logs {0}".format(id)
+    print("command:")
+    print(command)
+
+    logs = subprocess.run("{0}".format(command), shell=True,
+                          capture_output=True).stdout.decode('utf-8')
+    print("logs:")
+    print(logs)
+
+    output = subprocess.run("{0}".format(
+        command), shell=True, capture_output=True).stdout.decode('utf-8')
+
+    # podman_containers_array = output.split('\n')
+    # podman_containers_array.pop()  # Removing the last '' empty part after split
+
+    # print("podman_containers_array:")
+    # print(podman_containers_array)
+
+    # containers = {"containers": []}
+
+    # for item in podman_containers_array:
+
+    #     container_parts = item.split("#")
+
+    #     container = {
+    #         'containerId': container_parts[0],
+    #         'image': container_parts[1],
+    #         'command': container_parts[2],
+    #         'created': container_parts[3],
+    #         'ports': container_parts[4],
+    #         'names': container_parts[5],
+    #         'status': container_parts[6]
+    #     }
+
+    #     containers["containers"].append(container)
+
+    return {'logs': logs}
+
 
 def podman_volumes():
     command = "podman volume inspect -a"
 
-    volumes = subprocess.run("{0}".format(command), shell=True, capture_output=True).stdout
+    volumes = subprocess.run("{0}".format(
+        command), shell=True, capture_output=True).stdout
     volumes = json.loads(volumes)
 
     volumes_object = {
@@ -122,6 +173,8 @@ def podman_volumes():
 # Images
 
 # GET /images
+
+
 @app.route('/images', methods=['GET'])
 def get_images():
 
@@ -130,6 +183,8 @@ def get_images():
     return jsonify(images)
 
 # DELETE /images
+
+
 @app.route('/images', methods=['DELETE'])
 def remove_images():
     image_ids = request.get_json().get("IDs")
@@ -162,8 +217,9 @@ def remove_images():
     print(command)
 
     if count != 0:
-        subprocess.run("{0}".format(command), shell=True, capture_output=True).stdout
-    
+        subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True).stdout
+
     images = podman_images()
 
     return jsonify(images)
@@ -176,8 +232,9 @@ def prune_images():
     print("command:")
     print(command)
 
-    subprocess.run("{0}".format(command), shell=True, capture_output=True).stdout
-    
+    subprocess.run("{0}".format(command), shell=True,
+                   capture_output=True).stdout
+
     images = podman_images()
 
     return jsonify(images)
@@ -195,6 +252,8 @@ def get_containers():
     return jsonify(containers)
 
 # DELETE /containers
+
+
 @app.route('/containers', methods=['DELETE'])
 def remove_containers():
     container_ids = request.get_json().get("IDs")
@@ -214,8 +273,9 @@ def remove_containers():
     print(command)
 
     if count != 0:
-        subprocess.run("{0}".format(command), shell=True, capture_output=True).stdout
-    
+        subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True).stdout
+
     containers = podman_ps()
 
     return jsonify(containers)
@@ -241,5 +301,46 @@ def get_hello():
 
     return "Podman REST API"
 
+############################################################################################################################################################
 
-app.run(debug=True)
+
+# WebSocket Testing
+async_mode = None
+
+# socketio = SocketIO(app)
+socket_ = SocketIO(app, async_mode=async_mode, cors_allowed_origins="*")
+
+# @socket_.on('event://send-message', namespace='/test')
+
+
+@socket_.on('event://send-message')
+def test_message(data):
+    print('test_message()')
+    print("DATA:")
+    print(data)
+    # id = data.get_json().get("data")
+    # id = getattr(data, "id")
+    id = data.get('id')
+    print("ID:")
+    print(id)
+    logs = podman_logs(id)
+    emit('event://get-message', logs)
+    # session['receive_count'] = session.get('receive_count', 0) + 1
+    # emit('my_response', {'data': message['data'], 'count': session['receive_count']})
+
+# @socketio.on('event://send-message')
+# def handle_message(data):
+#     print('received message: ' + data)
+
+# @socketio.on('event://get-message')
+# def handle_my_custom_event():
+#     emit('my response')
+
+
+# app.run(debug=True)
+if __name__ == '__main__':
+    socket_.run(app, debug=True)
+
+
+# app.run(port=5000)
+# socketio.run(app, port=5005)

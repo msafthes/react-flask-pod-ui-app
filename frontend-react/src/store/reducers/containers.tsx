@@ -5,7 +5,8 @@ import {
     FetchContainersTypes,
     REMOVE_CONTAINERS_START, REMOVE_CONTAINERS_SUCCESS, REMOVE_CONTAINERS_FAIL,
     IRemoveContainersStartAction, IRemoveContainersSuccessAction, IRemoveContainersFailAction,
-    RemoveContainersTypes
+    RemoveContainersTypes,
+    UPDATE_CONTAINER_LOG, IUpdateContainerLogsAction,
 } from '../actions/actionTypes';
 
 
@@ -13,6 +14,7 @@ const initialState: IContainersState = {
     containers: [],
     error: '',
     loading: false,
+    containerLogs: [],
 };
 
 // Fetch
@@ -41,7 +43,13 @@ const removeContainersFail = (state: IContainersState, action: IRemoveContainers
     return { ...state, error: action.error, loading: false }
 };
 
-const reducer = (state = initialState, action: FetchContainersTypes | RemoveContainersTypes): IContainersState => {
+const updateContainerLogs = (state: IContainersState, action: IUpdateContainerLogsAction): IContainersState => {
+    console.log(`REDUCER - updateContainerLogs, action:`);
+    console.log(action);
+    return { ...state, containerLogs: action.containerLogs, loading: false }
+};
+
+const reducer = (state = initialState, action: FetchContainersTypes | RemoveContainersTypes | IUpdateContainerLogsAction): IContainersState => {
     switch (action.type) {
         case FETCH_CONTAINERS_START: return fetchContainersStart(state, action);
         case FETCH_CONTAINERS_SUCCESS: return fetchContainersSuccess(state, action);
@@ -49,6 +57,7 @@ const reducer = (state = initialState, action: FetchContainersTypes | RemoveCont
         case REMOVE_CONTAINERS_START: return removeContainersStart(state, action);
         case REMOVE_CONTAINERS_SUCCESS: return removeContainersSuccess(state, action);
         case REMOVE_CONTAINERS_FAIL: return removeContainersFail(state, action);
+        case UPDATE_CONTAINER_LOG: return updateContainerLogs(state, action);
         default: return state;
     }
 };

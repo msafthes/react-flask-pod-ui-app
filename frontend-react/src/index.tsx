@@ -10,6 +10,8 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import WebSocketProvider, { WebSocketContext } from './WebSocket';
+
 
 const store = configureStore();
 const persistor = persistStore(store)
@@ -17,9 +19,11 @@ const persistor = persistStore(store)
 const app = (
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
+            <WebSocketProvider>
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+            </WebSocketProvider>
         </PersistGate>
     </Provider>
 );

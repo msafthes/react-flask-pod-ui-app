@@ -18,6 +18,10 @@ const Containers = React.lazy(() => {
   return import('./pages/Containers/Containers');
 });
 
+const ContainerLogs = React.lazy(() => {
+  return import('./pages/ContainerLogs/ContainerLogs');
+});
+
 const Volumes = React.lazy(() => {
   return import('./pages/Volumes/Volumes');
 });
@@ -125,8 +129,9 @@ const App = (props: IAppProps) => {
   let routes = (
     <Switch>
       <Route path="/" exact component={Intro} />
-      <Route path="/images/" render={() => <Images imagesDataTest={imagesDataTest} />} />
-      <Route path="/containers/" render={() => <Containers containersDataTest={containersDataTest} />} />
+      <Route path="/images/" exact render={() => <Images imagesDataTest={imagesDataTest} />} />
+      <Route path="/containers/" exact render={() => <Containers containersDataTest={containersDataTest} />} />
+      <Route path="/containers/:id" render={() => <ContainerLogs />} />
       <Route path="/volumes/" render={() => <Volumes volumesDataTest={volumesDataTest} />} />
       <Redirect to="/" />
     </Switch>
