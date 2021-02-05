@@ -5,6 +5,7 @@ import css from './SideDrawer.module.css';
 import NavigationItems from '../NavigationItems/NavigationItems';
 import Backdrop from '../../UI/Backdrop/Backdrop';
 
+
 const sideDrawer = props => {
     let attachedClasses = [css.SideDrawer, css.Close];
     if (props.open) {

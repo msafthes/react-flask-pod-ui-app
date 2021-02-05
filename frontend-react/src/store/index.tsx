@@ -1,8 +1,10 @@
 import { createStore, applyMiddleware, compose, combineReducers, Store } from 'redux';
 import thunk from 'redux-thunk';
 import { persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+// defaults to localStorage for web
+import storage from 'redux-persist/lib/storage'
 
+// Reducers
 import imagesReducer from './reducers/images';
 import containersReducer from './reducers/containers';
 import volumesReducer from './reducers/volumes';

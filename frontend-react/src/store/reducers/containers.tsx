@@ -1,11 +1,14 @@
 import {
     IContainersState,
+
     FETCH_CONTAINERS_START, FETCH_CONTAINERS_SUCCESS, FETCH_CONTAINERS_FAIL,
     IFetchContainersStartAction, IFetchContainersSuccessAction, IFetchContainersFailAction,
     FetchContainersTypes,
+
     REMOVE_CONTAINERS_START, REMOVE_CONTAINERS_SUCCESS, REMOVE_CONTAINERS_FAIL,
     IRemoveContainersStartAction, IRemoveContainersSuccessAction, IRemoveContainersFailAction,
     RemoveContainersTypes,
+
     UPDATE_CONTAINER_LOG, IUpdateContainerLogsAction,
 } from '../actions/actionTypes';
 
@@ -54,10 +57,13 @@ const reducer = (state = initialState, action: FetchContainersTypes | RemoveCont
         case FETCH_CONTAINERS_START: return fetchContainersStart(state, action);
         case FETCH_CONTAINERS_SUCCESS: return fetchContainersSuccess(state, action);
         case FETCH_CONTAINERS_FAIL: return fetchContainersFail(state, action);
+
         case REMOVE_CONTAINERS_START: return removeContainersStart(state, action);
         case REMOVE_CONTAINERS_SUCCESS: return removeContainersSuccess(state, action);
         case REMOVE_CONTAINERS_FAIL: return removeContainersFail(state, action);
+
         case UPDATE_CONTAINER_LOG: return updateContainerLogs(state, action);
+
         default: return state;
     }
 };

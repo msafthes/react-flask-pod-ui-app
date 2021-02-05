@@ -6,8 +6,6 @@
     position: fixed;
     top: 0;
     left: 0;
-    /* background-color: black; */
-    /* background-color: rgba(0,0,0,0.8); */
     background-color: #111;
     display: flex;
     justify-content: space-between;

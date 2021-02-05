@@ -11,10 +11,7 @@ const toolbar = props => (
             <React.Fragment>
                 <DrawerToggle clicked={props.drawerToggleClicked} />
                 <div className={css.Name}>
-                    <NavLink
-                        to="/"
-                        className={css.Link}
-                    >
+                    <NavLink to="/" className={css.Link}>
                         Podman UI
                     </NavLink>
                 </div>

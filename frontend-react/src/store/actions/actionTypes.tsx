@@ -1,5 +1,6 @@
 import { Image, Container, Volume } from "../../models/Models";
 
+// See all available actions
 export const FETCH_IMAGES_START = 'FETCH_IMAGES_START';
 export const FETCH_IMAGES_SUCCESS = 'FETCH_IMAGES_SUCCESS';
 export const FETCH_IMAGES_FAIL = 'FETCH_IMAGES_FAIL';
@@ -27,16 +28,15 @@ export const FETCH_VOLUMES_FAIL = 'FETCH_VOLUMES_FAIL';
 export const UPDATE_CONTAINER_LOG = "UPDATE_CONTAINER_LOG";
 
 
-////////////////////////////////////////////
-// Images
-
+////////////////////////////////////////////////////////////////////////////////////////
+// Images State
 export interface IImagesState {
     images: Image[],
     error: string,
     loading: boolean
 }
 
-// Fetch
+// Images Fetch
 export interface IFetchImagesStartAction {
     type: typeof FETCH_IMAGES_START
 }
@@ -53,7 +53,7 @@ export interface IFetchImagesFailAction {
 
 export type FetchImagesTypes = IFetchImagesStartAction | IFetchImagesSuccessAction | IFetchImagesFailAction;
 
-// Remove
+// Images Remove
 export interface IRemoveImagesStartAction {
     type: typeof REMOVE_IMAGES_START
 }
@@ -70,7 +70,7 @@ export interface IRemoveImagesFailAction {
 
 export type RemoveImagesTypes = IRemoveImagesStartAction | IRemoveImagesSuccessAction | IRemoveImagesFailAction;
 
-// Prune
+// Images Prune
 export interface IPruneImagesStartAction {
     type: typeof PRUNE_IMAGES_START
 }
@@ -88,10 +88,8 @@ export interface IPruneImagesFailAction {
 export type PruneImagesTypes = IPruneImagesStartAction | IPruneImagesSuccessAction | IPruneImagesFailAction;
 
 
-
-////////////////////////////////////////////
-// Containers
-
+////////////////////////////////////////////////////////////////////////////////////////
+// Containers State
 export interface IContainersState {
     containers: Container[],
     error: string,
@@ -99,7 +97,7 @@ export interface IContainersState {
     containerLogs: any
 }
 
-// Fetch
+// Containers Fetch
 export interface IFetchContainersStartAction {
     type: typeof FETCH_CONTAINERS_START
 }
@@ -116,7 +114,7 @@ export interface IFetchContainersFailAction {
 
 export type FetchContainersTypes = IFetchContainersStartAction | IFetchContainersSuccessAction | IFetchContainersFailAction;
 
-// Remove
+// Containers Remove
 export interface IRemoveContainersStartAction {
     type: typeof REMOVE_CONTAINERS_START
 }
@@ -133,22 +131,22 @@ export interface IRemoveContainersFailAction {
 
 export type RemoveContainersTypes = IRemoveContainersStartAction | IRemoveContainersSuccessAction | IRemoveContainersFailAction;
 
-// Update Container Log
+//  Container Log Update
 export interface IUpdateContainerLogsAction {
     type: typeof UPDATE_CONTAINER_LOG,
     containerLogs: string
 }
 
-////////////////////////////////////////////
-// Volumes
 
+////////////////////////////////////////////////////////////////////////////////////////
+// Volumes State
 export interface IVolumesState {
     volumes: Volume[],
     error: string,
     loading: boolean
 }
 
-// Fetch
+// Volumes Fetch
 export interface IFetchVolumesStartAction {
     type: typeof FETCH_VOLUMES_START
 }
@@ -166,4 +164,4 @@ export interface IFetchVolumesFailAction {
 export type FetchVolumesTypes = IFetchVolumesStartAction | IFetchVolumesSuccessAction | IFetchVolumesFailAction;
 
 
-////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////

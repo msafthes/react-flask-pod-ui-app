@@ -65,12 +65,15 @@ const reducer = (state = initialState, action: FetchImagesTypes | RemoveImagesTy
         case FETCH_IMAGES_START: return fetchImagesStart(state, action);
         case FETCH_IMAGES_SUCCESS: return fetchImagesSuccess(state, action);
         case FETCH_IMAGES_FAIL: return fetchImagesFail(state, action);
+
         case REMOVE_IMAGES_START: return removeImagesStart(state, action);
         case REMOVE_IMAGES_SUCCESS: return removeImagesSuccess(state, action);
         case REMOVE_IMAGES_FAIL: return removeImagesFail(state, action);
+
         case PRUNE_IMAGES_START: return pruneImagesStart(state, action);
         case PRUNE_IMAGES_SUCCESS: return pruneImagesSuccess(state, action);
         case PRUNE_IMAGES_FAIL: return pruneImagesFail(state, action);
+
         default: return state;
     }
 };
