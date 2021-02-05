@@ -9,6 +9,8 @@ import css from './Containers.module.css';
 import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
 import { Container } from '../../models/Models';
 
+import { isAllTrue, handleSelectAll, isSelectedAny } from '../../helpers/helpers';
+
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
@@ -31,7 +33,6 @@ interface IContainersProps {
 
 const Containers = (props: IContainersProps) => {
     const { fetchContainers, removeContainers, containers } = props;
-
     const defaultSelectedContainers = {};
 
     for (const [key, value] of Object.entries(containers)) {
@@ -40,14 +41,7 @@ const Containers = (props: IContainersProps) => {
 
     const [selectedContainers, setSelectedContainers] = useState<any>({ ...defaultSelectedContainers });
 
-    let allTrue = true;
-    for (const [key, value] of Object.entries(selectedContainers)) {
-        if (value === false) {
-            allTrue = false;
-            break;
-        }
-    }
-
+    const allTrue = isAllTrue(selectedContainers);
     console.log(`OUTSIDE functions allTrue: ${allTrue}`);
 
     useEffect(() => {
@@ -62,11 +56,6 @@ const Containers = (props: IContainersProps) => {
 
         for (const [key, value] of Object.entries(old)) {
             if (id === key) {
-                // TEMP getting container ID for logs
-                // if (value === true) {
-                //     console.log(`getting ID for logs: ${id}`);
-                //     setSelectedContainer(id);
-                // }
                 old[key] = !old[key];
             }
         }
@@ -101,61 +90,12 @@ const Containers = (props: IContainersProps) => {
     };
 
     const selectAll = () => {
-        console.log("selectAll(), selectedContainers:");
-        console.log(selectedContainers);
-
-        let allTrue = true;
-        for (const [key, value] of Object.entries(selectedContainers)) {
-            if (value === false) {
-                allTrue = false;
-                break;
-            }
-        }
-
-        const updated = { ...selectedContainers };
-        for (const [key, value] of Object.entries(updated)) {
-            if (allTrue) {
-                updated[key] = false
-            } else {
-                updated[key] = true
-            }
-        }
-
+        const updated = handleSelectAll(selectedContainers);
         setSelectedContainers(updated);
         console.log(selectedContainers);
     };
 
-    const isSelectedAny = () => {
-        console.log("isSelectedAny(), selectedContainers:");
-        console.log(selectedContainers);
-
-        for (const [key, value] of Object.entries(selectedContainers)) {
-            if (value === true) {
-                console.log("TRUE - selected container found");
-                return true
-            }
-        }
-
-        console.log("FALSE - no selected container found");
-        return false;
-    };
-
-    const isSelectedOne = () => {
-        let count = 0;
-
-        for (const [key, value] of Object.entries(selectedContainers)) {
-            if (value === true) {
-                count++;
-            }
-        }
-
-        return count === 1;
-    };
-
-    const isSelected = isSelectedAny();
-    // const isSelectedSingle = isSelectedOne();
-
-    // console.log(`selectedContainer: ${selectedContainer}`);
+    const isSelected = isSelectedAny(selectedContainers);
 
     const containersTitleClasses = [css.Content, css.Heading];
     const useStyles = makeStyles({
@@ -211,9 +151,6 @@ const Containers = (props: IContainersProps) => {
                         onClick={() => handleSelectedContainersOperation(selectedContainers)}>
                         Remove
                     </Button>
-
-
-
                 </ButtonGroup>
 
                 <div className={css.Info}>

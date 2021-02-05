@@ -9,6 +9,8 @@ import css from './Images.module.css';
 import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
 import { Image, Container } from '../../models/Models';
 
+import { isAllTrue, handleSelectAll, isSelectedAny, extractIds } from '../../helpers/helpers';
+
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
@@ -44,14 +46,7 @@ const Images = (props: IImagesProps) => {
     const [showError, setShowError] = useState<boolean>(false);
     const [errorInfo, setErrorInfo] = useState<string>("");
 
-    let allTrue = true;
-    for (const [key, value] of Object.entries(selectedImages)) {
-        if (value === false) {
-            allTrue = false;
-            break;
-        }
-    }
-
+    const allTrue = isAllTrue(selectedImages);
     console.log(`OUTSIDE functions allTrue: ${allTrue}`);
 
     useEffect(() => {
@@ -78,12 +73,8 @@ const Images = (props: IImagesProps) => {
     const handleSelectedImagesOperation = selectedImages => {
         console.log("triggered handleSelectedImagesOperation(), selectedImages:");
         console.log(selectedImages);
-
-
-
         console.log("selectAll(), selectedImages:");
         console.log(selectedImages);
-
         console.log("images");
         console.log(images);
 
@@ -106,14 +97,10 @@ const Images = (props: IImagesProps) => {
             }
         });
 
+        console.log("outside - usedImages");
         console.log(usedImages);
 
-        const imageIds = [];
-        for (const [key, value] of Object.entries(selectedImages)) {
-            if (value === true) {
-                imageIds.push(key);
-            }
-        }
+        const imageIds = extractIds(selectedImages);
         console.log("imageIds:");
         console.log(imageIds);
         console.log("DE-selecting images:");
@@ -142,46 +129,12 @@ const Images = (props: IImagesProps) => {
     console.log(`===> errorInfo: ${errorInfo}`);
 
     const selectAll = () => {
-        console.log("selectAll(), selectedImages:");
-        console.log(selectedImages);
-
-        let allTrue = true;
-        for (const [key, value] of Object.entries(selectedImages)) {
-            if (value === false) {
-                allTrue = false;
-                break;
-            }
-        }
-
-        const updated = { ...selectedImages };
-        for (const [key, value] of Object.entries(updated)) {
-            if (allTrue) {
-                updated[key] = false
-            } else {
-                updated[key] = true
-            }
-        }
-
+        const updated = handleSelectAll(selectedImages);
         setSelectedImages(updated);
         console.log(selectedImages);
     };
 
-    const isSelectedAny = () => {
-        console.log("isSelectedAny(), selectedImages:");
-        console.log(selectedImages);
-
-        for (const [key, value] of Object.entries(selectedImages)) {
-            if (value === true) {
-                console.log("TRUE - selected image found");
-                return true
-            }
-        }
-
-        console.log("FALSE - no selected image found");
-        return false;
-    };
-
-    const isSelected = isSelectedAny();
+    const isSelected = isSelectedAny(selectedImages);
 
     const imagesTitleClasses = [css.Content, css.Heading];
     const useStyles = makeStyles({

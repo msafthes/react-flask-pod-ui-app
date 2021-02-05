@@ -9,12 +9,14 @@ import css from './Volumes.module.css';
 import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
 import { Volume } from '../../models/Models';
 
+import { isAllTrue, handleSelectAll } from '../../helpers/helpers';
+
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { makeStyles } from '@material-ui/core/styles';
+// import Button from '@material-ui/core/Button';
+// import ButtonGroup from '@material-ui/core/ButtonGroup';
+// import DeleteIcon from '@material-ui/icons/Delete';
+// import { makeStyles } from '@material-ui/core/styles';
 
 
 interface IVolumesProps {
@@ -28,7 +30,6 @@ interface IVolumesProps {
 
 const Volumes = (props: IVolumesProps) => {
     const { fetchVolumes, removeVolumes, volumes } = props;
-
     const defaultSelectedVolumes = {};
 
     for (const [key, value] of Object.entries(volumes)) {
@@ -37,14 +38,7 @@ const Volumes = (props: IVolumesProps) => {
 
     const [selectedVolumes, setSelectedVolumes] = useState<any>({ ...defaultSelectedVolumes });
 
-    let allTrue = true;
-    for (const [key, value] of Object.entries(selectedVolumes)) {
-        if (value === false) {
-            allTrue = false;
-            break;
-        }
-    }
-
+    const allTrue = isAllTrue(selectedVolumes);
     console.log(`OUTSIDE functions allTrue: ${allTrue}`);
 
     useEffect(() => {
@@ -67,63 +61,13 @@ const Volumes = (props: IVolumesProps) => {
         console.log(selectedVolumes);
     };
 
-    const handleSelectedVolumesOperation = selectedVolumes => {
-        console.log("triggered handleSelectedVolumesOperation(), selectedVolumes:");
-        console.log(selectedVolumes);
-        const volumeNames = [];
-        for (const [key, value] of Object.entries(selectedVolumes)) {
-            if (value === true) {
-                volumeNames.push(key);
-            }
-        }
-        console.log("volumeNames:");
-        console.log(volumeNames);
-        console.log("DE-selecting volumes:");
-        const updated = { ...selectedVolumes };
-
-        for (const [key, value] of Object.entries(updated)) {
-            if (value === true) {
-                updated[key] = false
-            }
-        }
-        setSelectedVolumes(updated);
-        console.log(selectedVolumes);
-
-        removeVolumes(volumeNames);
-    };
-
     const selectAll = () => {
-        console.log("selectAll(), selectedVolumes:");
-        console.log(selectedVolumes);
-
-        let allTrue = true;
-        for (const [key, value] of Object.entries(selectedVolumes)) {
-            if (value === false) {
-                allTrue = false;
-                break;
-            }
-        }
-
-        const updated = { ...selectedVolumes };
-        for (const [key, value] of Object.entries(updated)) {
-            if (allTrue) {
-                updated[key] = false
-            } else {
-                updated[key] = true
-            }
-        }
-
+        const updated = handleSelectAll(setSelectedVolumes);
         setSelectedVolumes(updated);
         console.log(selectedVolumes);
     };
 
     const volumesTitleClasses = [css.Content, css.Heading];
-    const useStyles = makeStyles({
-        buttonGroup: {
-            alignSelf: "flex-start"
-        }
-    });
-    const classes = useStyles();
 
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>
 
@@ -150,10 +94,6 @@ const Volumes = (props: IVolumesProps) => {
             <div className={css.Wrapper}>
                 <h1 className={css.Headline}>Podman Volumes</h1>
                 <p>Showing information about Volumes based on the `podman volume inspect` command</p>
-                <ButtonGroup className={classes.buttonGroup}>
-                    <Button disabled color="secondary" startIcon={<DeleteIcon />} onClick={() => handleSelectedVolumesOperation(selectedVolumes)}>Remove</Button>
-                </ButtonGroup>
-
                 <div className={css.Info}>
                     <div className={volumesTitleClasses.join(' ')}>
                         <Checkbox color="primary" onClick={selectAll} checked={allTrue} />
