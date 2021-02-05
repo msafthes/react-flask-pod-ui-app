@@ -20,7 +20,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 
 
-
 interface IContainersProps {
     containers: Container[],
     loading: boolean,
@@ -40,8 +39,6 @@ const Containers = (props: IContainersProps) => {
     }
 
     const [selectedContainers, setSelectedContainers] = useState<any>({ ...defaultSelectedContainers });
-
-    // const [selectedContainer, setSelectedContainer] = useState<String>(null);
 
     let allTrue = true;
     for (const [key, value] of Object.entries(selectedContainers)) {
@@ -144,24 +141,19 @@ const Containers = (props: IContainersProps) => {
     };
 
     const isSelectedOne = () => {
-        console.log("isSelectedOne(), selectedContainers:");
-        console.log(selectedContainers);
-
         let count = 0;
 
         for (const [key, value] of Object.entries(selectedContainers)) {
             if (value === true) {
-                // console.log(`TRUE - selected container found, total: ${count}`);
                 count++;
             }
         }
 
-        // console.log(`final selected count: ${count}`);
         return count === 1;
     };
 
     const isSelected = isSelectedAny();
-    const isSelectedSingle = isSelectedOne();
+    // const isSelectedSingle = isSelectedOne();
 
     // console.log(`selectedContainer: ${selectedContainer}`);
 
