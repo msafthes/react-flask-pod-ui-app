@@ -21,6 +21,13 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { Link } from 'react-router-dom';
 
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 interface IContainersProps {
     containers: Container[],
@@ -41,6 +48,8 @@ const Containers = (props: IContainersProps) => {
     }
 
     const [selectedContainers, setSelectedContainers] = useState<any>({ ...defaultSelectedContainers });
+    const [openRunModal, setOpenRunModal] = React.useState(false);
+    const [runCommand, setRunCommand] = React.useState("");
 
     const allTrue = isAllTrue(selectedContainers);
     console.log(`OUTSIDE functions allTrue: ${allTrue}`);
@@ -50,6 +59,28 @@ const Containers = (props: IContainersProps) => {
     }, [fetchContainers]);
 
     console.log(selectedContainers);
+
+    const handleRunOpen = () => {
+        setOpenRunModal(true);
+    };
+
+    const handleRunClose = () => {
+        setOpenRunModal(false);
+    };
+
+    const onChangeRun = (e) => {
+        setRunCommand(e.target.value);
+    };
+
+    const handleContainerRun = () => {
+        setOpenRunModal(false);
+        if (runCommand.length == 0) {
+            console.log("empty run command");
+            return;
+        }
+        setRunCommand('');
+        containerRun(runCommand);
+    };
 
     const handleCheckboxChange = changeEvent => {
         const { id } = changeEvent.target;
@@ -112,8 +143,8 @@ const Containers = (props: IContainersProps) => {
         content = <Grid container direction="column">
             {(containers && containers.length) ?
                 (containers.map((container, i) => {
-                    return <React.Fragment>
-                        <Grid item container className={css.Content} key={container.containerId}>
+                    return <React.Fragment key={container.containerId}>
+                        <Grid item container className={css.Content}>
                             <Checkbox color="primary" onClick={handleCheckboxChange} id={container.containerId} checked={selectedContainers[container.containerId]} />
                             <Grid className={css.ContainerId}>{container.containerId}</Grid>
                             <Grid className={css.Image}>{container.image}</Grid>
@@ -146,13 +177,42 @@ const Containers = (props: IContainersProps) => {
                 <h1 className={css.Headline}>Podman Containers</h1>
                 <p>Showing information about Containers and offering various operations with them</p>
                 <ButtonGroup className={classes.buttonGroup}>
-                    <Button disabled={!isSelected}
+                    <Button
+                        disabled={!isSelected}
                         color="secondary"
                         startIcon={<DeleteIcon />}
                         onClick={() => handleSelectedContainersOperation(selectedContainers)}>
                         Remove
                     </Button>
                 </ButtonGroup>
+
+                <div>
+                    <Button variant="outlined" color="primary" onClick={handleRunOpen}>
+                        Run
+                    </Button>
+                    <Dialog open={openRunModal} onClose={handleRunClose} aria-labelledby="form-dialog-title">
+                        <DialogTitle id="form-dialog-title">Run</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Enter the command for "podman run"
+                            </DialogContentText>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="name"
+                                label="Podman Run"
+                                type="text"
+                                fullWidth
+                                onChange={onChangeRun}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleContainerRun} color="primary">
+                                Run
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
 
                 <div className={css.Info}>
                     <div className={containersTitleClasses.join(' ')}>

@@ -173,7 +173,13 @@ const Images = (props: IImagesProps) => {
                 <h1 className={css.Headline}>Podman Images</h1>
                 <p>Showing information about images based on the `podman images` command</p>
                 <ButtonGroup className={classes.buttonGroup}>
-                    <Button disabled={!isSelected} color="secondary" startIcon={<DeleteIcon />} onClick={() => handleSelectedImagesOperation(selectedImages)}>Remove</Button>
+                    <Button
+                        disabled={!isSelected}
+                        color="secondary"
+                        startIcon={<DeleteIcon />}
+                        onClick={() => handleSelectedImagesOperation(selectedImages)}>
+                        Remove
+                    </Button>
                     <Button color="secondary" startIcon={<DeleteIcon />} onClick={() => pruneImages()}>Remove unused images</Button>
                 </ButtonGroup>
 

@@ -131,26 +131,23 @@ export const containerRunFail = (error: string) => {
 
 export const containerRun = (command: String) => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("containerRun() command:");
-        console.log(command);
-        // dispatch(containerRunStart());
+        dispatch(containerRunStart());
 
-        // const url = `http://127.0.0.1:5000/container-run`;
+        const url = `http://127.0.0.1:5000/container-run`;
+        const headers = {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        }
+        const data = {
+            command: command
+        }
 
-        // const headers = {
-        //     'Content-Type': 'application/json',
-        //     'Access-Control-Allow-Origin': '*'
-        // }
-
-        // axios.delete(url, {
-        //     headers: headers,
-        //     data: {
-        //         command: command
-        //     }
-        // }).then(response => {
-        //     dispatch(containerRunSuccess(response.data.containers));
-        // }).catch(err => {
-        //     dispatch(containerRunFail(err.response.data));
-        // });
+        axios.post(url, data, {
+            headers: headers,
+        }).then(response => {
+            dispatch(containerRunSuccess(response.data.containers));
+        }).catch(err => {
+            dispatch(containerRunFail(err.response.data));
+        });
     };
 };
