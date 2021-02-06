@@ -27,12 +27,13 @@ interface IContainersProps {
     loading: boolean,
     fetchContainers: Function,
     removeContainers: Function,
+    containerRun: Function,
 
     containersDataTest: Container[]
 }
 
 const Containers = (props: IContainersProps) => {
-    const { fetchContainers, removeContainers, containers } = props;
+    const { fetchContainers, removeContainers, containerRun, containers } = props;
     const defaultSelectedContainers = {};
 
     for (const [key, value] of Object.entries(containers)) {
@@ -182,7 +183,9 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         fetchContainers: () =>
             dispatch(actions.fetchContainers()),
         removeContainers: (selectedContainers) =>
-            dispatch(actions.removeContainers(selectedContainers))
+            dispatch(actions.removeContainers(selectedContainers)),
+        containerRun: (command) =>
+            dispatch(actions.containerRun(command))
     };
 };
 

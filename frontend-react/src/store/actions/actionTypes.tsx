@@ -21,11 +21,15 @@ export const REMOVE_CONTAINERS_START = 'REMOVE_CONTAINERS_START';
 export const REMOVE_CONTAINERS_SUCCESS = 'REMOVE_CONTAINERS_SUCCESS';
 export const REMOVE_CONTAINERS_FAIL = 'REMOVE_CONTAINERS_FAIL';
 
+export const UPDATE_CONTAINER_LOG = "UPDATE_CONTAINER_LOG";
+
+export const CONTAINER_RUN_START = 'CONTAINER_RUN_START';
+export const CONTAINER_RUN_SUCCESS = 'CONTAINER_RUN_SUCCESS';
+export const CONTAINER_RUN_FAIL = 'CONTAINER_RUN_FAIL';
+
 export const FETCH_VOLUMES_START = 'FETCH_VOLUMES_START';
 export const FETCH_VOLUMES_SUCCESS = 'FETCH_VOLUMES_SUCCESS';
 export const FETCH_VOLUMES_FAIL = 'FETCH_VOLUMES_FAIL';
-
-export const UPDATE_CONTAINER_LOG = "UPDATE_CONTAINER_LOG";
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -136,6 +140,23 @@ export interface IUpdateContainerLogsAction {
     type: typeof UPDATE_CONTAINER_LOG,
     containerLogs: string
 }
+
+// Container Run
+export interface IContainerRunStartAction {
+    type: typeof CONTAINER_RUN_START
+}
+
+export interface IContainerRunSuccessAction {
+    type: typeof CONTAINER_RUN_SUCCESS,
+    containers: Container[]
+}
+
+export interface IContainerRunFailAction {
+    type: typeof CONTAINER_RUN_FAIL,
+    error: string
+}
+
+export type ContainerRunTypes = IContainerRunStartAction | IContainerRunSuccessAction | IContainerRunFailAction;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////

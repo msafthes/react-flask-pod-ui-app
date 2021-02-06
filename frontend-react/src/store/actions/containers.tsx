@@ -6,6 +6,7 @@ import {
     FETCH_CONTAINERS_START, FETCH_CONTAINERS_SUCCESS, FETCH_CONTAINERS_FAIL,
     REMOVE_CONTAINERS_START, REMOVE_CONTAINERS_SUCCESS, REMOVE_CONTAINERS_FAIL,
     UPDATE_CONTAINER_LOG,
+    CONTAINER_RUN_START, CONTAINER_RUN_SUCCESS, CONTAINER_RUN_FAIL,
 } from './actionTypes';
 
 
@@ -106,3 +107,50 @@ export const updateContainerLogs = (containerLogs) => {
         containerLogs: containerLogs
     }
 }
+
+// Container Run
+export const containerRunStart = () => {
+    return {
+        type: CONTAINER_RUN_START
+    };
+};
+
+export const containerRunSuccess = (containers: Container) => {
+    return {
+        type: CONTAINER_RUN_SUCCESS,
+        containers: containers
+    };
+};
+
+export const containerRunFail = (error: string) => {
+    return {
+        type: CONTAINER_RUN_FAIL,
+        error: error
+    };
+};
+
+export const containerRun = (command: String) => {
+    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+        console.log("containerRun() command:");
+        console.log(command);
+        // dispatch(containerRunStart());
+
+        // const url = `http://127.0.0.1:5000/container-run`;
+
+        // const headers = {
+        //     'Content-Type': 'application/json',
+        //     'Access-Control-Allow-Origin': '*'
+        // }
+
+        // axios.delete(url, {
+        //     headers: headers,
+        //     data: {
+        //         command: command
+        //     }
+        // }).then(response => {
+        //     dispatch(containerRunSuccess(response.data.containers));
+        // }).catch(err => {
+        //     dispatch(containerRunFail(err.response.data));
+        // });
+    };
+};
