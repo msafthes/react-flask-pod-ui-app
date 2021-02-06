@@ -111,8 +111,6 @@ def podman_volumes():
 # Images
 
 # GET /images
-
-
 @app.route('/images', methods=['GET'])
 def get_images():
 
@@ -121,8 +119,6 @@ def get_images():
     return jsonify(images)
 
 # DELETE /images
-
-
 @app.route('/images', methods=['DELETE'])
 def remove_images():
     image_ids = request.get_json().get("IDs")
@@ -172,6 +168,21 @@ def remove_containers():
     all_ids = " ".join(container_ids)
 
     command = "podman rm {0}".format(all_ids)
+
+    if count != 0:
+        subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True).stdout
+
+    containers = podman_ps()
+
+    return jsonify(containers)
+
+# POST /container-run
+@app.route('/container-run', methods=['POST'])
+def container_run():
+    run_command = request.get_json().get("command")
+    count = len(run_command)
+    command = "podman run {0}".format(run_command)
 
     if count != 0:
         subprocess.run("{0}".format(command), shell=True,
