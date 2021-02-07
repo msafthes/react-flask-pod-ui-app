@@ -139,7 +139,7 @@ const Containers = (props: IContainersProps) => {
         setSelectedContainers(updated);
         console.log(selectedContainers);
 
-        // removeContainers(containerIds);
+        removeContainers(containerIds);
     };
 
     const selectAll = () => {
