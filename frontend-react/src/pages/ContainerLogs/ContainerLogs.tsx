@@ -14,6 +14,8 @@ import Grid from '@material-ui/core/Grid';
 
 import { v4 as uuidv4 } from 'uuid';
 
+import { LazyLog } from 'react-lazylog';
+
 
 interface IContainerLogsProps {
     containerLogs: any,
@@ -27,11 +29,12 @@ const ContainerLogs = (props: IContainerLogsProps) => {
     const ws = useContext(WebSocketContext);
 
     const updateLogs = () => {
+        console.log(">>> updateLogs()");
         ws.updateLogs(props.match.params.id);
     }
 
     useEffect(() => {
-        const interval = setInterval(() => updateLogs(), 50000);
+        const interval = setInterval(() => updateLogs(), 5000);
         // returned function will be called on component unmount 
         return () => {
             clearInterval(interval)
@@ -39,17 +42,16 @@ const ContainerLogs = (props: IContainerLogsProps) => {
     }, [])
 
     const id = props.match.params.id;
+    const containerLogs = props.containerLogs;
 
     return (
         <div className={css.ContainerLogs}>
             <div className={css.Wrapper}>
                 <h1 className={css.Headline}>Containers Logs</h1>
                 <p>Container ID: {id}</p>
-                <Grid container direction="column">
-                    {(props.containerLogs && props.containerLogs.map((log) => {
-                        return <Grid className={css.ContainerLog} key={uuidv4()}>{log}</Grid>
-                    }))}
-                </Grid>
+                <div className={css.LogViewer}>
+                    <LazyLog enableSearch extraLines={1} text={containerLogs} caseInsensitive />
+                </div>
             </div>
         </div>
     );

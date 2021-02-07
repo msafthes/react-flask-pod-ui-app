@@ -87,6 +87,12 @@ def podman_logs(id):
     output = subprocess.run("{0}".format(
         command), shell=True, capture_output=True).stdout.decode('utf-8')
 
+    print("len(logs):", len(logs))
+    if len(logs) == 0:
+        logs = "There are no logs for this container yet."
+
+    print("READY logs:")
+    print(logs)
     return {'logs': logs}
 
 

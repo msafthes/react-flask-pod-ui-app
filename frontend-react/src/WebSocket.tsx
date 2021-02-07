@@ -38,14 +38,16 @@ export default ({ children }) => {
             console.log("GOT containerLogs:");
             console.log(containerLogs);
 
-            let test = msg.logs;
-            test = test.split('\n')
-            console.log("test:");
-            console.log(test);
+            // let test = msg.logs;
+            // test = test.split('\n')
+            // console.log("test:");
+            // console.log(test);
 
             // const payload = JSON.parse(msg);
             // dispatch(actions.updateContainerLogs(containerLogs));
-            dispatch(actions.updateContainerLogs(test));
+
+            // dispatch(actions.updateContainerLogs(test));
+            dispatch(actions.updateContainerLogs(containerLogs));
         })
 
         ws = {
