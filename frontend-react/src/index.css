@@ -14,6 +14,8 @@ code {
 }
 
 /* Material UI changes */
+
+/* Checkboxes */
 .MuiCheckbox-root {
   color: #3f51b5 !important;
   color: rgba(255,255,255,1) !important;
@@ -24,6 +26,7 @@ code {
   opacity: 1 !important;
 }
 
+/* Buttons */
 .MuiButton-outlinedSecondary.Mui-disabled {
   border: 1px solid  rgba(255,255,255,1) !important;
 }
@@ -31,4 +34,14 @@ code {
 .MuiButton-root.Mui-disabled {
   color: rgba(255,255,255,1) !important;
   opacity: 0.30 !important;
+}
+
+/* Accordion */
+.MuiAccordion-root {
+  background-color: #111 !important;
+  border-top: 1px solid rgb(255 255 255 / 12%);
+  border-bottom: 1px solid rgb(255 255 255 / 12%);
+  color: white !important;
+  /* box-shadow: outset 0 -1px 0 0 rgb(255 255 255 / 12%); */
+  /* box-shadow: inset 0 -1px 0 0 rgb(255 255 255 / 12%); */
 }
