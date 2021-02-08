@@ -117,8 +117,8 @@ const Containers = (props: IContainersProps) => {
         console.log(selectedContainers);
     };
 
-    const handleSelectedContainersOperation = selectedContainers => {
-        console.log("triggered handleSelectedContainersOperation(), selectedContainers:");
+    const handleRemoveContainers = selectedContainers => {
+        console.log("triggered handleRemoveContainers(), selectedContainers:");
         console.log(selectedContainers);
         const containerIds = [];
         for (const [key, value] of Object.entries(selectedContainers)) {
@@ -157,7 +157,6 @@ const Containers = (props: IContainersProps) => {
         }
     });
     const classes = useStyles();
-
 
 
 
@@ -204,9 +203,6 @@ const Containers = (props: IContainersProps) => {
 
 
 
-
-
-
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>
 
     if (!props.loading) {
@@ -214,12 +210,12 @@ const Containers = (props: IContainersProps) => {
             {(containers && containers.length) ?
                 (containers.map((container, i) => {
                     return <React.Fragment key={container.containerId}>
-                        <IsolatedMenu
-                            containerId={container.containerId}
-                            removeContainer={handleSelectedContainersOperation}
-                        />
                         <Grid item container className={css.Content}>
                             <Checkbox color="primary" onClick={handleCheckboxChange} id={container.containerId} checked={selectedContainers[container.containerId]} />
+                            <IsolatedMenu
+                                containerId={container.containerId}
+                                removeContainer={handleRemoveContainers}
+                            />
                             <Grid className={css.ContainerId}>{container.containerId}</Grid>
                             <Grid className={css.Image}>{container.image}</Grid>
                             <Grid className={css.Command}>{container.command}</Grid>
@@ -247,7 +243,7 @@ const Containers = (props: IContainersProps) => {
                         disabled={!isSelected}
                         color="secondary"
                         startIcon={<DeleteIcon />}
-                        onClick={() => handleSelectedContainersOperation(selectedContainers)}>
+                        onClick={() => handleRemoveContainers(selectedContainers)}>
                         Remove Selected
                     </Button>
                 </ButtonGroup>

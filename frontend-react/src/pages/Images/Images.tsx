@@ -70,8 +70,8 @@ const Images = (props: IImagesProps) => {
         console.log(selectedImages);
     };
 
-    const handleSelectedImagesOperation = selectedImages => {
-        console.log("triggered handleSelectedImagesOperation(), selectedImages:");
+    const handleRemoveImages = selectedImages => {
+        console.log("triggered handleRemoveImages(), selectedImages:");
         console.log(selectedImages);
         console.log("selectAll(), selectedImages:");
         console.log(selectedImages);
@@ -177,7 +177,7 @@ const Images = (props: IImagesProps) => {
                         disabled={!isSelected}
                         color="secondary"
                         startIcon={<DeleteIcon />}
-                        onClick={() => handleSelectedImagesOperation(selectedImages)}>
+                        onClick={() => handleRemoveImages(selectedImages)}>
                         Remove
                     </Button>
                     <Button color="secondary" startIcon={<DeleteIcon />} onClick={() => pruneImages()}>Remove unused images</Button>
