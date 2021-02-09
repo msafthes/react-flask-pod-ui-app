@@ -41,24 +41,43 @@
 /* CONTAINERS */
 .ContainerId {
     width: 10%;
+    width: 10rem;
+}
+.Status {
+    width: 13.5%;
+    width: 13.5rem;
 }
 .Image {
     width: 25.5%;
+    width: 25.5rem;
 }
 .Command {
     width: 11.5%;
+    width: 11.5rem;
 }
 .Created {
     width: 9.5%;
+    width: 9.5rem;
 }
 .Ports {
     width: 15.5%;
+    width: 15.5rem;
 }
 .Names {
     width: 12%;
+    width: 12rem;
 }
-.Status {
-    width: 13.5%
+
+.ContainerId, .Image, .Command, .Created,
+.Ports, .Names, .Status {
+    overflow: hidden;
+    /* margin-right: 1% */
+    margin-right: 1.25rem;
+}
+
+.DetailTitle {
+    color: var(--color-purple);
+    width: 4.5rem;
 }
 
 .Headline {

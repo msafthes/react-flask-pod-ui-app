@@ -9,12 +9,10 @@ import { Link } from 'react-router-dom';
 
 
 const IsolatedMenu = props => {
-    // const containerId = props.containerId;
     const { containerId, removeContainer } = props
-    // const [anchorEl, setAnchorEl] = useState(null);
-    // const open = Boolean(anchorEl);
-
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const id = {};
+    id[containerId] = true;
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -23,9 +21,6 @@ const IsolatedMenu = props => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-    const id = {};
-    id[containerId] = true;
 
     return (
         <div>
@@ -47,8 +42,7 @@ const IsolatedMenu = props => {
                 </Button>
                 </Link>
                 <MenuItem onClick={() => removeContainer(id)}>Remove</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <MenuItem onClick={handleClose}>Close</MenuItem>
             </Menu>
         </div>
     )

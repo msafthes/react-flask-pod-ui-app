@@ -49,6 +49,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import IsolatedMenu from '../../components/MaterialCustomized/IsolatedMenu';
 
+import Tooltip from '@material-ui/core/Tooltip';
+
+
 
 interface IContainersProps {
     containers: Container[],
@@ -210,20 +213,77 @@ const Containers = (props: IContainersProps) => {
             {(containers && containers.length) ?
                 (containers.map((container, i) => {
                     return <React.Fragment key={container.containerId}>
-                        <Grid item container className={css.Content}>
-                            <Checkbox color="primary" onClick={handleCheckboxChange} id={container.containerId} checked={selectedContainers[container.containerId]} />
-                            <IsolatedMenu
-                                containerId={container.containerId}
-                                removeContainer={handleRemoveContainers}
-                            />
-                            <Grid className={css.ContainerId}>{container.containerId}</Grid>
-                            <Grid className={css.Image}>{container.image}</Grid>
-                            <Grid className={css.Command}>{container.command}</Grid>
-                            <Grid className={css.Created}>{container.created}</Grid>
-                            <Grid className={css.Ports}>{container.ports}</Grid>
-                            <Grid className={css.Names}>{container.names}</Grid>
-                            <Grid className={css.Status}>{container.status}</Grid>
-                        </Grid>
+
+                        <Accordion>
+
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-label="Expand"
+                                aria-controls="additional-actions1-content"
+                                id="additional-actions1-header"
+                            >
+                                <FormControlLabel
+                                    aria-label="Acknowledge"
+                                    onClick={(event) => event.stopPropagation()}
+                                    onFocus={(event) => event.stopPropagation()}
+                                    control={<Checkbox
+                                        color="primary"
+                                        onClick={handleCheckboxChange}
+                                        id={container.containerId}
+                                        checked={selectedContainers[container.containerId]} />}
+                                    // label="Select"
+                                    label=""
+                                />
+                                <Grid item container className={css.Content}>
+                                    {/* <Checkbox
+                                        color="primary"
+                                        onClick={handleCheckboxChange}
+                                        id={container.containerId}
+                                        checked={selectedContainers[container.containerId]} /> */}
+                                    <Tooltip title={container.containerId}>
+                                        <Grid className={css.ContainerId}>{container.containerId}</Grid>
+                                    </Tooltip>
+                                    <Tooltip title={container.status}>
+                                        <Grid className={css.Status}>{container.status}</Grid>
+                                    </Tooltip>
+                                    <Tooltip title={container.image}>
+                                        <Grid className={css.Image}>{container.image}</Grid>
+                                    </Tooltip>
+                                    <Tooltip title={container.command}>
+                                        <Grid className={css.Command}>{container.command}</Grid>
+                                    </Tooltip>
+                                    <Tooltip title={container.ports}>
+                                        <Grid className={css.Ports}>{container.ports}</Grid>
+                                    </Tooltip>
+                                    <Tooltip title={container.created}>
+                                        <Grid className={css.Created}>{container.created}</Grid>
+                                    </Tooltip>
+
+                                    <FormControlLabel
+                                        aria-label="Acknowledge"
+                                        onClick={(event) => event.stopPropagation()}
+                                        onFocus={(event) => event.stopPropagation()}
+                                        control={<IsolatedMenu
+                                            containerId={container.containerId}
+                                            removeContainer={handleRemoveContainers}
+                                        />}
+                                        // label="Select"
+                                        label=""
+                                    />
+                                </Grid>
+                            </AccordionSummary>
+
+                            <AccordionDetails>
+                                <Grid className={css.DetailTitle}>Names:</Grid>
+                                <Grid className={css.Names}>{container.names}</Grid>
+                                {/* <Typography>
+                                    The click event of the nested action will propagate up and expand the accordion unless
+                                    you explicitly stop it.
+                            </Typography> */}
+                            </AccordionDetails>
+
+                        </Accordion>
+
                     </React.Fragment>
 
                 }))
@@ -280,44 +340,13 @@ const Containers = (props: IContainersProps) => {
                     <div className={containersTitleClasses.join(' ')}>
                         <Checkbox color="primary" onClick={selectAll} checked={allTrue} />
                         <div className={css.ContainerId}>Container ID</div>
+                        <div className={css.Status}>Status</div>
                         <div className={css.Image}>Image</div>
                         <div className={css.Command}>Command</div>
-                        <div className={css.Created}>Created</div>
                         <div className={css.Ports}>Ports</div>
-                        <div className={css.Names}>Names</div>
-                        <div className={css.Status}>Status</div>
+                        <div className={css.Created}>Created</div>
+                        {/* <div className={css.Names}>Names</div> */}
                     </div>
-                    {/* <Accordion>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-label="Expand"
-                            aria-controls="additional-actions1-content"
-                            id="additional-actions1-header"
-                        >
-                            <FormControlLabel
-                                aria-label="Acknowledge"
-                                onClick={(event) => event.stopPropagation()}
-                                onFocus={(event) => event.stopPropagation()}
-                                control={<Checkbox color="primary" onClick={selectAll} checked={allTrue} />}
-                                label="Select"
-                            />
-                            <div className={containersTitleClasses.join(' ')}>
-                                <div className={css.ContainerId}>Container ID</div>
-                                <div className={css.Image}>Image</div>
-                                <div className={css.Command}>Command</div>
-                                <div className={css.Created}>Created</div>
-                                <div className={css.Ports}>Ports</div>
-                                <div className={css.Names}>Names</div>
-                                <div className={css.Status}>Status</div>
-                            </div>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Typography>
-                                The click event of the nested action will propagate up and expand the accordion unless
-                                you explicitly stop it.
-                            </Typography>
-                        </AccordionDetails>
-                    </Accordion> */}
                     {content}
                 </div>
             </div>
@@ -337,7 +366,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
             dispatch(actions.fetchContainers()),
         removeContainers: (selectedContainers) =>
             dispatch(actions.removeContainers(selectedContainers)),
-        containerRun: (command) =>
+        containerRun: (command, containers) =>
             dispatch(actions.containerRun(command))
     };
 };

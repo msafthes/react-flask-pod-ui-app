@@ -159,7 +159,6 @@ const Images = (props: IImagesProps) => {
                         <Grid className={css.Created}>{image.created}</Grid>
                         <Grid className={css.Size}>{image.size}</Grid>
                     </Grid>
-
                 }))
                 :
                 ''
