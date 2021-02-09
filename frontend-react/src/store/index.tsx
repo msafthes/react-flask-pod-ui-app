@@ -1,8 +1,12 @@
 import { createStore, applyMiddleware, compose, combineReducers, Store } from 'redux';
 import thunk from 'redux-thunk';
-import { persistReducer } from 'redux-persist'
+import { persistReducer } from 'redux-persist';
 // defaults to localStorage for web
-import storage from 'redux-persist/lib/storage'
+import storage from 'redux-persist/lib/storage';
+// Connected React Router
+import { connectRouter } from 'connected-react-router';
+import { createBrowserHistory } from 'history';
+import { routerMiddleware } from 'connected-react-router';
 
 // Reducers
 import imagesReducer from './reducers/images';
@@ -23,19 +27,26 @@ const persistConfig = {
     storage,
 }
 
-const rootReducer = combineReducers({
+const rootReducer = (history) => combineReducers({
     images: imagesReducer,
     containers: containersReducer,
     volumes: volumesReducer,
+    router: connectRouter(history),
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+export const history = createBrowserHistory();
 
-export type AppState = ReturnType<typeof rootReducer>;
+const persistedReducer = persistReducer(persistConfig, rootReducer(history));
+
+// export type AppState = ReturnType<typeof rootReducer>;
+export type AppState = any;
 
 export function configureStore(): Store<AppState> {
     const store = createStore(persistedReducer, composeEnhancers(
-        applyMiddleware(thunk)
+        applyMiddleware(
+            routerMiddleware(history),
+            thunk
+        )
     ));
 
     return store;

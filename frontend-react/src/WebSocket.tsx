@@ -35,7 +35,7 @@ export default ({ children }) => {
             console.log(msg["logs"]);
             // const containerLogs = JSON.parse(msg).logs;
             const containerLogs = msg.logs;
-            console.log("GOT containerLogs:");
+            console.log("\n\nGOT containerLogs:");
             console.log(containerLogs);
 
             // let test = msg.logs;

@@ -9,6 +9,8 @@ import {
     CONTAINER_RUN_START, CONTAINER_RUN_SUCCESS, CONTAINER_RUN_FAIL,
 } from './actionTypes';
 
+import { push } from 'connected-react-router';
+
 
 // CONTAINERS
 
@@ -145,6 +147,24 @@ export const containerRun = (command: String) => {
         axios.post(url, data, {
             headers: headers,
         }).then(response => {
+            // -dt -p 8080:8080 --rm docker.io/library/alpine /bin/sh
+            // console.log(`command: ${command}`);
+            const parts = command.split(" ");
+            // console.log(`parts:`);
+            // console.log(parts);
+            // console.log(containers);
+
+            parts.forEach(part => {
+                response.data.containers.forEach(container => {
+                    const image = container.image.split(":")[0];
+                    // console.log(`part: ${part} | image: ${image} | ID: ${container.containerId} | imageRaw: ${container.image}`);
+
+                    if (part === container.containerId || part === container.image || part === image) {
+                        // console.log(`\n\n>>>>> found ID: ${container.containerId}`);
+                        dispatch(push(`/containers/${container.containerId}`));
+                    }
+                });
+            });
             dispatch(containerRunSuccess(response.data.containers));
         }).catch(err => {
             dispatch(containerRunFail(err.response.data));
