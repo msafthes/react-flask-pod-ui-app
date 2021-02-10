@@ -16,10 +16,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import DeleteIcon from '@material-ui/icons/Delete';
-import PageviewIcon from '@material-ui/icons/Pageview';
+// import PageviewIcon from '@material-ui/icons/Pageview';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -32,25 +32,23 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { withStyles } from '@material-ui/core/styles';
+// import { withStyles } from '@material-ui/core/styles';
 // import Menu, { MenuProps } from '@material-ui/core/Menu';
 // import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import SendIcon from '@material-ui/icons/Send';
+// import ListItemIcon from '@material-ui/core/ListItemIcon';
+// import ListItemText from '@material-ui/core/ListItemText';
+// import InboxIcon from '@material-ui/icons/MoveToInbox';
+// import DraftsIcon from '@material-ui/icons/Drafts';
+// import SendIcon from '@material-ui/icons/Send';
 
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+// import Menu from '@material-ui/core/Menu';
+// import MenuItem from '@material-ui/core/MenuItem';
 
-import IsolatedMenu from '../../components/MaterialCustomized/IsolatedMenu';
-
+import MenuContainers from '../../components/MaterialCustomized/MenuContainers';
 import Tooltip from '@material-ui/core/Tooltip';
-
 
 
 interface IContainersProps {
@@ -161,51 +159,6 @@ const Containers = (props: IContainersProps) => {
     });
     const classes = useStyles();
 
-
-
-    // const StyledMenu = withStyles({
-    //     paper: {
-    //         border: '1px solid #d3d4d5',
-    //     },
-    // })((props: MenuProps) => (
-    //     <Menu
-    //         elevation={0}
-    //         getContentAnchorEl={null}
-    //         anchorOrigin={{
-    //             vertical: 'bottom',
-    //             horizontal: 'center',
-    //         }}
-    //         transformOrigin={{
-    //             vertical: 'top',
-    //             horizontal: 'center',
-    //         }}
-    //         {...props}
-    //     />
-    // ));
-
-    // const StyledMenuItem = withStyles((theme) => ({
-    //     root: {
-    //         '&:focus': {
-    //             backgroundColor: theme.palette.primary.main,
-    //             '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-    //                 color: theme.palette.common.white,
-    //             },
-    //         },
-    //     },
-    // }))(MenuItem);
-
-    // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-    // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    //     setAnchorEl(event.currentTarget);
-    // };
-
-    // const handleClose = () => {
-    //     setAnchorEl(null);
-    // };
-
-
-
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>
 
     if (!props.loading) {
@@ -235,11 +188,6 @@ const Containers = (props: IContainersProps) => {
                                     label=""
                                 />
                                 <Grid item container className={css.Content}>
-                                    {/* <Checkbox
-                                        color="primary"
-                                        onClick={handleCheckboxChange}
-                                        id={container.containerId}
-                                        checked={selectedContainers[container.containerId]} /> */}
                                     <Tooltip title={container.containerId}>
                                         <Grid className={css.ContainerId}>{container.containerId}</Grid>
                                     </Tooltip>
@@ -263,9 +211,9 @@ const Containers = (props: IContainersProps) => {
                                         aria-label="Acknowledge"
                                         onClick={(event) => event.stopPropagation()}
                                         onFocus={(event) => event.stopPropagation()}
-                                        control={<IsolatedMenu
+                                        control={<MenuContainers
                                             containerId={container.containerId}
-                                            removeContainer={handleRemoveContainers}
+                                            removeItem={handleRemoveContainers}
                                         />}
                                         // label="Select"
                                         label=""
@@ -276,10 +224,6 @@ const Containers = (props: IContainersProps) => {
                             <AccordionDetails>
                                 <Grid className={css.DetailTitle}>Names:</Grid>
                                 <Grid className={css.Names}>{container.names}</Grid>
-                                {/* <Typography>
-                                    The click event of the nested action will propagate up and expand the accordion unless
-                                    you explicitly stop it.
-                            </Typography> */}
                             </AccordionDetails>
 
                         </Accordion>
@@ -298,17 +242,47 @@ const Containers = (props: IContainersProps) => {
             <div className={css.Wrapper}>
                 <h1 className={css.Headline}>Podman Containers</h1>
                 <p>Showing information about Containers and offering various operations with them</p>
-                <ButtonGroup className={classes.buttonGroup}>
-                    <Button
-                        disabled={!isSelected}
-                        color="secondary"
-                        startIcon={<DeleteIcon />}
-                        onClick={() => handleRemoveContainers(selectedContainers)}>
-                        Remove Selected
+                <Grid container className={css.Content}>
+                    <Grid item className={css.Buttons}>
+                        <Button
+                            disabled={!isSelected}
+                            color="secondary"
+                            variant="outlined"
+                            startIcon={<DeleteIcon />}
+                            onClick={() => handleRemoveContainers(selectedContainers)}>
+                            Remove Selected
+                        </Button>
+                    </Grid>
+                    <Grid item className={css.Buttons}>
+                        <Button variant="outlined" color="primary" onClick={handleRunOpen}>
+                            Run
                     </Button>
-                </ButtonGroup>
+                        <Dialog open={openRunModal} onClose={handleRunClose} aria-labelledby="form-dialog-title">
+                            <DialogTitle id="form-dialog-title">Run</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Enter the command for "podman run"
+                            </DialogContentText>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="name"
+                                    label="Podman Run"
+                                    type="text"
+                                    fullWidth
+                                    onChange={onChangeRun}
+                                />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleContainerRun} color="primary">
+                                    Run
+                            </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </Grid>
+                </Grid>
 
-                <div>
+                {/* <div>
                     <Button variant="outlined" color="primary" onClick={handleRunOpen}>
                         Run
                     </Button>
@@ -334,7 +308,7 @@ const Containers = (props: IContainersProps) => {
                             </Button>
                         </DialogActions>
                     </Dialog>
-                </div>
+                </div> */}
 
                 <div className={css.Info}>
                     <div className={containersTitleClasses.join(' ')}>

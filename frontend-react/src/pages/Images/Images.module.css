@@ -40,19 +40,29 @@
 
 /* IMAGES */
 .Repository {
-    width: 30%;
+    width: 25rem;
 }
 .Tag {
-    width: 15%;
+    width: 10rem;
 }
 .Id {
-    width: 20%;
+    width: 10rem;
 }
 .Created {
-    width: 15%;
+    width: 9.5rem;
 }
 .Size {
-    width: 15%;
+    width: 15rem;
+}
+
+.Repository, .Tag, .Id, .Created,
+.Size {
+    overflow: hidden;
+    margin-right: 1.25rem;
+}
+
+.Buttons {
+    margin-right: 1.25rem !important;
 }
 
 .Headline {

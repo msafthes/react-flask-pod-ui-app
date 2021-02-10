@@ -18,6 +18,16 @@ import Checkbox from '@material-ui/core/Checkbox';
 // import DeleteIcon from '@material-ui/icons/Delete';
 // import { makeStyles } from '@material-ui/core/styles';
 
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import MenuVolumes from '../../components/MaterialCustomized/MenuVolumes';
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 interface IVolumesProps {
     volumes: Volume[],
@@ -75,12 +85,65 @@ const Volumes = (props: IVolumesProps) => {
         content = <Grid container direction="column">
             {(volumes && volumes.length) ?
                 (volumes.map((volume, i) => {
-                    return <Grid item container className={css.Content} key={volume.Name}>
-                        <Checkbox color="primary" onClick={handleCheckboxChange} id={volume.Name} checked={selectedVolumes[volume.Name]} />
-                        <Grid className={css.Name}>{volume.Name}</Grid>
-                        <Grid className={css.Driver}>{volume.Driver}</Grid>
-                        <Grid className={css.Mountpoint}>{volume.Mountpoint}</Grid>
-                    </Grid>
+                    return <React.Fragment key={volume.Name}>
+
+                        <Accordion>
+
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-label="Expand"
+                                aria-controls="additional-actions1-content"
+                                id="additional-actions1-header"
+                            >
+                                <FormControlLabel
+                                    aria-label="Acknowledge"
+                                    onClick={(event) => event.stopPropagation()}
+                                    onFocus={(event) => event.stopPropagation()}
+                                    control={<Checkbox
+                                        color="primary"
+                                        onClick={handleCheckboxChange}
+                                        id={volume.Name}
+                                        checked={selectedVolumes[volume.Name]} />}
+                                    // label="Select"
+                                    label=""
+                                />
+                                <Grid item container className={css.Content}>
+                                    <Tooltip title={volume.Name}>
+                                        <Grid className={css.Name}>{volume.Name}</Grid>
+                                    </Tooltip>
+                                    <Tooltip title={volume.Driver}>
+                                        <Grid className={css.Driver}>{volume.Driver}</Grid>
+                                    </Tooltip>
+                                    <Tooltip title={volume.Mountpoint}>
+                                        <Grid className={css.Mountpoint}>{volume.Mountpoint}</Grid>
+                                    </Tooltip>
+
+                                    <FormControlLabel
+                                        aria-label="Acknowledge"
+                                        onClick={(event) => event.stopPropagation()}
+                                        onFocus={(event) => event.stopPropagation()}
+                                        control={<MenuVolumes
+                                            volumeName={volume.Name}
+                                        // removeItem={handleRemoveVolumes}
+                                        />}
+                                        // label="Select"
+                                        label=""
+                                    />
+                                </Grid>
+                            </AccordionSummary>
+
+                            <AccordionDetails>
+                                <Typography>
+                                    There are no additional data to display yet.
+                                </Typography>
+                            </AccordionDetails>
+
+                        </Accordion>
+
+                    </React.Fragment>
+                    // <Grid item container className={css.Content} key={volume.Name}>
+
+                    // </Grid>
 
                 }))
                 :

@@ -14,11 +14,20 @@ import { isAllTrue, handleSelectAll, isSelectedAny, extractIds } from '../../hel
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { Typography } from '@material-ui/core';
+
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import MenuImages from '../../components/MaterialCustomized/MenuImages';
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 interface IImagesProps {
@@ -151,14 +160,68 @@ const Images = (props: IImagesProps) => {
         content = <Grid container direction="column">
             {(images && images.length) ?
                 (images.map((image, i) => {
-                    return <Grid item container className={css.Content} key={image.id}>
-                        <Checkbox color="primary" onClick={handleCheckboxChange} id={image.id} checked={selectedImages[image.id]} />
-                        <Grid className={css.Repository}>{image.repository}</Grid>
-                        <Grid className={css.Tag}>{image.tag}</Grid>
-                        <Grid className={css.Id}>{image.id}</Grid>
-                        <Grid className={css.Created}>{image.created}</Grid>
-                        <Grid className={css.Size}>{image.size}</Grid>
-                    </Grid>
+                    return <React.Fragment key={image.id}>
+
+                        <Accordion>
+
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-label="Expand"
+                                aria-controls="additional-actions1-content"
+                                id="additional-actions1-header"
+                            >
+                                <FormControlLabel
+                                    aria-label="Acknowledge"
+                                    onClick={(event) => event.stopPropagation()}
+                                    onFocus={(event) => event.stopPropagation()}
+                                    control={<Checkbox
+                                        color="primary"
+                                        onClick={handleCheckboxChange}
+                                        id={image.id}
+                                        checked={selectedImages[image.id]} />}
+                                    // label="Select"
+                                    label=""
+                                />
+                                <Grid item container className={css.Content}>
+                                    <Tooltip title={image.repository}>
+                                        <Grid className={css.Repository}>{image.repository}</Grid>
+                                    </Tooltip>
+                                    <Tooltip title={image.tag}>
+                                        <Grid className={css.Tag}>{image.tag}</Grid>
+                                    </Tooltip>
+                                    <Tooltip title={image.id}>
+                                        <Grid className={css.Id}>{image.id}</Grid>
+                                    </Tooltip>
+                                    <Tooltip title={image.created}>
+                                        <Grid className={css.Created}>{image.created}</Grid>
+                                    </Tooltip>
+                                    <Tooltip title={image.size}>
+                                        <Grid className={css.Size}>{image.size}</Grid>
+                                    </Tooltip>
+
+                                    <FormControlLabel
+                                        aria-label="Acknowledge"
+                                        onClick={(event) => event.stopPropagation()}
+                                        onFocus={(event) => event.stopPropagation()}
+                                        control={<MenuImages
+                                            containerId={image.id}
+                                            removeItem={handleRemoveImages}
+                                        />}
+                                        // label="Select"
+                                        label=""
+                                    />
+                                </Grid>
+                            </AccordionSummary>
+
+                            <AccordionDetails>
+                                <Typography>
+                                    There are no additional data to display yet.
+                        </Typography>
+                            </AccordionDetails>
+
+                        </Accordion>
+
+                    </React.Fragment>
                 }))
                 :
                 ''
@@ -171,16 +234,27 @@ const Images = (props: IImagesProps) => {
             <div className={css.Wrapper}>
                 <h1 className={css.Headline}>Podman Images</h1>
                 <p>Showing information about images based on the `podman images` command</p>
-                <ButtonGroup className={classes.buttonGroup}>
-                    <Button
-                        disabled={!isSelected}
-                        color="secondary"
-                        startIcon={<DeleteIcon />}
-                        onClick={() => handleRemoveImages(selectedImages)}>
-                        Remove
+                <Grid container className={css.Content}>
+                    <Grid item className={css.Buttons}>
+                        <Button
+                            disabled={!isSelected}
+                            color="secondary"
+                            variant="outlined"
+                            startIcon={<DeleteIcon />}
+                            onClick={() => handleRemoveImages(selectedImages)}>
+                            Remove Selected
                     </Button>
-                    <Button color="secondary" startIcon={<DeleteIcon />} onClick={() => pruneImages()}>Remove unused images</Button>
-                </ButtonGroup>
+                    </Grid>
+                    <Grid item className={css.Buttons}>
+                        <Button
+                            color="secondary"
+                            variant="outlined"
+                            startIcon={<DeleteIcon />}
+                            onClick={() => pruneImages()}>
+                            Remove unused images
+                    </Button>
+                    </Grid>
+                </Grid>
 
                 {showError &&
                     <Alert severity="error" onClose={() => { setShowError(!showError) }}>

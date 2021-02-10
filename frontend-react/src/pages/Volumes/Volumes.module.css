@@ -40,13 +40,22 @@
 
 /* VOLUMES */
 .Name {
-    width: 25%;
+    width: 25rem;
 }
 .Driver {
-    width: 10%;
+    width: 10rem;
 }
 .Mountpoint {
-    width: 60%;
+    width: 40rem;
+}
+
+.Name, .Driver, .Mountpoint {
+    overflow: hidden;
+    margin-right: 1.25rem;
+}
+
+.Buttons {
+    margin-right: 1.25rem !important;
 }
 
 .Headline {

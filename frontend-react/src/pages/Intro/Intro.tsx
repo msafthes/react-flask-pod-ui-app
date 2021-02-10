@@ -9,8 +9,8 @@ const Intro = () => {
             <div className={css.Content}>
                 <h1>Welcome to Podman Web UI Demo!</h1>
                 <h2>Navigate to images/containers/volumes pages</h2>
-                <NavLink to="/images" className={css.Link}>
-                    Try images!
+                <NavLink to="/containers" className={css.Link}>
+                    Try containers!
                 </NavLink>
             </div>
         </div>
