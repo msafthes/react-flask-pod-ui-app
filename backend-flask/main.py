@@ -237,10 +237,11 @@ def test_message(data):
     # id = data.get_json().get("data")
     # id = getattr(data, "id")
     id = data.get('id')
-    print("ID:")
-    print(id)
     logs = podman_logs(id)
-    emit('event://get-message', logs)
+
+    logs_data = {}
+    logs_data[id] = logs
+    emit('event://get-message', logs_data)
     # session['receive_count'] = session.get('receive_count', 0) + 1
     # emit('my_response', {'data': message['data'], 'count': session['receive_count']})
 

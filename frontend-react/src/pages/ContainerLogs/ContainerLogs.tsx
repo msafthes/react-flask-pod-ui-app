@@ -4,17 +4,14 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { AppState } from '../../store';
 
-import css from './ContainerLogs.module.css';
-
 import { withRouter } from 'react-router-dom';
-
 import { WebSocketContext } from '../../WebSocket';
-
-import Grid from '@material-ui/core/Grid';
-
+import { LazyLog } from 'react-lazylog';
 import { v4 as uuidv4 } from 'uuid';
 
-import { LazyLog } from 'react-lazylog';
+import css from './ContainerLogs.module.css';
+import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
+import Grid from '@material-ui/core/Grid';
 
 
 interface IContainerLogsProps {
@@ -44,7 +41,11 @@ const ContainerLogs = (props: IContainerLogsProps) => {
     const id = props.match.params.id;
     const containerLogs = props.containerLogs;
 
-    console.log(`=> ID: ${id}`);
+    let content = <div className={css.Wrapper}><LoadingIndicator /></div>;
+
+    if (containerLogs && containerLogs[id]) {
+        content = <LazyLog enableSearch extraLines={1} text={containerLogs[id].logs} caseInsensitive />
+    }
 
     return (
         <div className={css.ContainerLogs}>
@@ -52,7 +53,7 @@ const ContainerLogs = (props: IContainerLogsProps) => {
                 <h1 className={css.Headline}>Containers Logs</h1>
                 <p>Container ID: {id}</p>
                 <div className={css.LogViewer}>
-                    <LazyLog enableSearch extraLines={1} text={containerLogs} caseInsensitive />
+                    {content}
                 </div>
             </div>
         </div>

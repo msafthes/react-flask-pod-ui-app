@@ -32,11 +32,14 @@ export default ({ children }) => {
             console.log("Frontend Websocket.tsx socket.on event://get-message");
             console.log("response:");
             console.log(msg);
-            console.log(msg["logs"]);
+            // console.log(msg["logs"]);
+
             // const containerLogs = JSON.parse(msg).logs;
-            const containerLogs = msg.logs;
-            console.log("\n\nGOT containerLogs:");
-            console.log(containerLogs);
+
+            // const containerLogs = msg.logs;
+            const containerLogs = msg;
+            // console.log("\n\nGOT containerLogs:");
+            // console.log(containerLogs);
 
             // let test = msg.logs;
             // test = test.split('\n')
