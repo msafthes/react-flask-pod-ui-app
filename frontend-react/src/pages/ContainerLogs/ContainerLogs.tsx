@@ -44,6 +44,8 @@ const ContainerLogs = (props: IContainerLogsProps) => {
     const id = props.match.params.id;
     const containerLogs = props.containerLogs;
 
+    console.log(`=> ID: ${id}`);
+
     return (
         <div className={css.ContainerLogs}>
             <div className={css.Wrapper}>

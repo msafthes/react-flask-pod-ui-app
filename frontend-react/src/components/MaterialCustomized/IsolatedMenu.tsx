@@ -34,7 +34,7 @@ const IsolatedMenu = props => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <Link to={`/containers/${containerId}`} style={{ textDecoration: 'none', marginLeft: '2.5%' }}>
+                <Link to={`/container_logs/${containerId}`} style={{ textDecoration: 'none', marginLeft: '2.5%' }}>
                     <Button
                         startIcon={<PageviewIcon />}
                         onClick={() => console.log(`oops ID: ${containerId}`)}>

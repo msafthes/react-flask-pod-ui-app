@@ -161,7 +161,7 @@ export const containerRun = (command: String) => {
 
                     if (part === container.containerId || part === container.image || part === image) {
                         // console.log(`\n\n>>>>> found ID: ${container.containerId}`);
-                        dispatch(push(`/containers/${container.containerId}`));
+                        dispatch(push(`/container_logs/${container.containerId}`));
                     }
                 });
             });

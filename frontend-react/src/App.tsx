@@ -65,7 +65,7 @@ const App = (props: IAppProps) => {
       <Route path="/" exact component={Intro} />
       <Route path="/images/" exact render={() => <Images imagesDataTest={imagesDataTest} />} />
       <Route path="/containers/" exact render={() => <Containers containersDataTest={containersDataTest} />} />
-      <Route path="/containers/:id" render={() => <ContainerLogs />} />
+      <Route path="/container_logs/:id" render={() => <ContainerLogs />} />
       <Route path="/volumes/" render={() => <Volumes volumesDataTest={volumesDataTest} />} />
       <Redirect to="/" />
     </Switch>
