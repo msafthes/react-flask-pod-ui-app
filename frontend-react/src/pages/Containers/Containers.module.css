@@ -72,6 +72,7 @@
 .Ports, .Names, .Status {
     overflow: hidden;
     margin-right: 1.25rem;
+    text-overflow: ellipsis;
 }
 
 .Buttons {

@@ -9,7 +9,10 @@ const MenuImages = props => {
     const { imageId, removeImage } = props
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const id = {};
-    id[imageId] = true;
+
+    if (imageId) {
+        id[imageId] = true;
+    }
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -18,6 +21,11 @@ const MenuImages = props => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    console.log("ID:");
+    console.log(id);
+    console.log("imageId:");
+    console.log(imageId);
 
     return (
         <div>

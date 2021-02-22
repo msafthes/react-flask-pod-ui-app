@@ -49,13 +49,13 @@ const Volumes = (props: IVolumesProps) => {
     const [selectedVolumes, setSelectedVolumes] = useState<any>({ ...defaultSelectedVolumes });
 
     const allTrue = isAllTrue(selectedVolumes);
-    console.log(`OUTSIDE functions allTrue: ${allTrue}`);
+    // console.log(`OUTSIDE functions allTrue: ${allTrue}`);
 
     useEffect(() => {
         fetchVolumes();
     }, [fetchVolumes]);
 
-    console.log(selectedVolumes);
+    // console.log(selectedVolumes);
 
     const handleCheckboxChange = changeEvent => {
         const { id } = changeEvent.target;
@@ -68,13 +68,13 @@ const Volumes = (props: IVolumesProps) => {
         }
 
         setSelectedVolumes(old);
-        console.log(selectedVolumes);
+        // console.log(selectedVolumes);
     };
 
     const selectAll = () => {
         const updated = handleSelectAll(setSelectedVolumes);
         setSelectedVolumes(updated);
-        console.log(selectedVolumes);
+        // console.log(selectedVolumes);
     };
 
     const volumesTitleClasses = [css.Content, css.Heading];

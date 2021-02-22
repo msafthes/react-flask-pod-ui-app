@@ -79,7 +79,7 @@ export const removeContainersFail = (error: string) => {
 export const removeContainers = (containerIds: Array<String>) => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         console.log("removeContainers() containerIds:");
-        console.log(containerIds);
+        // console.log(containerIds);
         dispatch(removeContainersStart());
 
         const url = `http://127.0.0.1:5000/containers`;

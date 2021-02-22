@@ -74,13 +74,13 @@ const Containers = (props: IContainersProps) => {
     const [runCommand, setRunCommand] = React.useState("");
 
     const allTrue = isAllTrue(selectedContainers);
-    console.log(`OUTSIDE functions allTrue: ${allTrue}`);
+    // console.log(`OUTSIDE functions allTrue: ${allTrue}`);
 
     useEffect(() => {
         fetchContainers();
     }, [fetchContainers]);
 
-    console.log(selectedContainers);
+    // console.log(selectedContainers);
 
     const handleRunOpen = () => {
         setOpenRunModal(true);
@@ -115,21 +115,21 @@ const Containers = (props: IContainersProps) => {
         }
 
         setSelectedContainers(old);
-        console.log(selectedContainers);
+        // console.log(selectedContainers);
     };
 
     const handleRemoveContainers = selectedContainers => {
         console.log("triggered handleRemoveContainers(), selectedContainers:");
-        console.log(selectedContainers);
+        // console.log(selectedContainers);
         const containerIds = [];
         for (const [key, value] of Object.entries(selectedContainers)) {
             if (value === true) {
                 containerIds.push(key);
             }
         }
-        console.log("containerIds:");
-        console.log(containerIds);
-        console.log("DE-selecting containers:");
+        // console.log("containerIds:");
+        // console.log(containerIds);
+        // console.log("DE-selecting containers:");
         const updated = { ...selectedContainers };
 
         for (const [key, value] of Object.entries(updated)) {
@@ -138,15 +138,17 @@ const Containers = (props: IContainersProps) => {
             }
         }
         setSelectedContainers(updated);
-        console.log(selectedContainers);
+        // console.log(selectedContainers);
 
-        removeContainers(containerIds);
+        console.log("TEMPORARILY DISABLED actual removing! containerIds:");
+        console.log(containerIds);
+        // removeContainers(containerIds);
     };
 
     const selectAll = () => {
         const updated = handleSelectAll(selectedContainers);
         setSelectedContainers(updated);
-        console.log(selectedContainers);
+        // console.log(selectedContainers);
     };
 
     const isSelected = isSelectedAny(selectedContainers);
@@ -213,7 +215,7 @@ const Containers = (props: IContainersProps) => {
                                         onFocus={(event) => event.stopPropagation()}
                                         control={<MenuContainers
                                             containerId={container.containerId}
-                                            removeItem={handleRemoveContainers}
+                                            removeContainer={handleRemoveContainers}
                                         />}
                                         // label="Select"
                                         label=""
