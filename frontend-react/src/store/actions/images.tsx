@@ -75,8 +75,7 @@ export const removeImagesFail = (error: string) => {
 
 export const removeImages = (imageIds: Array<String>) => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("removeImages() imageIds:");
-        // console.log(imageIds);
+        console.log("removeImages()");
         dispatch(removeImagesStart());
 
         const url = `http://127.0.0.1:5000/images`;

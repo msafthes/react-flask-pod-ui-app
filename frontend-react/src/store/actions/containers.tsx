@@ -78,8 +78,7 @@ export const removeContainersFail = (error: string) => {
 
 export const removeContainers = (containerIds: Array<String>) => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("removeContainers() containerIds:");
-        // console.log(containerIds);
+        console.log("removeContainers()");
         dispatch(removeContainersStart());
 
         const url = `http://127.0.0.1:5000/containers`;
@@ -148,11 +147,7 @@ export const containerRun = (command: String) => {
             headers: headers,
         }).then(response => {
             // -dt -p 8080:8080 --rm docker.io/library/alpine /bin/sh
-            // console.log(`command: ${command}`);
             const parts = command.split(" ");
-            // console.log(`parts:`);
-            // console.log(parts);
-            // console.log(containers);
 
             parts.forEach(part => {
                 response.data.containers.forEach(container => {
@@ -160,7 +155,6 @@ export const containerRun = (command: String) => {
                     // console.log(`part: ${part} | image: ${image} | ID: ${container.containerId} | imageRaw: ${container.image}`);
 
                     if (part === container.containerId || part === container.image || part === image) {
-                        // console.log(`\n\n>>>>> found ID: ${container.containerId}`);
                         dispatch(push(`/container_logs/${container.containerId}`));
                     }
                 });

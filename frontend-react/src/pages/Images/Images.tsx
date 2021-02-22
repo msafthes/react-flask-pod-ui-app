@@ -56,14 +56,11 @@ const Images = (props: IImagesProps) => {
     const [errorInfo, setErrorInfo] = useState<string>("");
 
     const allTrue = isAllTrue(selectedImages);
-    // console.log(`OUTSIDE functions allTrue: ${allTrue}`);
 
     useEffect(() => {
         fetchImages();
         fetchContainers();
     }, [fetchImages, fetchContainers]);
-
-    // console.log(selectedImages);
 
     const handleCheckboxChange = changeEvent => {
         const { id } = changeEvent.target;
@@ -76,29 +73,19 @@ const Images = (props: IImagesProps) => {
         }
 
         setSelectedImages(old);
-        // console.log(selectedImages);
     };
 
     const handleRemoveImages = selectedImages => {
-        console.log("triggered handleRemoveImages(), selectedImages:");
-        // console.log(selectedImages);
-        // console.log("selectAll(), selectedImages:");
-        // console.log(selectedImages);
-        // console.log("images");
-        // console.log(images);
+        console.log("triggered handleRemoveImages()")
 
         const usedImages = [];
         let usedImagesNames = [];
 
         images.forEach((image) => {
-            // console.log(image);
             if (selectedImages[image.id] === true) {
                 const imageRepoTag = (image.tag === '') ? `${image.repository}` : `${image.repository}:${image.tag}`;
-                // console.log(`imageRepoTag: ${imageRepoTag}`);
                 containers.forEach((container) => {
-                    // console.log(container);
                     if (container.image === imageRepoTag) {
-                        console.log("FOUND USED IMAGE!");
                         usedImages.push(image);
                         usedImagesNames.push(imageRepoTag);
                     }
@@ -106,22 +93,7 @@ const Images = (props: IImagesProps) => {
             }
         });
 
-        // usedImagesNames = [...(new Set(usedImagesNames))];
-        console.log("usedImagesNames:");
-        console.log(usedImagesNames);
-        // const test = [...new Set(usedImagesNames)];
-        // const uniqueSet = new Set(usedImages);
-        // console.log("uniqueSet:");
-        // console.log(uniqueSet);
-
-
-        // console.log("outside - usedImages");
-        // console.log(usedImages);
-
         const imageIds = extractIds(selectedImages);
-        // console.log("imageIds:");
-        // console.log(imageIds);
-        // console.log("DE-selecting images:");
         const updated = { ...selectedImages };
 
         for (const [key, value] of Object.entries(updated)) {
@@ -130,12 +102,9 @@ const Images = (props: IImagesProps) => {
             }
         }
         setSelectedImages(updated);
-        // console.log(selectedImages);
 
         if (usedImages.length > 0) {
             console.log("SELECTION INVALID - there are used images");
-            // console.log(usedImages);
-            // console.log(usedImagesNames);
             setShowError(true);
             usedImagesNames = [...new Set(usedImagesNames)];
             setErrorInfo(usedImagesNames.join(" "));
@@ -145,12 +114,9 @@ const Images = (props: IImagesProps) => {
         }
     };
 
-    // console.log(`===> errorInfo: ${errorInfo}`);
-
     const selectAll = () => {
         const updated = handleSelectAll(selectedImages);
         setSelectedImages(updated);
-        // console.log(selectedImages);
     };
 
     const isSelected = isSelectedAny(selectedImages);
@@ -162,7 +128,6 @@ const Images = (props: IImagesProps) => {
         }
     });
     const classes = useStyles();
-
 
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>
 

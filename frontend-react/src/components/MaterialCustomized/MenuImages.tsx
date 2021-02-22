@@ -22,11 +22,6 @@ const MenuImages = props => {
         setAnchorEl(null);
     };
 
-    console.log("ID:");
-    console.log(id);
-    console.log("imageId:");
-    console.log(imageId);
-
     return (
         <div>
             <Button variant="outlined" color="secondary" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>

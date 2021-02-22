@@ -37,7 +37,7 @@ const MenuContainers = props => {
                 <Link to={`/container_logs/${containerId}`} style={{ textDecoration: 'none', marginLeft: '2.5%' }}>
                     <Button
                         startIcon={<PageviewIcon />}
-                        onClick={() => console.log(`oops ID: ${containerId}`)}>
+                        onClick={() => console.log(`clicked ID: ${containerId}`)}>
                         Show Logs
                 </Button>
                 </Link>
