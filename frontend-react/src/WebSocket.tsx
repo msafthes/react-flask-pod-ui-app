@@ -2,8 +2,8 @@ import React, { createContext } from 'react';
 import io from 'socket.io-client';
 import { WS_BASE } from './config';
 import { useDispatch } from 'react-redux';
-// import { updateChatLog } from './store/actions/index';
 import * as actions from './store/actions/index';
+
 
 const WebSocketContext = createContext(null)
 
@@ -16,40 +16,21 @@ export default ({ children }) => {
     const dispatch = useDispatch();
 
     const updateLogs = (id) => {
-        console.log("Frontend Websocket.tsx updateLogs()");
+        console.log("Websocket.tsx updateLogs() => socket.emit event://update-logs");
         const payload = {
             id: id
         }
-        socket.emit("event://send-message", payload);
-        // socket.emit("event://send-message", JSON.stringify(payload));
-        // dispatch(actions.updateContainerLog(payload));
+        socket.emit("event://update-logs", payload);
     }
 
     if (!socket) {
         socket = io.connect(WS_BASE)
 
-        socket.on("event://get-message", (msg) => {
-            console.log("Frontend Websocket.tsx socket.on event://get-message");
+        socket.on("event://get-logs", (msg) => {
+            console.log("Websocket.tsx socket.on event://get-logs");
             console.log("response:");
             console.log(msg);
-            // console.log(msg["logs"]);
-
-            // const containerLogs = JSON.parse(msg).logs;
-
-            // const containerLogs = msg.logs;
             const containerLogs = msg;
-            // console.log("\n\nGOT containerLogs:");
-            // console.log(containerLogs);
-
-            // let test = msg.logs;
-            // test = test.split('\n')
-            // console.log("test:");
-            // console.log(test);
-
-            // const payload = JSON.parse(msg);
-            // dispatch(actions.updateContainerLogs(containerLogs));
-
-            // dispatch(actions.updateContainerLogs(test));
             dispatch(actions.updateContainerLogs(containerLogs));
         })
 

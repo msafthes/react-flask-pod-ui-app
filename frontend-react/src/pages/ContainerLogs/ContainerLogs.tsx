@@ -11,7 +11,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 import css from './ContainerLogs.module.css';
 import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
-import Grid from '@material-ui/core/Grid';
 
 
 interface IContainerLogsProps {
