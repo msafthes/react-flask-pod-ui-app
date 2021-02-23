@@ -11,6 +11,8 @@ import {
 
 import { push } from 'connected-react-router';
 
+import { API_BASE } from '../../config';
+
 
 // CONTAINERS
 
@@ -39,7 +41,7 @@ export const fetchContainers = () => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         dispatch(fetchContainersStart());
 
-        const url = `http://127.0.0.1:5000/containers`;
+        const url = `${API_BASE}/containers`;
 
         const headers = {
             'Content-Type': 'application/json',
@@ -81,7 +83,7 @@ export const removeContainers = (containerIds: Array<String>) => {
         console.log("removeContainers()");
         dispatch(removeContainersStart());
 
-        const url = `http://127.0.0.1:5000/containers`;
+        const url = `${API_BASE}/containers`;
 
         const headers = {
             'Content-Type': 'application/json',
@@ -134,7 +136,7 @@ export const containerRun = (command: String) => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         dispatch(containerRunStart());
 
-        const url = `http://127.0.0.1:5000/container-run`;
+        const url = `${API_BASE}/container-run`;
         const headers = {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'

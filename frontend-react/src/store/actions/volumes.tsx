@@ -6,6 +6,8 @@ import {
     FETCH_VOLUMES_START, FETCH_VOLUMES_SUCCESS, FETCH_VOLUMES_FAIL,
 } from './actionTypes';
 
+import { API_BASE } from '../../config';
+
 
 // VOLUMES
 
@@ -34,7 +36,7 @@ export const fetchVolumes = () => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         dispatch(fetchVolumesStart());
 
-        const url = `http://127.0.0.1:5000/volumes`;
+        const url = `${API_BASE}/volumes`;
 
         const headers = {
             'Content-Type': 'application/json',

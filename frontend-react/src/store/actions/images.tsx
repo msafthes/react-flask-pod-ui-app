@@ -8,6 +8,8 @@ import {
     PRUNE_IMAGES_START, PRUNE_IMAGES_SUCCESS, PRUNE_IMAGES_FAIL,
 } from './actionTypes';
 
+import { API_BASE } from '../../config';
+
 
 // IMAGES
 
@@ -36,7 +38,7 @@ export const fetchImages = () => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         dispatch(fetchImagesStart());
 
-        const url = `http://127.0.0.1:5000/images`;
+        const url = `${API_BASE}/images`;
 
         const headers = {
             'Content-Type': 'application/json',
@@ -78,7 +80,7 @@ export const removeImages = (imageIds: Array<String>) => {
         console.log("removeImages()");
         dispatch(removeImagesStart());
 
-        const url = `http://127.0.0.1:5000/images`;
+        const url = `${API_BASE}/images`;
 
         const headers = {
             'Content-Type': 'application/json',
@@ -123,7 +125,7 @@ export const pruneImages = () => {
         console.log("pruneImages()");
         dispatch(pruneImagesStart());
 
-        const url = `http://127.0.0.1:5000/images/prune`;
+        const url = `${API_BASE}/images/prune`;
 
         const headers = {
             'Content-Type': 'application/json',
