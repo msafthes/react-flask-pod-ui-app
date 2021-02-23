@@ -49,6 +49,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import MenuContainers from '../../components/MaterialCustomized/MenuContainers';
 import Tooltip from '@material-ui/core/Tooltip';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import { Typography } from '@material-ui/core';
 
 
 interface IContainersProps {
@@ -72,6 +74,8 @@ const Containers = (props: IContainersProps) => {
     const [selectedContainers, setSelectedContainers] = useState<any>({ ...defaultSelectedContainers });
     const [openRunModal, setOpenRunModal] = React.useState(false);
     const [runCommand, setRunCommand] = React.useState("");
+    const [showError, setShowError] = useState<boolean>(false);
+    const [errorInfo, setErrorInfo] = useState<string>("");
 
     const allTrue = isAllTrue(selectedContainers);
 
@@ -122,6 +126,15 @@ const Containers = (props: IContainersProps) => {
                 containerIds.push(key);
             }
         }
+
+        let runningContainersIds = [];
+        containers.forEach((container) => {
+            console.log(`status: ${container.status}`);
+            if ((selectedContainers[container.containerId] === true) && (container.status.startsWith('Up '))) {
+                runningContainersIds.push(container.containerId);
+            }
+        });
+
         const updated = { ...selectedContainers };
 
         for (const [key, value] of Object.entries(updated)) {
@@ -129,8 +142,18 @@ const Containers = (props: IContainersProps) => {
                 updated[key] = false
             }
         }
+
         setSelectedContainers(updated);
-        removeContainers(containerIds);
+
+        if (runningContainersIds.length > 0) {
+            console.log("SELECTION INVALID - there are running containers");
+            setShowError(true);
+            runningContainersIds = [...new Set(runningContainersIds)];
+            setErrorInfo(runningContainersIds.join(" "));
+        } else {
+            console.log("Ready for deletion");
+            removeContainers(containerIds);
+        }
     };
 
     const selectAll = () => {
@@ -271,33 +294,21 @@ const Containers = (props: IContainersProps) => {
                     </Grid>
                 </Grid>
 
-                {/* <div>
-                    <Button variant="outlined" color="primary" onClick={handleRunOpen}>
-                        Run
-                    </Button>
-                    <Dialog open={openRunModal} onClose={handleRunClose} aria-labelledby="form-dialog-title">
-                        <DialogTitle id="form-dialog-title">Run</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText>
-                                Enter the command for "podman run"
-                            </DialogContentText>
-                            <TextField
-                                autoFocus
-                                margin="dense"
-                                id="name"
-                                label="Podman Run"
-                                type="text"
-                                fullWidth
-                                onChange={onChangeRun}
-                            />
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleContainerRun} color="primary">
-                                Run
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                </div> */}
+                {showError &&
+                    <Alert severity="error" onClose={() => { setShowError(!showError) }}>
+                        <AlertTitle><strong>Error</strong></AlertTitle>
+                        The following containers are running and cannot be removed:
+                        {(errorInfo.length > 0) ?
+                            (errorInfo.split(' ').map((id, i) => {
+                                return <Typography key={id} variant="body1" component="div" align="left">
+                                    <strong>container: {id}</strong><strong></strong>
+                                </Typography>
+                            }))
+                            :
+                            ''
+                        }
+                    </Alert>
+                }
 
                 <div className={css.Info}>
                     <div className={containersTitleClasses.join(' ')}>
@@ -308,7 +319,6 @@ const Containers = (props: IContainersProps) => {
                         <div className={css.Command}>Command</div>
                         <div className={css.Ports}>Ports</div>
                         <div className={css.Created}>Created</div>
-                        {/* <div className={css.Names}>Names</div> */}
                     </div>
                     {content}
                 </div>

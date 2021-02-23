@@ -235,10 +235,9 @@ const Images = (props: IImagesProps) => {
                     <Alert severity="error" onClose={() => { setShowError(!showError) }}>
                         <AlertTitle><strong>Error</strong></AlertTitle>
                         The following images are being used and cannot be deleted:
-
                         {(errorInfo.length > 0) ?
                             (errorInfo.split(' ').map((name, i) => {
-                                return <Typography variant="body1" component="div" align="left">
+                                return <Typography key={name} variant="body1" component="div" align="left">
                                     <strong>image: {name}</strong><strong></strong>
                                 </Typography>
                             }))
