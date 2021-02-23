@@ -218,46 +218,22 @@ def get_hello():
     return "Podman REST API"
 
 ############################################################################################################################################################
+# WebSockets
 
-
-# WebSocket Testing
 async_mode = None
-
-# socketio = SocketIO(app)
 socket_ = SocketIO(app, async_mode=async_mode, cors_allowed_origins="*")
 
-# @socket_.on('event://send-message', namespace='/test')
-
-
-@socket_.on('event://send-message')
-def test_message(data):
-    print('test_message()')
+@socket_.on('event://update-logs')
+def update_logs(data):
+    print('update_logs()')
     print("DATA:")
     print(data)
-    # id = data.get_json().get("data")
-    # id = getattr(data, "id")
+
     id = data.get('id')
     logs = podman_logs(id)
-
     logs_data = {}
     logs_data[id] = logs
-    emit('event://get-message', logs_data)
-    # session['receive_count'] = session.get('receive_count', 0) + 1
-    # emit('my_response', {'data': message['data'], 'count': session['receive_count']})
+    emit('event://get-logs', logs_data)
 
-# @socketio.on('event://send-message')
-# def handle_message(data):
-#     print('received message: ' + data)
-
-# @socketio.on('event://get-message')
-# def handle_my_custom_event():
-#     emit('my response')
-
-
-# app.run(debug=True)
 if __name__ == '__main__':
     socket_.run(app, debug=True)
-
-
-# app.run(port=5000)
-# socketio.run(app, port=5005)
