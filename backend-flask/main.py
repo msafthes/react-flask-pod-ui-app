@@ -198,6 +198,44 @@ def container_run():
 
     return jsonify(containers)
 
+# GET /containers/stop
+@app.route('/containers/stop', methods=['GET'])
+def containers_stop():
+    container_ids = request.get_json().get("IDs")
+
+    count = len(container_ids)
+
+    all_ids = " ".join(container_ids)
+
+    command = "podman stop {0}".format(all_ids)
+
+    if count != 0:
+        subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True).stdout
+
+    containers = podman_ps()
+
+    return jsonify(containers)
+
+# GET /containers/kill
+@app.route('/containers/kill', methods=['GET'])
+def containers_kill():
+    container_ids = request.get_json().get("IDs")
+
+    count = len(container_ids)
+
+    all_ids = " ".join(container_ids)
+
+    command = "podman kill {0}".format(all_ids)
+
+    if count != 0:
+        subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True).stdout
+
+    containers = podman_ps()
+
+    return jsonify(containers)
+
 
 ############################################################################################################################################################
 # Volumes
@@ -221,7 +259,9 @@ def get_hello():
 # WebSockets
 
 async_mode = None
-socket_ = SocketIO(app, async_mode=async_mode, cors_allowed_origins="*")
+# socket_ = SocketIO(app, async_mode=async_mode, cors_allowed_origins="*")
+socket_ = SocketIO(app, async_mode=async_mode, cors_allowed_origins=["http://localhost:3000"])
+# socketio.init_app(app, cors_allowed_origins=["http://localhost:3000", "https://your-production-domain.com"])
 
 @socket_.on('event://update-logs')
 def update_logs(data):
