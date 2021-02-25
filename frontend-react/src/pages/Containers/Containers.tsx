@@ -83,6 +83,15 @@ const Containers = (props: IContainersProps) => {
         fetchContainers();
     }, [fetchContainers]);
 
+    useEffect(() => {
+        console.log("useEffect [containers]");
+        const newSelected = {};
+        for (const [key, value] of Object.entries(containers)) {
+            newSelected[value.containerId] = false
+        }
+        setSelectedContainers({ ...newSelected });
+    }, [containers]);
+
     const handleRunOpen = () => {
         setOpenRunModal(true);
     };
@@ -161,6 +170,10 @@ const Containers = (props: IContainersProps) => {
         setSelectedContainers(updated);
     };
 
+    console.log("selectedContainers OUTSIDE:");
+    console.log(selectedContainers);
+    console.log("containers prop OUTSIDE:");
+    console.log(containers);
     const isSelected = isSelectedAny(selectedContainers);
 
     const containersTitleClasses = [css.Content, css.Heading];
@@ -177,6 +190,12 @@ const Containers = (props: IContainersProps) => {
         content = <Grid container direction="column">
             {(containers && containers.length) ?
                 (containers.map((container, i) => {
+                    console.log(">> containers.map");
+                    console.log("container:");
+                    console.log(container);
+                    console.log(container.containerId);
+                    console.log(selectedContainers[container.containerId]);
+                    console.log("<<");
                     return <React.Fragment key={container.containerId}>
 
                         <Accordion>
@@ -193,8 +212,10 @@ const Containers = (props: IContainersProps) => {
                                     onFocus={(event) => event.stopPropagation()}
                                     control={<Checkbox
                                         color="primary"
-                                        onClick={handleCheckboxChange}
-                                        id={container.containerId}
+                                        // onClick={handleCheckboxChange}
+                                        onChange={handleCheckboxChange}
+                                        // id={container.containerId}
+                                        id={"123"}
                                         checked={selectedContainers[container.containerId]} />}
                                     // label="Select"
                                     label=""
@@ -312,7 +333,11 @@ const Containers = (props: IContainersProps) => {
 
                 <div className={css.Info}>
                     <div className={containersTitleClasses.join(' ')}>
-                        <Checkbox color="primary" onClick={selectAll} checked={allTrue} />
+                        <Checkbox
+                            color="primary"
+                            // onClick={selectAll}
+                            onChange={selectAll}
+                            checked={allTrue} />
                         <div className={css.ContainerId}>Container ID</div>
                         <div className={css.Status}>Status</div>
                         <div className={css.Image}>Image</div>
