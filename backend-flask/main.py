@@ -154,6 +154,21 @@ def prune_images():
 
     return jsonify(images)
 
+# POST /images/pull
+@app.route('/images/pull', methods=['POST'])
+def images_pull():
+    name = request.get_json().get("name")
+    length = len(name)
+    command = "podman pull {0}".format(run_command)
+
+    if length != 0:
+        subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True).stdout
+
+    images = podman_images()
+
+    return jsonify(images)
+
 
 ############################################################################################################################################################
 # Containers
@@ -242,8 +257,43 @@ def containers_kill():
 
 # GET /volumes
 @app.route('/volumes', methods=['GET'])
-def get_volumes():
+def volumes_get():
     volumes = podman_volumes()
+    return jsonify(volumes)
+
+# POST /volumes/create
+@app.route('/volumes/create', methods=['POST'])
+def volumes_create():
+    name = request.get_json().get("name")
+
+    length = len(name)
+
+    command = "podman volume create {0}".format(name)
+
+    if length != 0:
+        subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True).stdout
+
+    volumes = podman_volumes()
+
+    return jsonify(volumes)
+
+# DELETE /volumes
+@app.route('/volumes', methods=['DELETE'])
+def volumes_remove():
+    names = request.get_json().get("names")
+
+    length = len(name)
+    all_names = " ".join(names)
+
+    command = "podman volume rm {0}".format(names)
+
+    if length != 0:
+        subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True).stdout
+
+    volumes = podman_volumes()
+
     return jsonify(volumes)
 
 
