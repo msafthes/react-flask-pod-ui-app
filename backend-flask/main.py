@@ -52,11 +52,26 @@ def podman_ps():
 
     command = 'podman ps -a --format "{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}"'
 
-    output = subprocess.run("{0}".format(
-        command), shell=True, capture_output=True).stdout.decode('utf-8')
+    # output = subprocess.run("{0}".format(
+    #     command), shell=True, capture_output=True).stdout.decode('utf-8')
+
+    output = ''
+    while len(output) == 0:
+        output = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 
+                                stdout=subprocess.PIPE, 
+                                universal_newlines=True).stdout
+
+    print("podman_ps output executed")
+
+    # IMAGES
+    # command = subprocess.run(['podman', 'images', '--format', '{{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}'],
+    #                           stdout=subprocess.PIPE,
+    #                           universal_newlines=True)
 
     print("output")
     print(output)
+    print("len(output)")
+    print(len(output))
 
     podman_containers_array = output.split('\n')
     podman_containers_array.pop()  # Removing the last '' empty part after split
@@ -244,6 +259,8 @@ def containers_stop():
     if count != 0:
         subprocess.run("{0}".format(command), shell=True,
                        capture_output=True).stdout
+
+    print("containers_stop command executed")
 
     containers = podman_ps()
     print("containers:")
