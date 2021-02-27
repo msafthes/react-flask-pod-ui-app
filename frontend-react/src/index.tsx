@@ -13,6 +13,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import WebSocketProvider from './WebSocket';
+import { ViewportProvider } from './Viewport';
 
 
 const store = configureStore();
@@ -22,9 +23,11 @@ const app = (
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
             <WebSocketProvider>
-                <ConnectedRouter history={history}>
-                    <App />
-                </ConnectedRouter>
+                <ViewportProvider>
+                    <ConnectedRouter history={history}>
+                        <App />
+                    </ConnectedRouter>
+                </ViewportProvider>
             </WebSocketProvider>
         </PersistGate>
     </Provider>

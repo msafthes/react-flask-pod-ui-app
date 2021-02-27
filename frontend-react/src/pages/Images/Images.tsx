@@ -29,6 +29,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MenuImages from '../../components/MaterialCustomized/MenuImages';
 import Tooltip from '@material-ui/core/Tooltip';
 
+import { useViewport } from '../../Viewport';
+
 
 interface IImagesProps {
     images: Image[],
@@ -45,6 +47,8 @@ interface IImagesProps {
 
 const Images = (props: IImagesProps) => {
     const { fetchImages, removeImages, pruneImages, pullImage, images, containers, fetchContainers } = props;
+    const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
+    console.log(`width=${width}, phone=${phone}, tabletPortrait=${tabletPortrait}, tabletLandscape=${tabletLandscape}, desktop=${desktop}`);
 
     const defaultSelectedImages = {};
 

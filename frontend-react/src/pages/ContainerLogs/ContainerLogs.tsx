@@ -12,6 +12,8 @@ import { v4 as uuidv4 } from 'uuid';
 import css from './ContainerLogs.module.css';
 import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
 
+import { useViewport } from '../../Viewport';
+
 
 interface IContainerLogsProps {
     containerLogs: any,
@@ -22,6 +24,9 @@ interface IContainerLogsProps {
 }
 
 const ContainerLogs = (props: IContainerLogsProps) => {
+    const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
+    console.log(`width=${width}, phone=${phone}, tabletPortrait=${tabletPortrait}, tabletLandscape=${tabletLandscape}, desktop=${desktop}`);
+
     const ws = useContext(WebSocketContext);
 
     const updateLogs = () => {

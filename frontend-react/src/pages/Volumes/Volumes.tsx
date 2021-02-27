@@ -27,6 +27,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MenuVolumes from '../../components/MaterialCustomized/MenuVolumes';
 import Tooltip from '@material-ui/core/Tooltip';
 
+import { useViewport } from '../../Viewport';
+
 
 interface IVolumesProps {
     volumes: Volume[],
@@ -40,6 +42,9 @@ interface IVolumesProps {
 
 const Volumes = (props: IVolumesProps) => {
     const { fetchVolumes, createVolume, removeVolumes, volumes } = props;
+    const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
+    console.log(`width=${width}, phone=${phone}, tabletPortrait=${tabletPortrait}, tabletLandscape=${tabletLandscape}, desktop=${desktop}`);
+
     const defaultSelectedVolumes = {};
 
     for (const [key, value] of Object.entries(volumes)) {

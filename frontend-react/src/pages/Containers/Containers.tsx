@@ -52,6 +52,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { Typography } from '@material-ui/core';
 
+import { useViewport } from '../../Viewport';
+
 
 interface IContainersProps {
     containers: Container[],
@@ -67,6 +69,9 @@ interface IContainersProps {
 
 const Containers = (props: IContainersProps) => {
     const { fetchContainers, removeContainers, stopContainers, killContainers, containerRun, containers } = props;
+    const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
+    console.log(`width=${width}, phone=${phone}, tabletPortrait=${tabletPortrait}, tabletLandscape=${tabletLandscape}, desktop=${desktop}`);
+
     const defaultSelectedContainers = {};
 
     for (const [key, value] of Object.entries(containers)) {
