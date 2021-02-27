@@ -63,3 +63,13 @@ export const extractIds = (items: Object) => {
     }
     return imageIds;
 };
+
+export const extractSelected = (items) => {
+    const selectedItems = [];
+    for (const [key, value] of Object.entries(items)) {
+        if (value === true) {
+            selectedItems.push(key);
+        }
+    }
+    return selectedItems;
+};

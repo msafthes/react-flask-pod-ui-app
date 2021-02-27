@@ -2,6 +2,7 @@ export {
     fetchImages,
     removeImages,
     pruneImages,
+    pullImage,
 } from './images';
 
 export {
@@ -9,8 +10,12 @@ export {
     removeContainers,
     updateContainerLogs,
     containerRun,
+    stopContainers,
+    killContainers,
 } from './containers';
 
 export {
     fetchVolumes,
+    createVolume,
+    removeVolumes,
 } from './volumes';

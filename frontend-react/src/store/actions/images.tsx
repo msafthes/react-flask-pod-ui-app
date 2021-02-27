@@ -6,6 +6,7 @@ import {
     FETCH_IMAGES_START, FETCH_IMAGES_SUCCESS, FETCH_IMAGES_FAIL,
     REMOVE_IMAGES_START, REMOVE_IMAGES_SUCCESS, REMOVE_IMAGES_FAIL,
     PRUNE_IMAGES_START, PRUNE_IMAGES_SUCCESS, PRUNE_IMAGES_FAIL,
+    PULL_IMAGE_START, PULL_IMAGE_SUCCESS, PULL_IMAGE_FAIL,
 } from './actionTypes';
 
 import { API_BASE } from '../../config';
@@ -137,6 +138,53 @@ export const pruneImages = () => {
             dispatch(pruneImagesSuccess(response.data.images));
         }).catch(err => {
             dispatch(pruneImagesFail(err.response.data));
+        });
+    };
+};
+
+// Pull Image
+export const pullImageStart = () => {
+    return {
+        type: PULL_IMAGE_START
+    };
+};
+
+export const pullImageSuccess = (images: Image) => {
+    return {
+        type: PULL_IMAGE_SUCCESS,
+        images: images
+    };
+};
+
+export const pullImageFail = (error: string) => {
+    return {
+        type: PULL_IMAGE_FAIL,
+        error: error
+    };
+};
+
+export const pullImage = (name: string) => {
+    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+        console.log("pullImage()");
+        dispatch(pullImageStart());
+
+        const url = `${API_BASE}/images/pull`;
+
+        const headers = {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        }
+
+        const data = {
+            name: name
+        }
+
+        axios.post(url, data, {
+            headers: headers,
+        }).then(response => {
+            dispatch(pullImageSuccess(response.data.images));
+        }).catch(err => {
+            dispatch(pullImageFail(err.response.data));
         });
     };
 };

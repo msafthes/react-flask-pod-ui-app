@@ -46,6 +46,7 @@ def podman_images():
 
 
 def podman_ps():
+    print("podman_ps()")
     # Example: separating each info with #
     # 54a48d41f6d9#registry.fedoraproject.org/f29/httpd:latest#/usr/bin/run-http...#2 minutes ago#0.0.0.0:8080->8080/tcp#laughing_bassi#Running
 
@@ -53,6 +54,9 @@ def podman_ps():
 
     output = subprocess.run("{0}".format(
         command), shell=True, capture_output=True).stdout.decode('utf-8')
+
+    print("output")
+    print(output)
 
     podman_containers_array = output.split('\n')
     podman_containers_array.pop()  # Removing the last '' empty part after split
@@ -157,9 +161,15 @@ def prune_images():
 # POST /images/pull
 @app.route('/images/pull', methods=['POST'])
 def images_pull():
+    print("images_pull()")
     name = request.get_json().get("name")
+    print("name:")
+    print(name)
+
     length = len(name)
-    command = "podman pull {0}".format(run_command)
+    command = "podman pull {0}".format(name)
+    print("command:")
+    print(command)
 
     if length != 0:
         subprocess.run("{0}".format(command), shell=True,
@@ -213,27 +223,36 @@ def container_run():
 
     return jsonify(containers)
 
-# GET /containers/stop
-@app.route('/containers/stop', methods=['GET'])
+# POST /containers/stop
+@app.route('/containers/stop', methods=['POST'])
 def containers_stop():
     container_ids = request.get_json().get("IDs")
+    print("containers_stop()")
+    print("container_ids:")
+    print(container_ids)
 
     count = len(container_ids)
 
     all_ids = " ".join(container_ids)
+    print("all_ids:")
+    print(all_ids)
 
     command = "podman stop {0}".format(all_ids)
+    print("command:")
+    print(command)
 
     if count != 0:
         subprocess.run("{0}".format(command), shell=True,
                        capture_output=True).stdout
 
     containers = podman_ps()
+    print("containers:")
+    print(containers)
 
     return jsonify(containers)
 
-# GET /containers/kill
-@app.route('/containers/kill', methods=['GET'])
+# POST /containers/kill
+@app.route('/containers/kill', methods=['POST'])
 def containers_kill():
     container_ids = request.get_json().get("IDs")
 
@@ -283,10 +302,14 @@ def volumes_create():
 def volumes_remove():
     names = request.get_json().get("names")
 
-    length = len(name)
+    length = len(names)
     all_names = " ".join(names)
+    print("all_names")
+    print(all_names)
 
-    command = "podman volume rm {0}".format(names)
+    command = "podman volume rm {0}".format(all_names)
+    print("command")
+    print(command)
 
     if length != 0:
         subprocess.run("{0}".format(command), shell=True,

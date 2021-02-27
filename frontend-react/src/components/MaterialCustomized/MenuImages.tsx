@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 
 const MenuImages = props => {
-    const { imageId, removeImage } = props
+    const { imageId, imageOperation } = props
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const id = {};
 
@@ -34,7 +34,7 @@ const MenuImages = props => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={() => removeImage(id)}>Remove</MenuItem>
+                <MenuItem onClick={() => imageOperation(id, "remove")}>Remove</MenuItem>
                 <MenuItem onClick={handleClose}>Close</MenuItem>
             </Menu>
         </div>

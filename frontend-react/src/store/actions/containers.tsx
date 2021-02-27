@@ -5,6 +5,8 @@ import { Container } from '../../models/Models';
 import {
     FETCH_CONTAINERS_START, FETCH_CONTAINERS_SUCCESS, FETCH_CONTAINERS_FAIL,
     REMOVE_CONTAINERS_START, REMOVE_CONTAINERS_SUCCESS, REMOVE_CONTAINERS_FAIL,
+    STOP_CONTAINERS_START, STOP_CONTAINERS_SUCCESS, STOP_CONTAINERS_FAIL,
+    KILL_CONTAINERS_START, KILL_CONTAINERS_SUCCESS, KILL_CONTAINERS_FAIL,
     UPDATE_CONTAINER_LOG,
     CONTAINER_RUN_START, CONTAINER_RUN_SUCCESS, CONTAINER_RUN_FAIL,
 } from './actionTypes';
@@ -99,6 +101,96 @@ export const removeContainers = (containerIds: Array<String>) => {
             dispatch(removeContainersSuccess(response.data.containers));
         }).catch(err => {
             dispatch(removeContainersFail(err.response.data));
+        });
+    };
+};
+
+// Stop
+export const stopContainersStart = () => {
+    return {
+        type: STOP_CONTAINERS_START
+    };
+};
+
+export const stopContainersSuccess = (containers: Container) => {
+    return {
+        type: STOP_CONTAINERS_SUCCESS,
+        containers: containers
+    };
+};
+
+export const stopContainersFail = (error: string) => {
+    return {
+        type: STOP_CONTAINERS_FAIL,
+        error: error
+    };
+};
+
+export const stopContainers = (containerIds: Array<String>) => {
+    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+        console.log("stopContainers()");
+        dispatch(stopContainersStart());
+
+        const url = `${API_BASE}/containers/stop`;
+        const headers = {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        }
+        const data = {
+            IDs: containerIds
+        }
+
+        axios.post(url, data, {
+            headers: headers,
+        }).then(response => {
+            dispatch(stopContainersSuccess(response.data.containers));
+        }).catch(err => {
+            dispatch(stopContainersFail(err.response.data));
+        });
+    };
+};
+
+// Kill
+export const killContainersStart = () => {
+    return {
+        type: KILL_CONTAINERS_START
+    };
+};
+
+export const killContainersSuccess = (containers: Container) => {
+    return {
+        type: KILL_CONTAINERS_SUCCESS,
+        containers: containers
+    };
+};
+
+export const killContainersFail = (error: string) => {
+    return {
+        type: KILL_CONTAINERS_FAIL,
+        error: error
+    };
+};
+
+export const killContainers = (containerIds: Array<String>) => {
+    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+        console.log("killContainers()");
+        dispatch(killContainersStart());
+
+        const url = `${API_BASE}/containers/kill`;
+        const headers = {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        }
+        const data = {
+            IDs: containerIds
+        }
+
+        axios.post(url, data, {
+            headers: headers,
+        }).then(response => {
+            dispatch(killContainersSuccess(response.data.containers));
+        }).catch(err => {
+            dispatch(killContainersFail(err.response.data));
         });
     };
 };

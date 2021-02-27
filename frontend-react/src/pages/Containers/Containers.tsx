@@ -9,7 +9,7 @@ import css from './Containers.module.css';
 import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
 import { Container } from '../../models/Models';
 
-import { isAllTrue, handleSelectAll, isSelectedAny } from '../../helpers/helpers';
+import { isAllTrue, handleSelectAll, isSelectedAny, extractSelected } from '../../helpers/helpers';
 
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -58,13 +58,15 @@ interface IContainersProps {
     loading: boolean,
     fetchContainers: Function,
     removeContainers: Function,
+    stopContainers: Function,
+    killContainers: Function,
     containerRun: Function,
 
     containersDataTest: Container[]
 }
 
 const Containers = (props: IContainersProps) => {
-    const { fetchContainers, removeContainers, containerRun, containers } = props;
+    const { fetchContainers, removeContainers, stopContainers, killContainers, containerRun, containers } = props;
     const defaultSelectedContainers = {};
 
     for (const [key, value] of Object.entries(containers)) {
@@ -72,8 +74,8 @@ const Containers = (props: IContainersProps) => {
     }
 
     const [selectedContainers, setSelectedContainers] = useState<any>({ ...defaultSelectedContainers });
-    const [openRunModal, setOpenRunModal] = React.useState(false);
-    const [runCommand, setRunCommand] = React.useState("");
+    const [openRunModal, setOpenRunModal] = useState(false);
+    const [runCommand, setRunCommand] = useState("");
     const [showError, setShowError] = useState<boolean>(false);
     const [errorInfo, setErrorInfo] = useState<string>("");
 
@@ -110,8 +112,8 @@ const Containers = (props: IContainersProps) => {
             console.log("empty run command");
             return;
         }
-        setRunCommand('');
         containerRun(runCommand);
+        setRunCommand('');
     };
 
     const handleCheckboxChange = changeEvent => {
@@ -127,15 +129,8 @@ const Containers = (props: IContainersProps) => {
         setSelectedContainers(old);
     };
 
-    const handleRemoveContainers = selectedContainers => {
-        console.log("triggered handleRemoveContainers()");
-        const containerIds = [];
-        for (const [key, value] of Object.entries(selectedContainers)) {
-            if (value === true) {
-                containerIds.push(key);
-            }
-        }
-
+    const handleRemoveContainers = (selectedContainers, containerIds) => {
+        console.log("handleRemoveContainers()");
         let runningContainersIds = [];
         containers.forEach((container) => {
             console.log(`status: ${container.status}`);
@@ -143,16 +138,6 @@ const Containers = (props: IContainersProps) => {
                 runningContainersIds.push(container.containerId);
             }
         });
-
-        const updated = { ...selectedContainers };
-
-        for (const [key, value] of Object.entries(updated)) {
-            if (value === true) {
-                updated[key] = false
-            }
-        }
-
-        setSelectedContainers(updated);
 
         if (runningContainersIds.length > 0) {
             console.log("SELECTION INVALID - there are running containers");
@@ -163,6 +148,35 @@ const Containers = (props: IContainersProps) => {
             console.log("Ready for deletion");
             removeContainers(containerIds);
         }
+    };
+
+    // Function to handle various container operations, ready to be used for "all" containers as well
+    const handleContainerOperation = (selectedContainers, mode: string) => {
+        console.log(`triggered handleContainerOperation(), mode: ${mode}`);
+        const containerIds = extractSelected(selectedContainers);
+
+        switch (mode.toLowerCase()) {
+            case "remove":
+                handleRemoveContainers(selectedContainers, containerIds);
+                break;
+            case "stop":
+                stopContainers(containerIds);
+                break;
+            case "kill":
+                killContainers(containerIds);
+                break;
+            default: console.log("Unknown operation!");
+        }
+
+        const updated = { ...selectedContainers };
+
+        for (const [key, value] of Object.entries(updated)) {
+            if (value === true) {
+                updated[key] = false
+            }
+        }
+
+        setSelectedContainers(updated);
     };
 
     const selectAll = () => {
@@ -246,7 +260,10 @@ const Containers = (props: IContainersProps) => {
                                         onFocus={(event) => event.stopPropagation()}
                                         control={<MenuContainers
                                             containerId={container.containerId}
-                                            removeContainer={handleRemoveContainers}
+                                            containerOperation={handleContainerOperation}
+                                        // removeContainer={handleRemoveContainers}
+                                        // stopContainer={handleStopContainers}
+                                        // killContainer={handleKillContainers}
                                         />}
                                         // label="Select"
                                         label=""
@@ -282,14 +299,14 @@ const Containers = (props: IContainersProps) => {
                             color="secondary"
                             variant="outlined"
                             startIcon={<DeleteIcon />}
-                            onClick={() => handleRemoveContainers(selectedContainers)}>
+                            onClick={() => handleContainerOperation(selectedContainers, "remove")}>
                             Remove Selected
                         </Button>
                     </Grid>
                     <Grid item className={css.Buttons}>
                         <Button variant="outlined" color="primary" onClick={handleRunOpen}>
                             Run
-                    </Button>
+                        </Button>
                         <Dialog open={openRunModal} onClose={handleRunClose} aria-labelledby="form-dialog-title">
                             <DialogTitle id="form-dialog-title">Run</DialogTitle>
                             <DialogContent>
@@ -364,7 +381,11 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
             dispatch(actions.fetchContainers()),
         removeContainers: (selectedContainers) =>
             dispatch(actions.removeContainers(selectedContainers)),
-        containerRun: (command, containers) =>
+        stopContainers: (selectedContainers) =>
+            dispatch(actions.stopContainers(selectedContainers)),
+        killContainers: (selectedContainers) =>
+            dispatch(actions.killContainers(selectedContainers)),
+        containerRun: (command) =>
             dispatch(actions.containerRun(command))
     };
 };

@@ -9,20 +9,19 @@ import css from './Volumes.module.css';
 import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
 import { Volume } from '../../models/Models';
 
-import { isAllTrue, handleSelectAll } from '../../helpers/helpers';
+import { isAllTrue, handleSelectAll, extractIds, isSelectedAny } from '../../helpers/helpers';
 
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
-// import Button from '@material-ui/core/Button';
-// import ButtonGroup from '@material-ui/core/ButtonGroup';
-// import DeleteIcon from '@material-ui/icons/Delete';
+import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
 // import { makeStyles } from '@material-ui/core/styles';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from '@material-ui/core';
 
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import MenuVolumes from '../../components/MaterialCustomized/MenuVolumes';
@@ -33,13 +32,14 @@ interface IVolumesProps {
     volumes: Volume[],
     loading: boolean,
     fetchVolumes: Function,
+    createVolume: Function,
     removeVolumes: Function,
 
     volumesDataTest: Volume[]
 }
 
 const Volumes = (props: IVolumesProps) => {
-    const { fetchVolumes, removeVolumes, volumes } = props;
+    const { fetchVolumes, createVolume, removeVolumes, volumes } = props;
     const defaultSelectedVolumes = {};
 
     for (const [key, value] of Object.entries(volumes)) {
@@ -47,6 +47,8 @@ const Volumes = (props: IVolumesProps) => {
     }
 
     const [selectedVolumes, setSelectedVolumes] = useState<any>({ ...defaultSelectedVolumes });
+    const [openCreateVolumeModal, setOpenCreateVolumeModal] = useState(false);
+    const [createVolumeName, setCreateVolumeName] = useState("");
 
     const allTrue = isAllTrue(selectedVolumes);
 
@@ -67,10 +69,55 @@ const Volumes = (props: IVolumesProps) => {
         setSelectedVolumes(old);
     };
 
-    const selectAll = () => {
-        const updated = handleSelectAll(setSelectedVolumes);
+    const handleCreateVolumeOpen = () => {
+        setOpenCreateVolumeModal(true);
+    };
+
+    const handleCreateVolumeClose = () => {
+        setOpenCreateVolumeModal(false);
+    };
+
+    const onChangeCreateVolume = (e) => {
+        setCreateVolumeName(e.target.value);
+    };
+
+    const handleVolumeCreate = () => {
+        setOpenCreateVolumeModal(false);
+        if (createVolumeName.length == 0) {
+            console.log("empty volume create name");
+            return;
+        }
+        createVolume(createVolumeName);
+        setCreateVolumeName('');
+    };
+
+    const handleVolumeOperation = (selectedVolumes, mode: string) => {
+        console.log(`triggered handleVolumeOperation(), mode: ${mode}`);
+        const volumesNames = extractIds(selectedVolumes);
+
+        switch (mode.toLowerCase()) {
+            case "remove":
+                removeVolumes(volumesNames);
+                break;
+            default: console.log("Unknown operation!");
+        }
+
+        const updated = { ...selectedVolumes };
+
+        for (const [key, value] of Object.entries(updated)) {
+            if (value === true) {
+                updated[key] = false
+            }
+        }
         setSelectedVolumes(updated);
     };
+
+    const selectAll = () => {
+        const updated = handleSelectAll(selectedVolumes);
+        setSelectedVolumes(updated);
+    };
+
+    const isSelected = isSelectedAny(selectedVolumes);
 
     const volumesTitleClasses = [css.Content, css.Heading];
 
@@ -119,7 +166,7 @@ const Volumes = (props: IVolumesProps) => {
                                         onFocus={(event) => event.stopPropagation()}
                                         control={<MenuVolumes
                                             volumeName={volume.Name}
-                                        // removeItem={handleRemoveVolumes}
+                                            volumeOperation={handleVolumeOperation}
                                         />}
                                         // label="Select"
                                         label=""
@@ -137,9 +184,7 @@ const Volumes = (props: IVolumesProps) => {
 
                     </React.Fragment>
                     // <Grid item container className={css.Content} key={volume.Name}>
-
                     // </Grid>
-
                 }))
                 :
                 ''
@@ -152,6 +197,49 @@ const Volumes = (props: IVolumesProps) => {
             <div className={css.Wrapper}>
                 <h1 className={css.Headline}>Podman Volumes</h1>
                 <p>Showing information about Volumes based on the `podman volume inspect` command</p>
+                <Grid container className={css.Content}>
+                    <Grid item className={css.Buttons}>
+                        <Button
+                            disabled={!isSelected}
+                            color="secondary"
+                            variant="outlined"
+                            startIcon={<DeleteIcon />}
+                            onClick={() => handleVolumeOperation(selectedVolumes, "remove")}>
+                            Remove Selected
+                        </Button>
+                    </Grid>
+
+                    <Grid item className={css.Buttons}>
+                        <Button variant="outlined" color="primary" onClick={handleCreateVolumeOpen}>
+                            Create
+                        </Button>
+                        <Dialog open={openCreateVolumeModal} onClose={handleCreateVolumeClose} aria-labelledby="form-dialog-title">
+                            <DialogTitle id="form-dialog-title">Create</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Enter the name of volume you want to create"
+                            </DialogContentText>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="name"
+                                    label="Volume Create"
+                                    type="text"
+                                    fullWidth
+                                    onChange={onChangeCreateVolume}
+                                />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleVolumeCreate} color="primary">
+                                    Create
+                            </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </Grid>
+
+                </Grid>
+
+
                 <div className={css.Info}>
                     <div className={volumesTitleClasses.join(' ')}>
                         <Checkbox color="primary" onClick={selectAll} checked={allTrue} />
@@ -176,6 +264,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
         fetchVolumes: () =>
             dispatch(actions.fetchVolumes()),
+        createVolume: (name) =>
+            dispatch(actions.createVolume(name)),
+        removeVolumes: (selectedVolumes: string[]) =>
+            dispatch(actions.removeVolumes(selectedVolumes)),
     };
 };
 

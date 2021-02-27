@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 
 const MenuVolumes = props => {
-    const { volumeName, removeVolume } = props
+    const { volumeName, volumeOperation } = props
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const name = {};
     name[volumeName] = true;
@@ -31,7 +31,7 @@ const MenuVolumes = props => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {/* <MenuItem onClick={() => removeVolume(name)}>Remove</MenuItem> */}
+                <MenuItem onClick={() => volumeOperation(name, "remove")}>Remove</MenuItem>
                 <MenuItem onClick={handleClose}>Close</MenuItem>
             </Menu>
         </div>

@@ -9,6 +9,14 @@ import {
     IRemoveContainersStartAction, IRemoveContainersSuccessAction, IRemoveContainersFailAction,
     RemoveContainersTypes,
 
+    STOP_CONTAINERS_START, STOP_CONTAINERS_SUCCESS, STOP_CONTAINERS_FAIL,
+    IStopContainersStartAction, IStopContainersSuccessAction, IStopContainersFailAction,
+    StopContainersTypes,
+
+    KILL_CONTAINERS_START, KILL_CONTAINERS_SUCCESS, KILL_CONTAINERS_FAIL,
+    IKillContainersStartAction, IKillContainersSuccessAction, IKillContainersFailAction,
+    KillContainersTypes,
+
     UPDATE_CONTAINER_LOG, IUpdateContainerLogsAction,
 
     CONTAINER_RUN_START, CONTAINER_RUN_SUCCESS, CONTAINER_RUN_FAIL,
@@ -50,6 +58,32 @@ const removeContainersFail = (state: IContainersState, action: IRemoveContainers
     return { ...state, error: action.error, loading: false }
 };
 
+// Stop Containers
+const stopContainersStart = (state: IContainersState, action: IStopContainersStartAction): IContainersState => {
+    return { ...state, error: '', loading: true }
+};
+
+const stopContainersSuccess = (state: IContainersState, action: IStopContainersSuccessAction): IContainersState => {
+    return { ...state, containers: action.containers, error: '', loading: false }
+};
+
+const stopContainersFail = (state: IContainersState, action: IStopContainersFailAction): IContainersState => {
+    return { ...state, error: action.error, loading: false }
+};
+
+// Kill Containers
+const killContainersStart = (state: IContainersState, action: IKillContainersStartAction): IContainersState => {
+    return { ...state, error: '', loading: true }
+};
+
+const killContainersSuccess = (state: IContainersState, action: IKillContainersSuccessAction): IContainersState => {
+    return { ...state, containers: action.containers, error: '', loading: false }
+};
+
+const killContainersFail = (state: IContainersState, action: IKillContainersFailAction): IContainersState => {
+    return { ...state, error: action.error, loading: false }
+};
+
 // Update Logs
 const updateContainerLogs = (state: IContainersState, action: IUpdateContainerLogsAction): IContainersState => {
     console.log(`REDUCER - updateContainerLogs, action:`);
@@ -70,7 +104,8 @@ const containerRunFail = (state: IContainersState, action: IContainerRunFailActi
     return { ...state, error: action.error, loading: false }
 };
 
-const reducer = (state = initialState, action: FetchContainersTypes | RemoveContainersTypes | IUpdateContainerLogsAction | ContainerRunTypes): IContainersState => {
+const reducer = (state = initialState, action: FetchContainersTypes | RemoveContainersTypes | IUpdateContainerLogsAction |
+    ContainerRunTypes | StopContainersTypes | KillContainersTypes): IContainersState => {
     switch (action.type) {
         case FETCH_CONTAINERS_START: return fetchContainersStart(state, action);
         case FETCH_CONTAINERS_SUCCESS: return fetchContainersSuccess(state, action);
@@ -79,6 +114,14 @@ const reducer = (state = initialState, action: FetchContainersTypes | RemoveCont
         case REMOVE_CONTAINERS_START: return removeContainersStart(state, action);
         case REMOVE_CONTAINERS_SUCCESS: return removeContainersSuccess(state, action);
         case REMOVE_CONTAINERS_FAIL: return removeContainersFail(state, action);
+
+        case STOP_CONTAINERS_START: return stopContainersStart(state, action);
+        case STOP_CONTAINERS_SUCCESS: return stopContainersSuccess(state, action);
+        case STOP_CONTAINERS_FAIL: return stopContainersFail(state, action);
+
+        case KILL_CONTAINERS_START: return killContainersStart(state, action);
+        case KILL_CONTAINERS_SUCCESS: return killContainersSuccess(state, action);
+        case KILL_CONTAINERS_FAIL: return killContainersFail(state, action);
 
         case UPDATE_CONTAINER_LOG: return updateContainerLogs(state, action);
 

@@ -9,7 +9,8 @@ import { Link } from 'react-router-dom';
 
 
 const MenuContainers = props => {
-    const { containerId, removeContainer } = props
+    const { containerId, containerOperation } = props
+    // const { containerId, removeContainer, stopContainer, killContainer } = props
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const id = {};
     id[containerId] = true;
@@ -39,9 +40,11 @@ const MenuContainers = props => {
                         startIcon={<PageviewIcon />}
                         onClick={() => console.log(`clicked ID: ${containerId}`)}>
                         Show Logs
-                </Button>
+                    </Button>
                 </Link>
-                <MenuItem onClick={() => removeContainer(id)}>Remove</MenuItem>
+                <MenuItem onClick={() => containerOperation(id, "remove")}>Remove</MenuItem>
+                <MenuItem onClick={() => containerOperation(id, "stop")}>Stop</MenuItem>
+                <MenuItem onClick={() => containerOperation(id, "kill")}>Kill</MenuItem>
                 <MenuItem onClick={handleClose}>Close</MenuItem>
             </Menu>
         </div>

@@ -11,7 +11,11 @@ import {
 
     PRUNE_IMAGES_START, PRUNE_IMAGES_SUCCESS, PRUNE_IMAGES_FAIL,
     IPruneImagesStartAction, IPruneImagesSuccessAction, IPruneImagesFailAction,
-    PruneImagesTypes
+    PruneImagesTypes,
+
+    PULL_IMAGE_START, PULL_IMAGE_SUCCESS, PULL_IMAGE_FAIL,
+    IPullImageStartAction, IPullImageSuccessAction, IPullImageFailAction,
+    PullImageTypes,
 } from '../actions/actionTypes';
 
 
@@ -47,6 +51,19 @@ const removeImagesFail = (state: IImagesState, action: IRemoveImagesFailAction):
     return { ...state, error: action.error, loading: false }
 };
 
+// Pull
+const pullImageStart = (state: IImagesState, action: IPullImageStartAction): IImagesState => {
+    return { ...state, error: '', loading: true }
+};
+
+const pullImageSuccess = (state: IImagesState, action: IPullImageSuccessAction): IImagesState => {
+    return { ...state, images: action.images, error: '', loading: false }
+};
+
+const pullImageFail = (state: IImagesState, action: IPullImageFailAction): IImagesState => {
+    return { ...state, error: action.error, loading: false }
+};
+
 // Prune
 const pruneImagesStart = (state: IImagesState, action: IPruneImagesStartAction): IImagesState => {
     return { ...state, error: '', loading: true }
@@ -60,7 +77,7 @@ const pruneImagesFail = (state: IImagesState, action: IPruneImagesFailAction): I
     return { ...state, error: action.error, loading: false }
 };
 
-const reducer = (state = initialState, action: FetchImagesTypes | RemoveImagesTypes | PruneImagesTypes): IImagesState => {
+const reducer = (state = initialState, action: FetchImagesTypes | RemoveImagesTypes | PruneImagesTypes | PullImageTypes): IImagesState => {
     switch (action.type) {
         case FETCH_IMAGES_START: return fetchImagesStart(state, action);
         case FETCH_IMAGES_SUCCESS: return fetchImagesSuccess(state, action);
@@ -69,6 +86,10 @@ const reducer = (state = initialState, action: FetchImagesTypes | RemoveImagesTy
         case REMOVE_IMAGES_START: return removeImagesStart(state, action);
         case REMOVE_IMAGES_SUCCESS: return removeImagesSuccess(state, action);
         case REMOVE_IMAGES_FAIL: return removeImagesFail(state, action);
+
+        case PULL_IMAGE_START: return pullImageStart(state, action);
+        case PULL_IMAGE_SUCCESS: return pullImageSuccess(state, action);
+        case PULL_IMAGE_FAIL: return pullImageFail(state, action);
 
         case PRUNE_IMAGES_START: return pruneImagesStart(state, action);
         case PRUNE_IMAGES_SUCCESS: return pruneImagesSuccess(state, action);

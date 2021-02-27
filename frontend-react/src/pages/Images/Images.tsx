@@ -17,7 +17,7 @@ import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
 import { Alert, AlertTitle } from '@material-ui/lab';
-import { Typography } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from '@material-ui/core';
 
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -36,6 +36,7 @@ interface IImagesProps {
     fetchImages: Function,
     removeImages: Function,
     pruneImages: Function,
+    pullImage: Function,
 
     imagesDataTest: Image[],
     containers: Container[],
@@ -43,7 +44,7 @@ interface IImagesProps {
 }
 
 const Images = (props: IImagesProps) => {
-    const { fetchImages, removeImages, pruneImages, images, containers, fetchContainers } = props;
+    const { fetchImages, removeImages, pruneImages, pullImage, images, containers, fetchContainers } = props;
 
     const defaultSelectedImages = {};
 
@@ -54,6 +55,8 @@ const Images = (props: IImagesProps) => {
     const [selectedImages, setSelectedImages] = useState<any>({ ...defaultSelectedImages });
     const [showError, setShowError] = useState<boolean>(false);
     const [errorInfo, setErrorInfo] = useState<string>("");
+    const [openPullModal, setOpenPullModal] = useState(false);
+    const [pullImageName, setPullImageName] = useState("");
 
     const allTrue = isAllTrue(selectedImages);
 
@@ -75,9 +78,30 @@ const Images = (props: IImagesProps) => {
         setSelectedImages(old);
     };
 
-    const handleRemoveImages = selectedImages => {
-        console.log("triggered handleRemoveImages()")
+    const handlePullOpen = () => {
+        setOpenPullModal(true);
+    };
 
+    const handlePullClose = () => {
+        setOpenPullModal(false);
+    };
+
+    const onChangePull = (e) => {
+        setPullImageName(e.target.value);
+    };
+
+    const handleImagePull = () => {
+        setOpenPullModal(false);
+        if (pullImageName.length == 0) {
+            console.log("empty image pull name");
+            return;
+        }
+        pullImage(pullImageName);
+        setPullImageName('');
+    };
+
+    const handleRemoveImages = (images, imageIds) => {
+        console.log("handleRemoveImages()");
         const usedImages = [];
         let usedImagesNames = [];
 
@@ -93,16 +117,6 @@ const Images = (props: IImagesProps) => {
             }
         });
 
-        const imageIds = extractIds(selectedImages);
-        const updated = { ...selectedImages };
-
-        for (const [key, value] of Object.entries(updated)) {
-            if (value === true) {
-                updated[key] = false
-            }
-        }
-        setSelectedImages(updated);
-
         if (usedImages.length > 0) {
             console.log("SELECTION INVALID - there are used images");
             setShowError(true);
@@ -112,6 +126,27 @@ const Images = (props: IImagesProps) => {
             console.log("Ready for deletion");
             removeImages(imageIds);
         }
+    };
+
+    const handleImageOperation = (selectedImages, mode: string) => {
+        console.log(`triggered handleImageOperation(), mode: ${mode}`);
+        const imageIds = extractIds(selectedImages);
+
+        switch (mode.toLowerCase()) {
+            case "remove":
+                handleRemoveImages(images, imageIds);
+                break;
+            default: console.log("Unknown operation!");
+        }
+
+        const updated = { ...selectedImages };
+
+        for (const [key, value] of Object.entries(updated)) {
+            if (value === true) {
+                updated[key] = false
+            }
+        }
+        setSelectedImages(updated);
     };
 
     const selectAll = () => {
@@ -180,7 +215,7 @@ const Images = (props: IImagesProps) => {
                                         onFocus={(event) => event.stopPropagation()}
                                         control={<MenuImages
                                             imageId={image.id}
-                                            removeImage={handleRemoveImages}
+                                            imageOperation={handleImageOperation}
                                         />}
                                         // label="Select"
                                         label=""
@@ -216,7 +251,7 @@ const Images = (props: IImagesProps) => {
                             color="secondary"
                             variant="outlined"
                             startIcon={<DeleteIcon />}
-                            onClick={() => handleRemoveImages(selectedImages)}>
+                            onClick={() => handleImageOperation(selectedImages, "remove")}>
                             Remove Selected
                     </Button>
                     </Grid>
@@ -227,8 +262,37 @@ const Images = (props: IImagesProps) => {
                             startIcon={<DeleteIcon />}
                             onClick={() => pruneImages()}>
                             Remove unused images
-                    </Button>
+                        </Button>
                     </Grid>
+
+                    <Grid item className={css.Buttons}>
+                        <Button variant="outlined" color="primary" onClick={handlePullOpen}>
+                            Pull
+                        </Button>
+                        <Dialog open={openPullModal} onClose={handlePullClose} aria-labelledby="form-dialog-title">
+                            <DialogTitle id="form-dialog-title">Pull</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Enter the image you want to pull"
+                            </DialogContentText>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="name"
+                                    label="Image Pull"
+                                    type="text"
+                                    fullWidth
+                                    onChange={onChangePull}
+                                />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleImagePull} color="primary">
+                                    Pull
+                            </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </Grid>
+
                 </Grid>
 
                 {showError &&
@@ -279,6 +343,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
             dispatch(actions.removeImages(selectedImages)),
         pruneImages: () =>
             dispatch(actions.pruneImages()),
+        pullImage: (name) =>
+            dispatch(actions.pullImage(name)),
         fetchContainers: () =>
             dispatch(actions.fetchContainers()),
     };
