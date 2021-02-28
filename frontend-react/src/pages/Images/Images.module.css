@@ -61,6 +61,7 @@
     overflow: hidden;
     margin-right: 1.25rem;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .Button {
@@ -201,7 +202,7 @@
         /* color: green; */
     }
     .Repository {
-        width: 100%;
+        width: fit-content;
         /* width: auto; */
         word-break: break-word;
         margin-bottom: 1rem;

@@ -158,12 +158,16 @@ const Volumes = (props: IVolumesProps) => {
                                     <Tooltip title={volume.Name}>
                                         <Grid className={css.Name}>{volume.Name}</Grid>
                                     </Tooltip>
-                                    <Tooltip title={volume.Driver}>
-                                        <Grid className={css.Driver}>{volume.Driver}</Grid>
-                                    </Tooltip>
-                                    <Tooltip title={volume.Mountpoint}>
-                                        <Grid className={css.Mountpoint}>{volume.Mountpoint}</Grid>
-                                    </Tooltip>
+                                    {(desktop || tabletLandscape) &&
+                                        <Tooltip title={volume.Driver}>
+                                            <Grid className={css.Driver}>{volume.Driver}</Grid>
+                                        </Tooltip>
+                                    }
+                                    {desktop &&
+                                        <Tooltip title={volume.Mountpoint}>
+                                            <Grid className={css.Mountpoint}>{volume.Mountpoint}</Grid>
+                                        </Tooltip>
+                                    }
 
                                     <FormControlLabel
                                         aria-label="Acknowledge"
@@ -180,9 +184,16 @@ const Volumes = (props: IVolumesProps) => {
                             </AccordionSummary>
 
                             <AccordionDetails>
-                                <Typography>
-                                    There are no additional data to display yet.
-                                </Typography>
+                                <Grid container direction="column">
+                                    <Grid container direction="row">
+                                        <Grid item className={css.DetailTitle}>Mountpoint:</Grid>
+                                        <Grid item className={css.Mountpoint}>{volume.Mountpoint}</Grid>
+                                    </Grid>
+                                    <Grid container direction="row">
+                                        <Grid item className={css.DetailTitle}>Driver:</Grid>
+                                        <Grid item className={css.Driver}>{volume.Driver}</Grid>
+                                    </Grid>
+                                </Grid>
                             </AccordionDetails>
 
                         </Accordion>
@@ -202,8 +213,8 @@ const Volumes = (props: IVolumesProps) => {
             <div className={css.Wrapper}>
                 <h1 className={css.Headline}>Podman Volumes</h1>
                 <p>Showing information about Volumes based on the `podman volume inspect` command</p>
-                <Grid container className={css.Content}>
-                    <Grid item className={css.Buttons}>
+                <Grid container className={css.Buttons}>
+                    <Grid item className={css.Button}>
                         <Button
                             disabled={!isSelected}
                             color="secondary"
@@ -214,7 +225,7 @@ const Volumes = (props: IVolumesProps) => {
                         </Button>
                     </Grid>
 
-                    <Grid item className={css.Buttons}>
+                    <Grid item className={css.Button}>
                         <Button variant="outlined" color="primary" onClick={handleCreateVolumeOpen}>
                             Create
                         </Button>
@@ -249,8 +260,12 @@ const Volumes = (props: IVolumesProps) => {
                     <div className={volumesTitleClasses.join(' ')}>
                         <Checkbox color="primary" onClick={selectAll} checked={allTrue} />
                         <div className={css.Name}>Name</div>
-                        <div className={css.Driver}>Driver</div>
-                        <div className={css.Mountpoint}>Mountpoint</div>
+                        {(desktop || tabletLandscape) &&
+                            <div className={css.Driver}>Driver</div>
+                        }
+                        {desktop &&
+                            <div className={css.Mountpoint}>Mountpoint</div>
+                        }
                     </div>
                     {content}
                 </div>
