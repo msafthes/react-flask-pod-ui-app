@@ -1,5 +1,6 @@
 @import '../../Variables.css';
 
+/* ALL */
 .Containers {
     display: flex;
     flex-direction: column;
@@ -26,7 +27,7 @@
     flex-direction: column;
     margin-top: 1rem;
 }
-.Content {
+.Content, .Buttons {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -40,31 +41,24 @@
 
 /* CONTAINERS */
 .ContainerId {
-    width: 10%;
-    width: 10rem;
+    width: 8rem;
 }
 .Status {
-    width: 13.5%;
-    width: 13.5rem;
+    width: 12rem;
 }
 .Image {
-    width: 25.5%;
-    width: 25.5rem;
+    width: 19rem;
 }
 .Command {
-    width: 11.5%;
     width: 11.5rem;
 }
 .Created {
-    width: 9.5%;
     width: 9.5rem;
 }
 .Ports {
-    width: 15.5%;
-    width: 15.5rem;
+    width: 12rem;
 }
 .Names {
-    width: 12%;
     width: 12rem;
 }
 
@@ -73,15 +67,16 @@
     overflow: hidden;
     margin-right: 1.25rem;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.Buttons {
+.Button {
     margin-right: 1.25rem !important;
 }
 
 .DetailTitle {
     color: var(--color-purple);
-    width: 4.5rem;
+    width: 5.5rem;
 }
 
 .Headline {
@@ -110,7 +105,11 @@
     margin-bottom: 0;
 }
 
-@media (min-width: 1000px) {
+/* desktop 1200 + */
+@media (min-width: 1200px) {
+    * {
+        color: red;
+    }
     .Containers {
         margin-top: 10rem;
     }
@@ -132,4 +131,95 @@
     .Containers p {
         margin-bottom: 1rem;
     }
+
+    /* Containers */
+    .ContainerId {
+        width: 8rem;
+    }
+    .Status {
+        width: 12rem;
+    }
+    .Image {
+        width: 19rem;
+    }
+    .Ports {
+        width: 12rem;
+    }
+}
+
+/* tabletLandscape 900 - 1199 */
+/* @media (min-width: 900px) and (max-width: 1199px) { */
+@media (max-width: 1199px) {
+    * {
+        color: blue;
+    }
+    /* Containers */
+    .ContainerId {
+        width: 7rem;
+    }
+
+    .Buttons {
+        margin-top: 1rem;
+        margin-left: 1rem;
+    }
+    .DetailTitle {
+        margin-left: 1.5rem !important;
+    }
+}
+
+/* tabletPortrait 600 - 899 */
+/* @media (min-width: 600px) and (max-width: 899px) { */
+@media (max-width: 899px) {
+    * {
+        color: purple;
+    }
+    /* Containers */
+    .ContainerId, .Image {
+        margin-right: 0.7rem;
+    }
+    .Image {
+        width: 18.1rem;
+    }
+
+    .Buttons {
+        flex-direction: column-reverse;
+        /* margin-top: 1rem; */
+    }
+    .Button {
+        margin-top: 0.75rem !important;
+    }
+    .DetailTitle {
+        margin-left: 1.5rem !important;
+    }
+}
+
+/* phone < 600 */
+@media (max-width: 599px) {
+    * {
+        color: green;
+    }
+
+    /* Containers */
+    .Image, .Command, .Created,
+    .Ports, .Names, .Status {
+    width: 14rem;
+    margin-right: 0;
+    margin-left: 0.2rem;
+    text-overflow: unset;
+    white-space: normal;
+    word-break: break-word;
+    }
+    .DetailTitle {
+        margin-left: 0.2rem !important;
+    }
+
+    .ContainerId {
+        width: 80%;
+        /* width: fit-content; */
+        /* width: auto; */
+        word-break: break-word;
+        margin-bottom: 1rem;
+        margin-right: 0;
+    }
+
 }

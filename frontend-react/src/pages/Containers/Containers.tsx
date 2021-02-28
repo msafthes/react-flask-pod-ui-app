@@ -243,21 +243,21 @@ const Containers = (props: IContainersProps) => {
                                     <Tooltip title={container.containerId}>
                                         <Grid className={css.ContainerId}>{container.containerId}</Grid>
                                     </Tooltip>
-                                    <Tooltip title={container.status}>
-                                        <Grid className={css.Status}>{container.status}</Grid>
-                                    </Tooltip>
-                                    <Tooltip title={container.image}>
-                                        <Grid className={css.Image}>{container.image}</Grid>
-                                    </Tooltip>
-                                    <Tooltip title={container.command}>
-                                        <Grid className={css.Command}>{container.command}</Grid>
-                                    </Tooltip>
-                                    <Tooltip title={container.ports}>
-                                        <Grid className={css.Ports}>{container.ports}</Grid>
-                                    </Tooltip>
-                                    <Tooltip title={container.created}>
-                                        <Grid className={css.Created}>{container.created}</Grid>
-                                    </Tooltip>
+                                    {(desktop || tabletLandscape) &&
+                                        <Tooltip title={container.status}>
+                                            <Grid className={css.Status}>{container.status}</Grid>
+                                        </Tooltip>
+                                    }
+                                    {!phone &&
+                                        <Tooltip title={container.image}>
+                                            <Grid className={css.Image}>{container.image}</Grid>
+                                        </Tooltip>
+                                    }
+                                    {desktop &&
+                                        <Tooltip title={container.ports}>
+                                            <Grid className={css.Ports}>{container.ports}</Grid>
+                                        </Tooltip>
+                                    }
 
                                     <FormControlLabel
                                         aria-label="Acknowledge"
@@ -277,8 +277,33 @@ const Containers = (props: IContainersProps) => {
                             </AccordionSummary>
 
                             <AccordionDetails>
-                                <Grid className={css.DetailTitle}>Names:</Grid>
-                                <Grid className={css.Names}>{container.names}</Grid>
+                                <Grid container direction="column">
+                                    <Grid container direction="row">
+                                        <Grid className={css.DetailTitle}>Names:</Grid>
+                                        <Grid className={css.Names}>{container.names}</Grid>
+                                    </Grid>
+                                    <Grid container direction="row">
+                                        <Grid className={css.DetailTitle}>Created:</Grid>
+                                        <Grid className={css.Created}>{container.created}</Grid>
+                                    </Grid>
+                                    <Grid container direction="row">
+                                        <Grid className={css.DetailTitle}>Command:</Grid>
+                                        <Grid className={css.Command}>{container.command}</Grid>
+                                    </Grid>
+                                    <Grid container direction="row">
+                                        <Grid className={css.DetailTitle}>Ports:</Grid>
+                                        <Grid className={css.Ports}>{container.ports}</Grid>
+                                    </Grid>
+                                    <Grid container direction="row">
+                                        <Grid className={css.DetailTitle}>Image:</Grid>
+                                        <Grid className={css.Image}>{container.image}</Grid>
+                                    </Grid>
+                                    <Grid container direction="row">
+                                        <Grid className={css.DetailTitle}>Status:</Grid>
+                                        <Grid className={css.Status}>{container.status}</Grid>
+                                    </Grid>
+                                </Grid>
+
                             </AccordionDetails>
 
                         </Accordion>
@@ -297,8 +322,8 @@ const Containers = (props: IContainersProps) => {
             <div className={css.Wrapper}>
                 <h1 className={css.Headline}>Podman Containers</h1>
                 <p>Showing information about Containers and offering various operations with them</p>
-                <Grid container className={css.Content}>
-                    <Grid item className={css.Buttons}>
+                <Grid container className={css.Buttons}>
+                    <Grid item className={css.Button}>
                         <Button
                             disabled={!isSelected}
                             color="secondary"
@@ -308,7 +333,7 @@ const Containers = (props: IContainersProps) => {
                             Remove Selected
                         </Button>
                     </Grid>
-                    <Grid item className={css.Buttons}>
+                    <Grid item className={css.Button}>
                         <Button variant="outlined" color="primary" onClick={handleRunOpen}>
                             Run
                         </Button>
@@ -360,12 +385,18 @@ const Containers = (props: IContainersProps) => {
                             // onClick={selectAll}
                             onChange={selectAll}
                             checked={allTrue} />
-                        <div className={css.ContainerId}>Container ID</div>
-                        <div className={css.Status}>Status</div>
-                        <div className={css.Image}>Image</div>
-                        <div className={css.Command}>Command</div>
-                        <div className={css.Ports}>Ports</div>
-                        <div className={css.Created}>Created</div>
+                        <div className={css.ContainerId}>ID</div>
+                        {(desktop || tabletLandscape) &&
+                            <div className={css.Status}>Status</div>
+                        }
+                        {!phone &&
+                            <div className={css.Image}>Image</div>
+                        }
+                        {desktop &&
+                            <div className={css.Ports}>Ports</div>
+                        }
+                        {/* <div className={css.Command}>Command</div> */}
+                        {/* <div className={css.Created}>Created</div> */}
                     </div>
                     {content}
                 </div>

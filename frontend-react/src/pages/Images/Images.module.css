@@ -125,6 +125,7 @@
     .Images p {
         margin-bottom: 1rem;
     }
+
     /* IMAGES */
     .Repository {
         width: 20rem;
@@ -210,5 +211,8 @@
     }
     .Size {
         width: 8rem;
+    }
+    .DetailTitle {
+        margin-left: 0.2rem !important;
     }
 }
