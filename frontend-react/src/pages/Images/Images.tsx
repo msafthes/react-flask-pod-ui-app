@@ -200,18 +200,26 @@ const Images = (props: IImagesProps) => {
                                     <Tooltip title={image.repository}>
                                         <Grid className={css.Repository}>{image.repository}</Grid>
                                     </Tooltip>
-                                    <Tooltip title={image.tag}>
-                                        <Grid className={css.Tag}>{image.tag}</Grid>
-                                    </Tooltip>
-                                    <Tooltip title={image.id}>
-                                        <Grid className={css.Id}>{image.id}</Grid>
-                                    </Tooltip>
-                                    <Tooltip title={image.created}>
-                                        <Grid className={css.Created}>{image.created}</Grid>
-                                    </Tooltip>
-                                    <Tooltip title={image.size}>
-                                        <Grid className={css.Size}>{image.size}</Grid>
-                                    </Tooltip>
+                                    {(desktop || tabletLandscape) &&
+                                        <Tooltip title={image.tag}>
+                                            <Grid className={css.Tag}>{image.tag}</Grid>
+                                        </Tooltip>
+                                    }
+                                    {!phone &&
+                                        <Tooltip title={image.id}>
+                                            <Grid className={css.Id}>{image.id}</Grid>
+                                        </Tooltip>
+                                    }
+                                    {(desktop || tabletLandscape) &&
+                                        <Tooltip title={image.created}>
+                                            <Grid className={css.Created}>{image.created}</Grid>
+                                        </Tooltip>
+                                    }
+                                    {desktop &&
+                                        <Tooltip title={image.size}>
+                                            <Grid className={css.Size}>{image.size}</Grid>
+                                        </Tooltip>
+                                    }
 
                                     <FormControlLabel
                                         aria-label="Acknowledge"
@@ -228,9 +236,24 @@ const Images = (props: IImagesProps) => {
                             </AccordionSummary>
 
                             <AccordionDetails>
-                                <Typography>
-                                    There are no additional data to display yet.
-                        </Typography>
+                                <Grid container direction="column">
+                                    <Grid container direction="row">
+                                        <Grid item className={css.DetailTitle}>Size:</Grid>
+                                        <Grid item className={css.Size}>{image.size}</Grid>
+                                    </Grid>
+                                    <Grid container direction="row">
+                                        <Grid item className={css.DetailTitle}>Created:</Grid>
+                                        <Grid item className={css.Created}>{image.created}</Grid>
+                                    </Grid>
+                                    <Grid container direction="row">
+                                        <Grid item className={css.DetailTitle}>Tag:</Grid>
+                                        <Grid item className={css.Tag}>{image.tag}</Grid>
+                                    </Grid>
+                                    <Grid container direction="row">
+                                        <Grid item className={css.DetailTitle}>ID:</Grid>
+                                        <Grid item className={css.Id}>{image.id}</Grid>
+                                    </Grid>
+                                </Grid>
                             </AccordionDetails>
 
                         </Accordion>
@@ -248,8 +271,8 @@ const Images = (props: IImagesProps) => {
             <div className={css.Wrapper}>
                 <h1 className={css.Headline}>Podman Images</h1>
                 <p>Showing information about images based on the `podman images` command</p>
-                <Grid container className={css.Content}>
-                    <Grid item className={css.Buttons}>
+                <Grid container className={css.Buttons}>
+                    <Grid item className={css.Button}>
                         <Button
                             disabled={!isSelected}
                             color="secondary"
@@ -259,7 +282,7 @@ const Images = (props: IImagesProps) => {
                             Remove Selected
                     </Button>
                     </Grid>
-                    <Grid item className={css.Buttons}>
+                    <Grid item className={css.Button}>
                         <Button
                             color="secondary"
                             variant="outlined"
@@ -269,7 +292,7 @@ const Images = (props: IImagesProps) => {
                         </Button>
                     </Grid>
 
-                    <Grid item className={css.Buttons}>
+                    <Grid item className={css.Button}>
                         <Button variant="outlined" color="primary" onClick={handlePullOpen}>
                             Pull
                         </Button>
@@ -320,10 +343,19 @@ const Images = (props: IImagesProps) => {
                     <div className={imagesTitleClasses.join(' ')}>
                         <Checkbox color="primary" onClick={selectAll} checked={allTrue} />
                         <div className={css.Repository}>Repository</div>
-                        <div className={css.Tag}>Tag</div>
-                        <div className={css.Id}>ID</div>
-                        <div className={css.Created}>Created</div>
-                        <div className={css.Size}>Size</div>
+                        {(desktop || tabletLandscape) &&
+                            <div className={css.Tag}>Tag</div>
+                        }
+                        {!phone &&
+                            <div className={css.Id}>ID</div>
+                        }
+                        {(desktop || tabletLandscape) &&
+                            <div className={css.Created}>Created</div>
+                        }
+                        {desktop &&
+                            <div className={css.Size}>Size</div>
+                        }
+
                     </div>
                     {content}
                 </div>

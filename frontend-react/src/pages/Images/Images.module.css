@@ -1,5 +1,6 @@
 @import '../../Variables.css';
 
+/* ALL */
 .Images {
     display: flex;
     flex-direction: column;
@@ -26,7 +27,7 @@
     flex-direction: column;
     margin-top: 1rem;
 }
-.Content {
+.Content, .Buttons {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -62,7 +63,7 @@
     text-overflow: ellipsis;
 }
 
-.Buttons {
+.Button {
     margin-right: 1.25rem !important;
 }
 
@@ -92,7 +93,16 @@
     margin-bottom: 0;
 }
 
-@media (min-width: 1000px) {
+.DetailTitle {
+    color: var(--color-purple);
+    width: 4.5rem;
+}
+
+/* desktop 1200 + */
+@media (min-width: 1200px) {
+    * {
+        /* color: red; */
+    }
     .Images {
         margin-top: 10rem;
     }
@@ -113,5 +123,91 @@
 
     .Images p {
         margin-bottom: 1rem;
+    }
+    /* IMAGES */
+    .Repository {
+        width: 20rem;
+    }
+    .Tag {
+        width: 5rem;
+    }
+    .Id {
+        width: 8rem;
+    }
+    .Created {
+        width: 9.5rem;
+    }
+    .Size {
+        width: 5rem;
+    }
+}
+
+/* tabletLandscape 900 - 1199 */
+/* @media (min-width: 900px) and (max-width: 1199px) { */
+@media (max-width: 1199px) {
+    * {
+        /* color: blue; */
+    }
+    /* IMAGES */
+    .Repository {
+        width: 20rem;
+    }
+    .Tag {
+        width: 4rem;
+    }
+    .Id {
+        width: 7rem;
+    }
+    .Created {
+        width: 7rem;
+    }
+    .Buttons {
+        margin-top: 1rem;
+        margin-left: 1rem;
+    }
+    .DetailTitle {
+        margin-left: 1.5rem !important;
+    }
+}
+
+/* tabletPortrait 600 - 899 */
+/* @media (min-width: 600px) and (max-width: 899px) { */
+@media (max-width: 899px) {
+    * {
+        /* color: purple; */
+    }
+    /* IMAGES */
+    .Repository {
+        width: 17rem;
+    }
+    .Id {
+        width: 7rem;
+    }
+    .Buttons {
+        flex-direction: column-reverse;
+        /* margin-top: 1rem; */
+    }
+    .Button {
+        margin-top: 0.75rem !important;
+    }
+    .DetailTitle {
+        margin-left: 1.5rem !important;
+    }
+}
+
+/* phone < 600 */
+@media (max-width: 599px) {
+    * {
+        /* color: green; */
+    }
+    .Repository {
+        width: 100%;
+        /* width: auto; */
+        word-break: break-word;
+        margin-bottom: 1rem;
+        margin-right: 0;
+    }
+    .Size {
+        width: 8rem;
     }
 }
