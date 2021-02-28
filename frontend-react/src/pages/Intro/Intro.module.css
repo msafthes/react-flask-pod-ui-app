@@ -34,12 +34,14 @@
 }
 
 h1 {
+    max-width: 95%;
     color: var(--color-purple);
-    font-size: 2.1rem;
+    font-size: 1.5rem;
 }
 
 h2 {
-    font-size: 1.4rem;
+    max-width: 95%;
+    font-size: 1.2rem;
 }
 
 @media (min-width: 1000px) {
