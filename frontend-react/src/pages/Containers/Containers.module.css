@@ -108,7 +108,7 @@
 /* desktop 1200 + */
 @media (min-width: 1200px) {
     * {
-        color: red;
+        /* color: red; */
     }
     .Containers {
         margin-top: 10rem;
@@ -151,7 +151,7 @@
 /* @media (min-width: 900px) and (max-width: 1199px) { */
 @media (max-width: 1199px) {
     * {
-        color: blue;
+        /* color: blue; */
     }
     /* Containers */
     .ContainerId {
@@ -171,7 +171,7 @@
 /* @media (min-width: 600px) and (max-width: 899px) { */
 @media (max-width: 899px) {
     * {
-        color: purple;
+        /* color: purple; */
     }
     /* Containers */
     .ContainerId, .Image {
@@ -196,7 +196,7 @@
 /* phone < 600 */
 @media (max-width: 599px) {
     * {
-        color: green;
+        /* color: green; */
     }
 
     /* Containers */
