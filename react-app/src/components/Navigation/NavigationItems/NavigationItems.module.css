@@ -1,0 +1,54 @@
+@import '../../../Variables.css';
+
+.List {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-size: 1.5rem;
+    list-style: none;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.Item {
+    list-style: none;
+    padding: 8px 24px;
+}
+.Link {
+    color: var(--color-purple);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    text-decoration: none;
+}
+.Name {
+    position: absolute;
+    left: 2%;
+    top: 25%;
+    color: var(--color-purple);
+    font-size: 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.active {
+    color: #111;
+}
+
+@media (min-width: 1000px) {
+    .List {
+        flex-flow: row;
+    }
+}
+
+@media (min-width: 1000px) {
+    .Link {
+        font-weight: 500;
+    }
+    .active {
+        color: white;
+    }
+}
