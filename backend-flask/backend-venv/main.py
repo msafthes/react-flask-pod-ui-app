@@ -69,5 +69,6 @@ def update_logs(data):
     emit('event://get-logs', logs_data)
 
 if __name__ == '__main__':
+    # app.run(debug=True)
     # app.run()
     socket_.run(app, debug=True)
