@@ -12,13 +12,20 @@ images_api = Blueprint('images_api', __name__)
 def podman_images():
     # Example: separating each info with #
     # docker.io/library/nginx#latest#6678c7c2e56c#4 weeks ago #131 MB
-
-    command = subprocess.run(['podman', 'images', '--format', '{{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}'],
-                              stdout=subprocess.PIPE,
+    output = subprocess.run(['podman', 'images', '--format', '{{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}'],
+                              capture_output=True,
                               universal_newlines=True)
 
-    podman_images_array = command.stdout.split('\n')
-    podman_images_array.pop()  # Removing the last '' empty part after split
+    error_images = output.stderr
+
+    if len(error_images) != 0:
+        return [], error_images
+
+    output_images = output.stdout
+
+    podman_images_array = output_images.split('\n')
+    # Removing the last '' empty part after split
+    podman_images_array.pop()
 
     images = {"images": []}
 
@@ -36,7 +43,7 @@ def podman_images():
 
         images["images"].append(image)
 
-    return images
+    return images, ''
 
 ##############################################################
 # REST API
@@ -48,8 +55,11 @@ def podman_images():
 # GET /images
 @images_api.route('/images', methods=['GET'])
 def get_images():
+    images, error_images = podman_images()
 
-    images = podman_images()
+    if len(error_images) != 0:
+        return handle_error_images(400, "Error occured while running `podman images` command to fetch images :\
+        \n{0}".format(error_images))
 
     return jsonify(images)
 
@@ -57,17 +67,27 @@ def get_images():
 @images_api.route('/images', methods=['DELETE'])
 def remove_images():
     image_ids = request.get_json().get("IDs")
-    count = len(image_ids)
+    length = len(image_ids)
     all_ids = " ".join(image_ids)
 
     command = "podman rmi {0}".format(all_ids)
 
-    if count != 0:
-        subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True).stdout
+    error_remove = ''
 
-    images = podman_images()
+    if length != 0:
+        error_remove = subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True, universal_newlines=True).stderr
 
+    if len(error_remove) != 0:
+        return handle_error_images(400, "Error occured while running `podman rmi` command to remove images:\
+        \n{0}Command was: `{1}`".format(error_remove, command))
+
+    images, error_images = podman_images()
+
+    if len(error_images) != 0:
+        return handle_error_images(400, "Error occured while running `podman images` command to fetch images :\
+        \n{0}".format(error_images))
+    
     return jsonify(images)
 
 
@@ -76,30 +96,50 @@ def remove_images():
 def prune_images():
     command = "podman image prune -a -f"
 
-    subprocess.run("{0}".format(command), shell=True,
-                   capture_output=True).stdout
+    error_prune = ''
 
-    images = podman_images()
+    error_prune = subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True, universal_newlines=True).stderr
 
+    if len(error_prune) != 0:
+        return handle_error_images(400, "Error occured while running `podman image prune` command to remove unused/old images:\
+        \n{0}Command was: `{1}`".format(error_prune, command))
+
+    images, error_images = podman_images()
+
+    if len(error_images) != 0:
+        return handle_error_images(400, "Error occured while running `podman images` command to fetch images :\
+        \n{0}".format(error_images))
+    
     return jsonify(images)
 
 # POST /images/pull
 @images_api.route('/images/pull', methods=['POST'])
 def images_pull():
-    print("images_pull()")
     name = request.get_json().get("name")
-    print("name:")
-    print(name)
-
     length = len(name)
     command = "podman pull {0}".format(name)
-    print("command:")
-    print(command)
+
+    error_pull = ''
 
     if length != 0:
-        subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True).stdout
+        error_pull = subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True, universal_newlines=True).stderr
 
-    images = podman_images()
+    if len(error_pull) != 0:
+        return handle_error_images(400, "Error occured while running `podman pull` command to pull a new image:\
+        \n{0}Command was: `{1}`".format(error_pull, command))
 
+    images, error_images = podman_images()
+
+    if len(error_images) != 0:
+        return handle_error_images(400, "Error occured while running `podman images` command to fetch images :\
+        \n{0}".format(error_images))
+        
     return jsonify(images)
+
+# Errors
+@images_api.errorhandler(400)
+def handle_error_images(e, text):
+    print("errorhandler, e, text:", e, text)
+    return text, e

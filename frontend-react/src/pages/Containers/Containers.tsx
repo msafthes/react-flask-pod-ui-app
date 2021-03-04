@@ -7,56 +7,37 @@ import { AppState } from '../../store';
 
 import css from './Containers.module.css';
 import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
+import MenuContainers from '../../components/MaterialCustomized/MenuContainers';
+
 import { Container } from '../../models/Models';
-
 import { isAllTrue, handleSelectAll, isSelectedAny, extractSelected } from '../../helpers/helpers';
+import { useViewport } from '../../Viewport';
 
+// Material UI
+import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import DeleteIcon from '@material-ui/icons/Delete';
-// import PageviewIcon from '@material-ui/icons/Pageview';
-import { makeStyles } from '@material-ui/core/styles';
-
-// import { Link } from 'react-router-dom';
-
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
-// import { withStyles } from '@material-ui/core/styles';
-// import Menu, { MenuProps } from '@material-ui/core/Menu';
-// import MenuItem from '@material-ui/core/MenuItem';
-// import ListItemIcon from '@material-ui/core/ListItemIcon';
-// import ListItemText from '@material-ui/core/ListItemText';
-// import InboxIcon from '@material-ui/icons/MoveToInbox';
-// import DraftsIcon from '@material-ui/icons/Drafts';
-// import SendIcon from '@material-ui/icons/Send';
-
-// import Menu from '@material-ui/core/Menu';
-// import MenuItem from '@material-ui/core/MenuItem';
-
-import MenuContainers from '../../components/MaterialCustomized/MenuContainers';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { Typography } from '@material-ui/core';
 
-import { useViewport } from '../../Viewport';
-
 
 interface IContainersProps {
     containers: Container[],
+    errorContainers: string,
     loading: boolean,
     fetchContainers: Function,
     removeContainers: Function,
@@ -68,9 +49,8 @@ interface IContainersProps {
 }
 
 const Containers = (props: IContainersProps) => {
-    const { fetchContainers, removeContainers, stopContainers, killContainers, containerRun, containers } = props;
+    const { fetchContainers, removeContainers, stopContainers, killContainers, containerRun, containers, errorContainers } = props;
     const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
-    console.log(`width=${width}, phone=${phone}, tabletPortrait=${tabletPortrait}, tabletLandscape=${tabletLandscape}, desktop=${desktop}`);
 
     const defaultSelectedContainers = {};
 
@@ -82,6 +62,7 @@ const Containers = (props: IContainersProps) => {
     const [openRunModal, setOpenRunModal] = useState(false);
     const [runCommand, setRunCommand] = useState("");
     const [showError, setShowError] = useState<boolean>(false);
+    const [showBackendError, setShowBackendError] = useState<boolean>(false);
     const [errorInfo, setErrorInfo] = useState<string>("");
 
     const allTrue = isAllTrue(selectedContainers);
@@ -91,13 +72,17 @@ const Containers = (props: IContainersProps) => {
     }, [fetchContainers]);
 
     useEffect(() => {
-        console.log("useEffect [containers]");
+        // console.log("useEffect [containers]");
         const newSelected = {};
         for (const [key, value] of Object.entries(containers)) {
             newSelected[value.containerId] = false
         }
         setSelectedContainers({ ...newSelected });
     }, [containers]);
+
+    useEffect(() => {
+        setShowBackendError(errorContainers.length > 0);
+    }, [errorContainers]);
 
     const handleRunOpen = () => {
         setOpenRunModal(true);
@@ -114,7 +99,6 @@ const Containers = (props: IContainersProps) => {
     const handleContainerRun = () => {
         setOpenRunModal(false);
         if (runCommand.length == 0) {
-            console.log("empty run command");
             return;
         }
         containerRun(runCommand);
@@ -135,29 +119,26 @@ const Containers = (props: IContainersProps) => {
     };
 
     const handleRemoveContainers = (selectedContainers, containerIds) => {
-        console.log("handleRemoveContainers()");
+        // console.log("handleRemoveContainers()");
         let runningContainersIds = [];
         containers.forEach((container) => {
-            console.log(`status: ${container.status}`);
             if ((selectedContainers[container.containerId] === true) && (container.status.startsWith('Up '))) {
                 runningContainersIds.push(container.containerId);
             }
         });
 
         if (runningContainersIds.length > 0) {
-            console.log("SELECTION INVALID - there are running containers");
             setShowError(true);
             runningContainersIds = [...new Set(runningContainersIds)];
             setErrorInfo(runningContainersIds.join(" "));
         } else {
-            console.log("Ready for deletion");
             removeContainers(containerIds);
         }
     };
 
     // Function to handle various container operations, ready to be used for "all" containers as well
     const handleContainerOperation = (selectedContainers, mode: string) => {
-        console.log(`triggered handleContainerOperation(), mode: ${mode}`);
+        // console.log(`triggered handleContainerOperation(), mode: ${mode}`);
         const containerIds = extractSelected(selectedContainers);
 
         switch (mode.toLowerCase()) {
@@ -189,10 +170,6 @@ const Containers = (props: IContainersProps) => {
         setSelectedContainers(updated);
     };
 
-    console.log("selectedContainers OUTSIDE:");
-    console.log(selectedContainers);
-    console.log("containers prop OUTSIDE:");
-    console.log(containers);
     const isSelected = isSelectedAny(selectedContainers);
 
     const containersTitleClasses = [css.Content, css.Heading];
@@ -209,12 +186,6 @@ const Containers = (props: IContainersProps) => {
         content = <Grid container direction="column">
             {(containers && containers.length) ?
                 (containers.map((container, i) => {
-                    console.log(">> containers.map");
-                    console.log("container:");
-                    console.log(container);
-                    console.log(container.containerId);
-                    console.log(selectedContainers[container.containerId]);
-                    console.log("<<");
                     return <React.Fragment key={container.containerId}>
 
                         <Accordion>
@@ -233,10 +204,9 @@ const Containers = (props: IContainersProps) => {
                                         color="primary"
                                         // onClick={handleCheckboxChange}
                                         onChange={handleCheckboxChange}
-                                        // id={container.containerId}
-                                        id={"123"}
+                                        id={container.containerId}
+                                        // id={"123"}
                                         checked={selectedContainers[container.containerId]} />}
-                                    // label="Select"
                                     label=""
                                 />
                                 <Grid item container className={css.Content}>
@@ -266,11 +236,7 @@ const Containers = (props: IContainersProps) => {
                                         control={<MenuContainers
                                             containerId={container.containerId}
                                             containerOperation={handleContainerOperation}
-                                        // removeContainer={handleRemoveContainers}
-                                        // stopContainer={handleStopContainers}
-                                        // killContainer={handleKillContainers}
                                         />}
-                                        // label="Select"
                                         label=""
                                     />
                                 </Grid>
@@ -378,6 +344,15 @@ const Containers = (props: IContainersProps) => {
                     </Alert>
                 }
 
+                {showBackendError &&
+                    <Alert severity="error" onClose={() => { setShowBackendError(!showBackendError) }}>
+                        <AlertTitle><strong>Backend Error</strong></AlertTitle>
+                        {errorContainers.length > 0 &&
+                            <p className={css.Error}>{errorContainers}</p>
+                        }
+                    </Alert>
+                }
+
                 <div className={css.Info}>
                     <div className={containersTitleClasses.join(' ')}>
                         <Checkbox
@@ -395,8 +370,6 @@ const Containers = (props: IContainersProps) => {
                         {desktop &&
                             <div className={css.Ports}>Ports</div>
                         }
-                        {/* <div className={css.Command}>Command</div> */}
-                        {/* <div className={css.Created}>Created</div> */}
                     </div>
                     {content}
                 </div>
@@ -408,6 +381,7 @@ const Containers = (props: IContainersProps) => {
 const mapStateToProps = (state: AppState) => {
     return {
         containers: state.containers.containers,
+        errorContainers: state.containers.error,
     };
 };
 

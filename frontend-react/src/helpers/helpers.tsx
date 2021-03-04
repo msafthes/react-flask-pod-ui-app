@@ -20,13 +20,9 @@ export const toggleSelectAll = (obj: Object, allTrue: Boolean) => {
 
 export const handleSelectAll = (selectedItems: Object) => {
     console.log("handleSelectAll(), selectedItems:");
-    console.log(selectedItems);
     const allTrue = isAllTrue(selectedItems);
-    console.log(`allTrue: ${allTrue}`);
     const updated = { ...selectedItems };
     toggleSelectAll(updated, allTrue);
-    console.log("updated:");
-    console.log(updated);
 
     return updated
 };

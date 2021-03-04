@@ -16,7 +16,6 @@ export default ({ children }) => {
     const dispatch = useDispatch();
 
     const updateLogs = (id) => {
-        console.log("Websocket.tsx updateLogs() => socket.emit event://update-logs");
         const payload = {
             id: id
         }
@@ -27,9 +26,6 @@ export default ({ children }) => {
         socket = io.connect(WS_BASE)
 
         socket.on("event://get-logs", (msg) => {
-            console.log("Websocket.tsx socket.on event://get-logs");
-            console.log("response:");
-            console.log(msg);
             const containerLogs = msg;
             dispatch(actions.updateContainerLogs(containerLogs));
         })

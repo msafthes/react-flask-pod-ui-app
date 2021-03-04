@@ -7,34 +7,33 @@ import { AppState } from '../../store';
 
 import css from './Images.module.css';
 import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
+import MenuImages from '../../components/MaterialCustomized/MenuImages';
+
 import { Image, Container } from '../../models/Models';
-
 import { isAllTrue, handleSelectAll, isSelectedAny, extractIds } from '../../helpers/helpers';
+import { useViewport } from '../../Viewport';
 
+// Material UI
+import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { makeStyles } from '@material-ui/core/styles';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from '@material-ui/core';
-
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
-import MenuImages from '../../components/MaterialCustomized/MenuImages';
 import Tooltip from '@material-ui/core/Tooltip';
-
-import { useViewport } from '../../Viewport';
 
 
 interface IImagesProps {
     images: Image[],
     loading: boolean,
+    errorContainers: string,
+    errorImages: string,
     fetchImages: Function,
     removeImages: Function,
     pruneImages: Function,
@@ -46,9 +45,8 @@ interface IImagesProps {
 }
 
 const Images = (props: IImagesProps) => {
-    const { fetchImages, removeImages, pruneImages, pullImage, images, containers, fetchContainers } = props;
+    const { fetchImages, removeImages, pruneImages, pullImage, images, containers, fetchContainers, errorContainers, errorImages } = props;
     const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
-    console.log(`width=${width}, phone=${phone}, tabletPortrait=${tabletPortrait}, tabletLandscape=${tabletLandscape}, desktop=${desktop}`);
 
     const defaultSelectedImages = {};
 
@@ -58,6 +56,7 @@ const Images = (props: IImagesProps) => {
 
     const [selectedImages, setSelectedImages] = useState<any>({ ...defaultSelectedImages });
     const [showError, setShowError] = useState<boolean>(false);
+    const [showBackendError, setShowBackendError] = useState<boolean>(false);
     const [errorInfo, setErrorInfo] = useState<string>("");
     const [openPullModal, setOpenPullModal] = useState(false);
     const [pullImageName, setPullImageName] = useState("");
@@ -68,6 +67,10 @@ const Images = (props: IImagesProps) => {
         fetchImages();
         fetchContainers();
     }, [fetchImages, fetchContainers]);
+
+    useEffect(() => {
+        setShowBackendError(errorContainers.length > 0 || errorImages.length > 0);
+    }, [errorContainers, errorImages]);
 
     const handleCheckboxChange = changeEvent => {
         const { id } = changeEvent.target;
@@ -97,7 +100,6 @@ const Images = (props: IImagesProps) => {
     const handleImagePull = () => {
         setOpenPullModal(false);
         if (pullImageName.length == 0) {
-            console.log("empty image pull name");
             return;
         }
         pullImage(pullImageName);
@@ -105,7 +107,7 @@ const Images = (props: IImagesProps) => {
     };
 
     const handleRemoveImages = (images, imageIds) => {
-        console.log("handleRemoveImages()");
+        // console.log("handleRemoveImages()");
         const usedImages = [];
         let usedImagesNames = [];
 
@@ -122,18 +124,16 @@ const Images = (props: IImagesProps) => {
         });
 
         if (usedImages.length > 0) {
-            console.log("SELECTION INVALID - there are used images");
             setShowError(true);
             usedImagesNames = [...new Set(usedImagesNames)];
             setErrorInfo(usedImagesNames.join(" "));
         } else {
-            console.log("Ready for deletion");
             removeImages(imageIds);
         }
     };
 
     const handleImageOperation = (selectedImages, mode: string) => {
-        console.log(`triggered handleImageOperation(), mode: ${mode}`);
+        // console.log(`triggered handleImageOperation(), mode: ${mode}`);
         const imageIds = extractIds(selectedImages);
 
         switch (mode.toLowerCase()) {
@@ -193,7 +193,6 @@ const Images = (props: IImagesProps) => {
                                         onClick={handleCheckboxChange}
                                         id={image.id}
                                         checked={selectedImages[image.id]} />}
-                                    // label="Select"
                                     label=""
                                 />
                                 <Grid item container className={css.Content}>
@@ -229,7 +228,6 @@ const Images = (props: IImagesProps) => {
                                             imageId={image.id}
                                             imageOperation={handleImageOperation}
                                         />}
-                                        // label="Select"
                                         label=""
                                     />
                                 </Grid>
@@ -338,6 +336,18 @@ const Images = (props: IImagesProps) => {
                     </Alert>
                 }
 
+                {showBackendError &&
+                    <Alert severity="error" onClose={() => { setShowBackendError(!showBackendError) }}>
+                        <AlertTitle><strong>Backend Error</strong></AlertTitle>
+                        {errorContainers.length > 0 &&
+                            <p className={css.Error}>{errorContainers}</p>
+                        }
+                        {errorImages.length > 0 &&
+                            <p className={css.Error}>{errorImages}</p>
+                        }
+                    </Alert>
+                }
+
 
                 <div className={css.Info}>
                     <div className={imagesTitleClasses.join(' ')}>
@@ -368,6 +378,8 @@ const mapStateToProps = (state: AppState) => {
     return {
         images: state.images.images,
         containers: state.containers.containers,
+        errorImages: state.images.error,
+        errorContainers: state.containers.error,
     };
 };
 

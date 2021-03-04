@@ -50,7 +50,11 @@ export const fetchImages = () => {
                 dispatch(fetchImagesSuccess(response.data.images));
             })
             .catch(err => {
-                dispatch(fetchImagesFail(err.response.data));
+                err.response ?
+                    dispatch(fetchImagesFail(err.response.data))
+                    :
+                    dispatch(fetchImagesFail("Server does not respond while trying to fetch images."))
+
             });
     };
 };
@@ -78,7 +82,7 @@ export const removeImagesFail = (error: string) => {
 
 export const removeImages = (imageIds: Array<String>) => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("removeImages()");
+        // console.log("removeImages()");
         dispatch(removeImagesStart());
 
         const url = `${API_BASE}/images`;
@@ -95,7 +99,10 @@ export const removeImages = (imageIds: Array<String>) => {
         }).then(response => {
             dispatch(removeImagesSuccess(response.data.images));
         }).catch(err => {
-            dispatch(removeImagesFail(err.response.data));
+            err.response ?
+                dispatch(removeImagesFail(err.response.data))
+                :
+                dispatch(removeImagesFail("Server does not respond while trying to remove images."))
         });
     };
 };
@@ -123,7 +130,7 @@ export const pruneImagesFail = (error: string) => {
 
 export const pruneImages = () => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("pruneImages()");
+        // console.log("pruneImages()");
         dispatch(pruneImagesStart());
 
         const url = `${API_BASE}/images/prune`;
@@ -137,7 +144,10 @@ export const pruneImages = () => {
         }).then(response => {
             dispatch(pruneImagesSuccess(response.data.images));
         }).catch(err => {
-            dispatch(pruneImagesFail(err.response.data));
+            err.reponse ?
+                dispatch(pruneImagesFail(err.response.data))
+                :
+                dispatch(pruneImagesFail("Server does not respond while trying to prune images."))
         });
     };
 };
@@ -165,7 +175,7 @@ export const pullImageFail = (error: string) => {
 
 export const pullImage = (name: string) => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("pullImage()");
+        // console.log("pullImage()");
         dispatch(pullImageStart());
 
         const url = `${API_BASE}/images/pull`;
@@ -184,7 +194,10 @@ export const pullImage = (name: string) => {
         }).then(response => {
             dispatch(pullImageSuccess(response.data.images));
         }).catch(err => {
-            dispatch(pullImageFail(err.response.data));
+            err.reponse ?
+                dispatch(pullImageFail(err.response.data))
+                :
+                dispatch(pullImageFail("Server does not respond while trying to pull image."))
         });
     };
 };

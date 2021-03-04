@@ -54,7 +54,10 @@ export const fetchContainers = () => {
                 dispatch(fetchContainersSuccess(response.data.containers));
             })
             .catch(err => {
-                dispatch(fetchContainersFail(err.response.data));
+                err.response ?
+                    dispatch(fetchContainersFail(err.response.data))
+                    :
+                    dispatch(fetchContainersFail("Server does not respond while trying to fetch containers."))
             });
     };
 };
@@ -82,7 +85,7 @@ export const removeContainersFail = (error: string) => {
 
 export const removeContainers = (containerIds: Array<String>) => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("removeContainers()");
+        // console.log("removeContainers()");
         dispatch(removeContainersStart());
 
         const url = `${API_BASE}/containers`;
@@ -100,7 +103,10 @@ export const removeContainers = (containerIds: Array<String>) => {
         }).then(response => {
             dispatch(removeContainersSuccess(response.data.containers));
         }).catch(err => {
-            dispatch(removeContainersFail(err.response.data));
+            err.response ?
+                dispatch(removeContainersFail(err.response.data))
+                :
+                dispatch(removeContainersFail("Server does not respond while trying to remove containers."))
         });
     };
 };
@@ -128,7 +134,7 @@ export const stopContainersFail = (error: string) => {
 
 export const stopContainers = (containerIds: Array<String>) => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("stopContainers()");
+        // console.log("stopContainers()");
         dispatch(stopContainersStart());
 
         const url = `${API_BASE}/containers/stop`;
@@ -145,7 +151,10 @@ export const stopContainers = (containerIds: Array<String>) => {
         }).then(response => {
             dispatch(stopContainersSuccess(response.data.containers));
         }).catch(err => {
-            dispatch(stopContainersFail(err.response.data));
+            err.response ?
+                dispatch(stopContainersFail(err.response.data))
+                :
+                dispatch(stopContainersFail("Server does not respond while trying to stop containers."))
         });
     };
 };
@@ -173,7 +182,7 @@ export const killContainersFail = (error: string) => {
 
 export const killContainers = (containerIds: Array<String>) => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("killContainers()");
+        // console.log("killContainers()");
         dispatch(killContainersStart());
 
         const url = `${API_BASE}/containers/kill`;
@@ -190,7 +199,10 @@ export const killContainers = (containerIds: Array<String>) => {
         }).then(response => {
             dispatch(killContainersSuccess(response.data.containers));
         }).catch(err => {
-            dispatch(killContainersFail(err.response.data));
+            err.response ?
+                dispatch(killContainersFail(err.response.data))
+                :
+                dispatch(killContainersFail("Server does not respond while trying to kill containers."))
         });
     };
 };
@@ -255,7 +267,10 @@ export const containerRun = (command: String) => {
             });
             dispatch(containerRunSuccess(response.data.containers));
         }).catch(err => {
-            dispatch(containerRunFail(err.response.data));
+            err.response ?
+                dispatch(containerRunFail(err.response.data))
+                :
+                dispatch(containerRunFail("Server does not respond while trying to run container command."))
         });
     };
 };

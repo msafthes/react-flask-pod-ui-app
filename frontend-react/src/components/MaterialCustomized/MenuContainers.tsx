@@ -10,7 +10,6 @@ import { Link } from 'react-router-dom';
 
 const MenuContainers = props => {
     const { containerId, containerOperation } = props
-    // const { containerId, removeContainer, stopContainer, killContainer } = props
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const id = {};
     id[containerId] = true;
