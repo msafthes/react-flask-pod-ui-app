@@ -7,32 +7,31 @@ import { AppState } from '../../store';
 
 import css from './Volumes.module.css';
 import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
+import MenuVolumes from '../../components/MaterialCustomized/MenuVolumes';
+
 import { Volume } from '../../models/Models';
-
 import { isAllTrue, handleSelectAll, extractIds, isSelectedAny } from '../../helpers/helpers';
+import { useViewport } from '../../Viewport';
 
+// Material UI
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
-// import { makeStyles } from '@material-ui/core/styles';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from '@material-ui/core';
-
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
-import MenuVolumes from '../../components/MaterialCustomized/MenuVolumes';
 import Tooltip from '@material-ui/core/Tooltip';
-
-import { useViewport } from '../../Viewport';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 
 interface IVolumesProps {
     volumes: Volume[],
     loading: boolean,
+    errorVolumes: string,
     fetchVolumes: Function,
     createVolume: Function,
     removeVolumes: Function,
@@ -41,9 +40,8 @@ interface IVolumesProps {
 }
 
 const Volumes = (props: IVolumesProps) => {
-    const { fetchVolumes, createVolume, removeVolumes, volumes } = props;
+    const { fetchVolumes, createVolume, removeVolumes, volumes, errorVolumes } = props;
     const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
-    console.log(`width=${width}, phone=${phone}, tabletPortrait=${tabletPortrait}, tabletLandscape=${tabletLandscape}, desktop=${desktop}`);
 
     const defaultSelectedVolumes = {};
 
@@ -54,12 +52,17 @@ const Volumes = (props: IVolumesProps) => {
     const [selectedVolumes, setSelectedVolumes] = useState<any>({ ...defaultSelectedVolumes });
     const [openCreateVolumeModal, setOpenCreateVolumeModal] = useState(false);
     const [createVolumeName, setCreateVolumeName] = useState("");
+    const [showBackendError, setShowBackendError] = useState<boolean>(false);
 
     const allTrue = isAllTrue(selectedVolumes);
 
     useEffect(() => {
         fetchVolumes();
     }, [fetchVolumes]);
+
+    useEffect(() => {
+        setShowBackendError(errorVolumes.length > 0);
+    }, [errorVolumes]);
 
     const handleCheckboxChange = changeEvent => {
         const { id } = changeEvent.target;
@@ -89,7 +92,6 @@ const Volumes = (props: IVolumesProps) => {
     const handleVolumeCreate = () => {
         setOpenCreateVolumeModal(false);
         if (createVolumeName.length == 0) {
-            console.log("empty volume create name");
             return;
         }
         createVolume(createVolumeName);
@@ -97,7 +99,7 @@ const Volumes = (props: IVolumesProps) => {
     };
 
     const handleVolumeOperation = (selectedVolumes, mode: string) => {
-        console.log(`triggered handleVolumeOperation(), mode: ${mode}`);
+        // console.log(`triggered handleVolumeOperation(), mode: ${mode}`);
         const volumesNames = extractIds(selectedVolumes);
 
         switch (mode.toLowerCase()) {
@@ -151,7 +153,6 @@ const Volumes = (props: IVolumesProps) => {
                                         onClick={handleCheckboxChange}
                                         id={volume.Name}
                                         checked={selectedVolumes[volume.Name]} />}
-                                    // label="Select"
                                     label=""
                                 />
                                 <Grid item container className={css.Content}>
@@ -177,7 +178,6 @@ const Volumes = (props: IVolumesProps) => {
                                             volumeName={volume.Name}
                                             volumeOperation={handleVolumeOperation}
                                         />}
-                                        // label="Select"
                                         label=""
                                     />
                                 </Grid>
@@ -195,12 +195,8 @@ const Volumes = (props: IVolumesProps) => {
                                     </Grid>
                                 </Grid>
                             </AccordionDetails>
-
                         </Accordion>
-
                     </React.Fragment>
-                    // <Grid item container className={css.Content} key={volume.Name}>
-                    // </Grid>
                 }))
                 :
                 ''
@@ -255,6 +251,14 @@ const Volumes = (props: IVolumesProps) => {
 
                 </Grid>
 
+                {showBackendError &&
+                    <Alert severity="error" onClose={() => { setShowBackendError(!showBackendError) }}>
+                        <AlertTitle><strong>Backend Error</strong></AlertTitle>
+                        {errorVolumes.length > 0 &&
+                            <p className={css.Error}>{errorVolumes}</p>
+                        }
+                    </Alert>
+                }
 
                 <div className={css.Info}>
                     <div className={volumesTitleClasses.join(' ')}>
@@ -277,6 +281,7 @@ const Volumes = (props: IVolumesProps) => {
 const mapStateToProps = (state: AppState) => {
     return {
         volumes: state.volumes.volumes,
+        errorVolumes: state.volumes.error,
     };
 };
 

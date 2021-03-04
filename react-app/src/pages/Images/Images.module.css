@@ -99,6 +99,12 @@
     width: 4.5rem;
 }
 
+.Error {
+    color: red;
+    white-space: pre;
+    text-align: left !important;
+}
+
 /* desktop 1200 + */
 @media (min-width: 1200px) {
     * {

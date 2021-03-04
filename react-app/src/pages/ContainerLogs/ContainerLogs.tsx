@@ -25,8 +25,6 @@ interface IContainerLogsProps {
 
 const ContainerLogs = (props: IContainerLogsProps) => {
     const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
-    console.log(`width=${width}, phone=${phone}, tabletPortrait=${tabletPortrait}, tabletLandscape=${tabletLandscape}, desktop=${desktop}`);
-
     const ws = useContext(WebSocketContext);
 
     const updateLogs = () => {

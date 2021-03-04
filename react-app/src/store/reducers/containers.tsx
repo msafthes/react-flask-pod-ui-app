@@ -86,8 +86,7 @@ const killContainersFail = (state: IContainersState, action: IKillContainersFail
 
 // Update Logs
 const updateContainerLogs = (state: IContainersState, action: IUpdateContainerLogsAction): IContainersState => {
-    console.log(`REDUCER - updateContainerLogs, action:`);
-    console.log(action);
+    console.log(`REDUCER - updateContainerLogs`);
     return { ...state, containerLogs: action.containerLogs, loading: false }
 };
 

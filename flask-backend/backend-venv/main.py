@@ -40,12 +40,9 @@ def podman_logs(id):
     output = subprocess.run("{0}".format(
         command), shell=True, capture_output=True).stdout.decode('utf-8')
 
-    print("len(logs):", len(logs))
     if len(logs) == 0:
         logs = "There are no logs for this container yet."
 
-    print("READY logs:")
-    print(logs)
     return {'logs': logs}
 
 ##############################################################
@@ -67,14 +64,12 @@ socket_ = SocketIO(app, async_mode=async_mode, cors_allowed_origins=["http://loc
 
 @socket_.on('event://update-logs')
 def update_logs(data):
-    print('update_logs()')
-    print("DATA:")
-    print(data)
-
     id = data.get('id')
+
     logs = podman_logs(id)
     logs_data = {}
     logs_data[id] = logs
+
     emit('event://get-logs', logs_data)
 
 if __name__ == '__main__':

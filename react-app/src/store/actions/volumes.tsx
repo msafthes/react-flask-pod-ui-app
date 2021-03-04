@@ -49,7 +49,10 @@ export const fetchVolumes = () => {
                 dispatch(fetchVolumesSuccess(response.data.volumes));
             })
             .catch(err => {
-                dispatch(fetchVolumesFail(err.response.data));
+                err.response ?
+                    dispatch(fetchVolumesFail(err.response.data))
+                    :
+                    dispatch(fetchVolumesFail("Server does not respond while trying to fetch volumes."))
             });
     };
 };
@@ -77,7 +80,7 @@ export const createVolumeFail = (error: string) => {
 
 export const createVolume = (name: string) => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("createVolume()");
+        // console.log("createVolume()");
         dispatch(createVolumeStart());
 
         const url = `${API_BASE}/volumes/create`;
@@ -96,7 +99,11 @@ export const createVolume = (name: string) => {
         }).then(response => {
             dispatch(createVolumeSuccess(response.data.volumes));
         }).catch(err => {
-            dispatch(createVolumeFail(err.response.data));
+            err.response ?
+                dispatch(createVolumeFail(err.response.data))
+                :
+                dispatch(createVolumeFail("Server does not respond while trying to create volumes."))
+
         });
     };
 };
@@ -124,8 +131,7 @@ export const removeVolumesFail = (error: string) => {
 
 export const removeVolumes = (names: string[]) => {
     return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("removeVolumes(), names:");
-        console.log(names);
+        // console.log("removeVolumes()");
         dispatch(removeVolumesStart());
 
         const url = `${API_BASE}/volumes`;
@@ -145,7 +151,11 @@ export const removeVolumes = (names: string[]) => {
         }).then(response => {
             dispatch(removeVolumesSuccess(response.data.volumes));
         }).catch(err => {
-            dispatch(removeVolumesFail(err.response.data));
+            err.response ?
+                dispatch(removeVolumesFail(err.response.data))
+                :
+                dispatch(removeVolumesFail("Server does not respond while trying to remove volumes."))
+
         });
     };
 };
