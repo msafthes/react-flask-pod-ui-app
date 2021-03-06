@@ -13,8 +13,8 @@ In `flask-backend` folder there is `requirements.txt` file which contains a list
 
 Example of installing and creating a Virtual Environment (adjust the commands according to your Operating System): 
 
-`sudo apt install python-venv` => to install Python Virtual Environment
-`python -m venv app-venv` => to create a folder named "app-venv" with the environment
+`sudo apt install python-venv` => to install Python Virtual Environment<br  />
+`python -m venv app-venv` => to create a folder named "app-venv" with the environment<br  />
 `source app-venv/bin/activate` => to activate the Virtual Environment
 
 In the `flask-backend` folder run this command to start the Flask Server:<br  />
