@@ -33,7 +33,7 @@ def podman_volumes():
 ##############################################################
 # Volumes
 # GET /volumes
-@volumes_api.route('/volumes', methods=['GET'])
+@volumes_api.route('/api/volumes', methods=['GET'])
 def volumes_get():
     volumes, error_volumes = podman_volumes()
 
@@ -44,7 +44,7 @@ def volumes_get():
     return jsonify(volumes)
 
 # POST /volumes/create
-@volumes_api.route('/volumes/create', methods=['POST'])
+@volumes_api.route('/api/volumes/create', methods=['POST'])
 def volumes_create():
     name = request.get_json().get("name")
     length = len(name)
@@ -69,7 +69,7 @@ def volumes_create():
     return jsonify(volumes)
 
 # DELETE /volumes
-@volumes_api.route('/volumes', methods=['DELETE'])
+@volumes_api.route('/api/volumes', methods=['DELETE'])
 def volumes_remove():
     names = request.get_json().get("names")
     length = len(names)

@@ -53,13 +53,13 @@ def podman_ps():
 ##############################################################
 # Containers
 # GET /containers
-@containers_api.route('/containers', methods=['GET'])
+@containers_api.route('/api/containers', methods=['GET'])
 def get_containers():
     containers = podman_ps()
     return jsonify(containers)
 
 # DELETE /containers
-@containers_api.route('/containers', methods=['DELETE'])
+@containers_api.route('/api/containers', methods=['DELETE'])
 def remove_containers():
     container_ids = request.get_json().get("IDs")
     length = len(container_ids)
@@ -81,7 +81,7 @@ def remove_containers():
     return jsonify(containers)
 
 # POST /container-run
-@containers_api.route('/container-run', methods=['POST'])
+@containers_api.route('/api/container-run', methods=['POST'])
 def container_run():
     run_command = request.get_json().get("command")
     length = len(run_command)
@@ -101,7 +101,7 @@ def container_run():
     return jsonify(containers)
 
 # POST /containers/stop
-@containers_api.route('/containers/stop', methods=['POST'])
+@containers_api.route('/api/containers/stop', methods=['POST'])
 def containers_stop():
     container_ids = request.get_json().get("IDs")
     length = len(container_ids)
@@ -123,7 +123,7 @@ def containers_stop():
     return jsonify(containers)
 
 # POST /containers/kill
-@containers_api.route('/containers/kill', methods=['POST'])
+@containers_api.route('/api/containers/kill', methods=['POST'])
 def containers_kill():
     container_ids = request.get_json().get("IDs")
     length = len(container_ids)

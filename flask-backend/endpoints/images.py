@@ -53,7 +53,7 @@ def podman_images():
 # Images
 
 # GET /images
-@images_api.route('/images', methods=['GET'])
+@images_api.route('/api/images', methods=['GET'])
 def get_images():
     images, error_images = podman_images()
 
@@ -64,7 +64,7 @@ def get_images():
     return jsonify(images)
 
 # DELETE /images
-@images_api.route('/images', methods=['DELETE'])
+@images_api.route('/api/images', methods=['DELETE'])
 def remove_images():
     image_ids = request.get_json().get("IDs")
     length = len(image_ids)
@@ -92,7 +92,7 @@ def remove_images():
 
 
 # DELETE /images/prune
-@images_api.route('/images/prune', methods=['DELETE'])
+@images_api.route('/api/images/prune', methods=['DELETE'])
 def prune_images():
     command = "podman image prune -a -f"
 
@@ -114,7 +114,7 @@ def prune_images():
     return jsonify(images)
 
 # POST /images/pull
-@images_api.route('/images/pull', methods=['POST'])
+@images_api.route('/api/images/pull', methods=['POST'])
 def images_pull():
     name = request.get_json().get("name")
     length = len(name)

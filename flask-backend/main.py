@@ -50,7 +50,7 @@ def podman_logs(id):
 ##############################################################
 
 # GET /
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/api', methods=['GET', 'POST'])
 def get_hello():
     return "Podman REST API"
 
