@@ -72,6 +72,14 @@ const Images = (props: IImagesProps) => {
         setShowBackendError(errorContainers.length > 0 || errorImages.length > 0);
     }, [errorContainers, errorImages]);
 
+    useEffect(() => {
+        const newSelected = {};
+        for (const [key, value] of Object.entries(images)) {
+            newSelected[value.id] = false
+        }
+        setSelectedImages({ ...newSelected });
+    }, [images]);
+
     const handleCheckboxChange = changeEvent => {
         const { id } = changeEvent.target;
         const old = { ...selectedImages };
@@ -190,9 +198,9 @@ const Images = (props: IImagesProps) => {
                                     onFocus={(event) => event.stopPropagation()}
                                     control={<Checkbox
                                         color="primary"
-                                        onClick={handleCheckboxChange}
+                                        onChange={handleCheckboxChange}
                                         id={image.id}
-                                        checked={selectedImages[image.id]} />}
+                                        checked={selectedImages[image.id] || false} />}
                                     label=""
                                 />
                                 <Grid item container className={css.Content}>
@@ -351,7 +359,7 @@ const Images = (props: IImagesProps) => {
 
                 <div className={css.Info}>
                     <div className={imagesTitleClasses.join(' ')}>
-                        <Checkbox color="primary" onClick={selectAll} checked={allTrue} />
+                        <Checkbox color="primary" onChange={selectAll} checked={allTrue || false} />
                         <div className={css.Repository}>Repository</div>
                         {(desktop || tabletLandscape) &&
                             <div className={css.Tag}>Tag</div>

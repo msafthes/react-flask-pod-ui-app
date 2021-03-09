@@ -72,7 +72,6 @@ const Containers = (props: IContainersProps) => {
     }, [fetchContainers]);
 
     useEffect(() => {
-        // console.log("useEffect [containers]");
         const newSelected = {};
         for (const [key, value] of Object.entries(containers)) {
             newSelected[value.containerId] = false
@@ -202,11 +201,9 @@ const Containers = (props: IContainersProps) => {
                                     onFocus={(event) => event.stopPropagation()}
                                     control={<Checkbox
                                         color="primary"
-                                        // onClick={handleCheckboxChange}
                                         onChange={handleCheckboxChange}
                                         id={container.containerId}
-                                        // id={"123"}
-                                        checked={selectedContainers[container.containerId]} />}
+                                        checked={selectedContainers[container.containerId] || false} />}
                                     label=""
                                 />
                                 <Grid item container className={css.Content}>
@@ -357,9 +354,8 @@ const Containers = (props: IContainersProps) => {
                     <div className={containersTitleClasses.join(' ')}>
                         <Checkbox
                             color="primary"
-                            // onClick={selectAll}
                             onChange={selectAll}
-                            checked={allTrue} />
+                            checked={allTrue || false} />
                         <div className={css.ContainerId}>ID</div>
                         {(desktop || tabletLandscape) &&
                             <div className={css.Status}>Status</div>

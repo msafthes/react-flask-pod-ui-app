@@ -64,6 +64,14 @@ const Volumes = (props: IVolumesProps) => {
         setShowBackendError(errorVolumes.length > 0);
     }, [errorVolumes]);
 
+    useEffect(() => {
+        const newSelected = {};
+        for (const [key, value] of Object.entries(volumes)) {
+            newSelected[value.Name] = false
+        }
+        setSelectedVolumes({ ...newSelected });
+    }, [volumes]);
+
     const handleCheckboxChange = changeEvent => {
         const { id } = changeEvent.target;
         const old = { ...selectedVolumes };
@@ -99,7 +107,6 @@ const Volumes = (props: IVolumesProps) => {
     };
 
     const handleVolumeOperation = (selectedVolumes, mode: string) => {
-        // console.log(`triggered handleVolumeOperation(), mode: ${mode}`);
         const volumesNames = extractIds(selectedVolumes);
 
         switch (mode.toLowerCase()) {
@@ -137,7 +144,6 @@ const Volumes = (props: IVolumesProps) => {
                     return <React.Fragment key={volume.Name}>
 
                         <Accordion>
-
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-label="Expand"
@@ -150,9 +156,10 @@ const Volumes = (props: IVolumesProps) => {
                                     onFocus={(event) => event.stopPropagation()}
                                     control={<Checkbox
                                         color="primary"
-                                        onClick={handleCheckboxChange}
+                                        onChange={handleCheckboxChange}
                                         id={volume.Name}
-                                        checked={selectedVolumes[volume.Name]} />}
+                                        checked={selectedVolumes[volume.Name] || false}
+                                    />}
                                     label=""
                                 />
                                 <Grid item container className={css.Content}>
@@ -262,7 +269,7 @@ const Volumes = (props: IVolumesProps) => {
 
                 <div className={css.Info}>
                     <div className={volumesTitleClasses.join(' ')}>
-                        <Checkbox color="primary" onClick={selectAll} checked={allTrue} />
+                        <Checkbox color="primary" onChange={selectAll} checked={allTrue || false} />
                         <div className={css.Name}>Name</div>
                         {(desktop || tabletLandscape) &&
                             <div className={css.Driver}>Driver</div>

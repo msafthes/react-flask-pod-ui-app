@@ -19,7 +19,6 @@ export const toggleSelectAll = (obj: Object, allTrue: Boolean) => {
 };
 
 export const handleSelectAll = (selectedItems: Object) => {
-    console.log("handleSelectAll(), selectedItems:");
     const allTrue = isAllTrue(selectedItems);
     const updated = { ...selectedItems };
     toggleSelectAll(updated, allTrue);
@@ -28,13 +27,11 @@ export const handleSelectAll = (selectedItems: Object) => {
 };
 
 export const isSelectedAny = (selectedItems: Object) => {
-    console.log("isSelectedAny()");
     for (const [key, value] of Object.entries(selectedItems)) {
         if (value === true) {
             return true
         }
     }
-
     return false;
 };
 
