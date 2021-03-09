@@ -183,7 +183,7 @@ export const pullImage = (name: string) => {
         }
 
         try {
-            const response = await axios.post(url, data, { headers: headers, })
+            const response = await axios.post(url, data, { headers: headers, });
             dispatch(pullImageSuccess(response.data.images));
         } catch (err) {
             err.reponse ?

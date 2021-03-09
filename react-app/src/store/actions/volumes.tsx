@@ -35,7 +35,7 @@ export const fetchVolumesFail = (error: string) => {
 };
 
 export const fetchVolumes = () => {
-    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         dispatch(fetchVolumesStart());
 
         const url = `${API_BASE}/volumes`;
@@ -44,16 +44,15 @@ export const fetchVolumes = () => {
             'Content-Type': 'application/json',
         }
 
-        axios.get(url, { headers: headers })
-            .then(response => {
-                dispatch(fetchVolumesSuccess(response.data.volumes));
-            })
-            .catch(err => {
-                err.response ?
-                    dispatch(fetchVolumesFail(err.response.data))
-                    :
-                    dispatch(fetchVolumesFail("Server does not respond while trying to fetch volumes."))
-            });
+        try {
+            const response = await axios.get(url, { headers: headers });
+            dispatch(fetchVolumesSuccess(response.data.volumes));
+        } catch (err) {
+            err.response ?
+                dispatch(fetchVolumesFail(err.response.data))
+                :
+                dispatch(fetchVolumesFail("Server does not respond while trying to fetch volumes."))
+        }
     };
 };
 
@@ -79,7 +78,7 @@ export const createVolumeFail = (error: string) => {
 };
 
 export const createVolume = (name: string) => {
-    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         // console.log("createVolume()");
         dispatch(createVolumeStart());
 
@@ -94,17 +93,15 @@ export const createVolume = (name: string) => {
             name: name
         }
 
-        axios.post(url, data, {
-            headers: headers,
-        }).then(response => {
+        try {
+            const response = await axios.post(url, data, { headers: headers, });
             dispatch(createVolumeSuccess(response.data.volumes));
-        }).catch(err => {
+        } catch (err) {
             err.response ?
                 dispatch(createVolumeFail(err.response.data))
                 :
                 dispatch(createVolumeFail("Server does not respond while trying to create volumes."))
-
-        });
+        }
     };
 };
 
@@ -130,7 +127,7 @@ export const removeVolumesFail = (error: string) => {
 };
 
 export const removeVolumes = (names: string[]) => {
-    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         // console.log("removeVolumes()");
         dispatch(removeVolumesStart());
 
@@ -145,17 +142,14 @@ export const removeVolumes = (names: string[]) => {
             names: names
         }
 
-        axios.delete(url, {
-            headers: headers,
-            data,
-        }).then(response => {
+        try {
+            const response = await axios.delete(url, { headers: headers, data, });
             dispatch(removeVolumesSuccess(response.data.volumes));
-        }).catch(err => {
+        } catch (err) {
             err.response ?
                 dispatch(removeVolumesFail(err.response.data))
                 :
                 dispatch(removeVolumesFail("Server does not respond while trying to remove volumes."))
-
-        });
+        }
     };
 };
