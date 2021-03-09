@@ -20,9 +20,16 @@ app.register_blueprint(containers_api)
 app.register_blueprint(volumes_api)
 
 @app.route("/")
-def my_index():
+@app.route("/images")
+@app.route("/containers")
+@app.route("/volumes")
+@app.route("/container_logs:id")
+def frontend_app():
     return render_template("index.html", flask_token="Hello Flask+React")
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("index.html", flask_token="Hello Flask+React")
 
 ##############################################################
 # Functions
