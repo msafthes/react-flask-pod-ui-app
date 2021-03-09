@@ -77,8 +77,7 @@ def remove_containers():
                        capture_output=True, universal_newlines=True).stderr
 
     if len(error_remove) != 0:
-        return handle_error_containers(400, "Error occured while running `podman rm` command to remove containers:\
-        \n{0}Command was: `{1}`".format(error_remove, command))
+        return handle_error_containers(400, error_remove)
 
     containers = podman_ps()
     return jsonify(containers)
@@ -97,8 +96,7 @@ def container_run():
                        capture_output=True, universal_newlines=True).stderr
 
     if len(error_run) != 0:
-        return handle_error_containers(400, "Error occured while running `container run` command:\
-        \n{0}Command was: `{1}`".format(error_run, command))
+        return handle_error_containers(400, error_run)
 
     containers = podman_ps()
     return jsonify(containers)
@@ -119,8 +117,7 @@ def containers_stop():
                        capture_output=True, universal_newlines=True).stderr
 
     if len(error_stop) != 0:
-        return handle_error_containers(400, "Error occured while running `podman stop` command to stop containers:\
-        \n{0}Command was: `{1}`".format(error_stop, command))
+        return handle_error_containers(400, error_stop)
     
     containers = podman_ps()
     return jsonify(containers)
@@ -141,8 +138,7 @@ def containers_kill():
                        capture_output=True, universal_newlines=True).stderr
 
     if len(error_kill) != 0:
-        return handle_error_containers(400, "Error occured while running `podman kill` command to kill containers:\
-        \n{0}Command was: `{1}`".format(error_kill, command))
+        return handle_error_containers(400, error_kill)
     
     
     containers = podman_ps()

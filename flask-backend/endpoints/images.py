@@ -58,8 +58,7 @@ def get_images():
     images, error_images = podman_images()
 
     if len(error_images) != 0:
-        return handle_error_images(400, "Error occured while running `podman images` command to fetch images :\
-        \n{0}".format(error_images))
+        return handle_error_images(400, error_images)
 
     return jsonify(images)
 
@@ -79,14 +78,12 @@ def remove_images():
                        capture_output=True, universal_newlines=True).stderr
 
     if len(error_remove) != 0:
-        return handle_error_images(400, "Error occured while running `podman rmi` command to remove images:\
-        \n{0}Command was: `{1}`".format(error_remove, command))
+        return handle_error_images(400, error_remove)
 
     images, error_images = podman_images()
 
     if len(error_images) != 0:
-        return handle_error_images(400, "Error occured while running `podman images` command to fetch images :\
-        \n{0}".format(error_images))
+        return handle_error_images(400, error_images)
     
     return jsonify(images)
 
@@ -102,14 +99,12 @@ def prune_images():
                        capture_output=True, universal_newlines=True).stderr
 
     if len(error_prune) != 0:
-        return handle_error_images(400, "Error occured while running `podman image prune` command to remove unused/old images:\
-        \n{0}Command was: `{1}`".format(error_prune, command))
+        return handle_error_images(400, error_prune)
 
     images, error_images = podman_images()
 
     if len(error_images) != 0:
-        return handle_error_images(400, "Error occured while running `podman images` command to fetch images :\
-        \n{0}".format(error_images))
+        return handle_error_images(400, error_images)
     
     return jsonify(images)
 
@@ -127,14 +122,12 @@ def images_pull():
                        capture_output=True, universal_newlines=True).stderr
 
     if len(error_pull) != 0:
-        return handle_error_images(400, "Error occured while running `podman pull` command to pull a new image:\
-        \n{0}Command was: `{1}`".format(error_pull, command))
+        return handle_error_images(400, error_pull)
 
     images, error_images = podman_images()
 
     if len(error_images) != 0:
-        return handle_error_images(400, "Error occured while running `podman images` command to fetch images :\
-        \n{0}".format(error_images))
+        return handle_error_images(400, error_images)
         
     return jsonify(images)
 

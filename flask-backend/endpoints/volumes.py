@@ -38,8 +38,7 @@ def volumes_get():
     volumes, error_volumes = podman_volumes()
 
     if len(error_volumes) != 0:
-        return handle_error_volumes(400, "Error occured while running `podman volume inspect -a` command to fetch volumes :\
-        \n{0}".format(error_volumes))
+        return handle_error_volumes(400, error_volumes)
 
     return jsonify(volumes)
 
@@ -57,14 +56,12 @@ def volumes_create():
                        capture_output=True, universal_newlines=True).stderr
 
     if len(error_create) != 0:
-        return handle_error_volumes(400, "Error occured while running `podman volume create` command to create volumes:\
-        \n{0}Command was: `{1}`".format(error_create, command))
+        return handle_error_volumes(400, error_create)
 
     volumes, error_volumes = podman_volumes()
 
     if len(error_volumes) != 0:
-        return handle_error_volumes(400, "Error occured while running `podman volume inspect -a` command to fetch volumes :\
-        \n{0}".format(error_volumes))
+        return handle_error_volumes(400, error_volumes)
     
     return jsonify(volumes)
 
@@ -83,14 +80,12 @@ def volumes_remove():
                        capture_output=True, universal_newlines=True).stderr
 
     if len(error_remove) != 0:
-        return handle_error_volumes(400, "Error occured while running `podman volume rm` command to remove volumes:\
-        \n{0}Command was: `{1}`".format(error_remove, command))
+        return handle_error_volumes(400, error_remove)
 
     volumes, error_volumes = podman_volumes()
 
     if len(error_volumes) != 0:
-        return handle_error_volumes(400, "Error occured while running `podman volume inspect -a` command to fetch volumes :\
-        \n{0}".format(error_volumes))
+        return handle_error_volumes(400, error_volumes)
     
     return jsonify(volumes)
 
