@@ -45,7 +45,7 @@ interface IImagesProps {
 }
 
 const Images = (props: IImagesProps) => {
-    const { fetchImages, removeImages, pruneImages, pullImage, images, containers, fetchContainers, errorContainers, errorImages } = props;
+    const { fetchImages, removeImages, pruneImages, pullImage, images, containers, fetchContainers, errorContainers, errorImages, loading } = props;
     const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
 
     const defaultSelectedImages = {};
@@ -178,7 +178,7 @@ const Images = (props: IImagesProps) => {
 
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>
 
-    if (!props.loading) {
+    if (images) {
         content = <Grid container direction="column">
             {(images && images.length) ?
                 (images.map((image, i) => {
@@ -326,6 +326,8 @@ const Images = (props: IImagesProps) => {
                         </Dialog>
                     </Grid>
 
+                    {loading && <LoadingIndicator />}
+
                 </Grid>
 
                 {showError &&
@@ -385,6 +387,7 @@ const Images = (props: IImagesProps) => {
 const mapStateToProps = (state: AppState) => {
     return {
         images: state.images.images,
+        loading: state.images.loading,
         containers: state.containers.containers,
         errorImages: state.images.error,
         errorContainers: state.containers.error,

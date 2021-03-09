@@ -49,7 +49,7 @@ interface IContainersProps {
 }
 
 const Containers = (props: IContainersProps) => {
-    const { fetchContainers, removeContainers, stopContainers, killContainers, containerRun, containers, errorContainers } = props;
+    const { fetchContainers, removeContainers, stopContainers, killContainers, containerRun, containers, errorContainers, loading } = props;
     const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
 
     const defaultSelectedContainers = {};
@@ -181,7 +181,7 @@ const Containers = (props: IContainersProps) => {
 
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>
 
-    if (!props.loading) {
+    if (containers) {
         content = <Grid container direction="column">
             {(containers && containers.length) ?
                 (containers.map((container, i) => {
@@ -323,6 +323,9 @@ const Containers = (props: IContainersProps) => {
                             </DialogActions>
                         </Dialog>
                     </Grid>
+
+                    {loading && <LoadingIndicator />}
+
                 </Grid>
 
                 {showError &&
@@ -377,6 +380,7 @@ const Containers = (props: IContainersProps) => {
 const mapStateToProps = (state: AppState) => {
     return {
         containers: state.containers.containers,
+        loading: state.containers.loading,
         errorContainers: state.containers.error,
     };
 };

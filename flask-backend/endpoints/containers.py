@@ -17,14 +17,17 @@ def podman_ps():
 
     output = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 
                                 capture_output=True,
-                                universal_newlines=True).stdout
+                                universal_newlines=True)
 
-    if len(output) == 0:
-        output = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 
+    output_containers = output.stdout
+    output_error = output.stderr
+
+    if len(output_containers) == 0 and ("does not exist in database" in output_error):
+        output_containers = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 
                                 stdout=subprocess.PIPE, 
                                 universal_newlines=True).stdout
     
-    podman_containers_array = output.split('\n')
+    podman_containers_array = output_containers.split('\n')
     # Removing the last '' empty part after split
     podman_containers_array.pop()
 

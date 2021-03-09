@@ -40,7 +40,7 @@ interface IVolumesProps {
 }
 
 const Volumes = (props: IVolumesProps) => {
-    const { fetchVolumes, createVolume, removeVolumes, volumes, errorVolumes } = props;
+    const { fetchVolumes, createVolume, removeVolumes, volumes, errorVolumes, loading } = props;
     const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
 
     const defaultSelectedVolumes = {};
@@ -137,7 +137,7 @@ const Volumes = (props: IVolumesProps) => {
 
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>
 
-    if (!props.loading) {
+    if (volumes) {
         content = <Grid container direction="column">
             {(volumes && volumes.length) ?
                 (volumes.map((volume, i) => {
@@ -256,6 +256,8 @@ const Volumes = (props: IVolumesProps) => {
                         </Dialog>
                     </Grid>
 
+                    {loading && <LoadingIndicator />}
+
                 </Grid>
 
                 {showBackendError &&
@@ -288,6 +290,7 @@ const Volumes = (props: IVolumesProps) => {
 const mapStateToProps = (state: AppState) => {
     return {
         volumes: state.volumes.volumes,
+        loading: state.volumes.loading,
         errorVolumes: state.volumes.error,
     };
 };
