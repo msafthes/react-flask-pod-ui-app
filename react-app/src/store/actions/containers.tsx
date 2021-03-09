@@ -40,7 +40,7 @@ export const fetchContainersFail = (error: string) => {
 };
 
 export const fetchContainers = () => {
-    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         dispatch(fetchContainersStart());
 
         const url = `${API_BASE}/containers`;
@@ -49,16 +49,15 @@ export const fetchContainers = () => {
             'Content-Type': 'application/json',
         }
 
-        axios.get(url, { headers: headers })
-            .then(response => {
-                dispatch(fetchContainersSuccess(response.data.containers));
-            })
-            .catch(err => {
-                err.response ?
-                    dispatch(fetchContainersFail(err.response.data))
-                    :
-                    dispatch(fetchContainersFail("Server does not respond while trying to fetch containers."))
-            });
+        try {
+            const response = await axios.get(url, { headers: headers });
+            dispatch(fetchContainersSuccess(response.data.containers));
+        } catch (err) {
+            err.response ?
+                dispatch(fetchContainersFail(err.response.data))
+                :
+                dispatch(fetchContainersFail("Server does not respond while trying to fetch containers."))
+        }
     };
 };
 
@@ -84,7 +83,7 @@ export const removeContainersFail = (error: string) => {
 };
 
 export const removeContainers = (containerIds: Array<String>) => {
-    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         // console.log("removeContainers()");
         dispatch(removeContainersStart());
 
@@ -95,19 +94,15 @@ export const removeContainers = (containerIds: Array<String>) => {
             'Access-Control-Allow-Origin': '*'
         }
 
-        axios.delete(url, {
-            headers: headers,
-            data: {
-                IDs: containerIds
-            }
-        }).then(response => {
+        try {
+            const response = await axios.delete(url, { headers: headers, data: { IDs: containerIds } });
             dispatch(removeContainersSuccess(response.data.containers));
-        }).catch(err => {
+        } catch (err) {
             err.response ?
                 dispatch(removeContainersFail(err.response.data))
                 :
                 dispatch(removeContainersFail("Server does not respond while trying to remove containers."))
-        });
+        }
     };
 };
 
@@ -133,7 +128,7 @@ export const stopContainersFail = (error: string) => {
 };
 
 export const stopContainers = (containerIds: Array<String>) => {
-    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         // console.log("stopContainers()");
         dispatch(stopContainersStart());
 
@@ -146,16 +141,15 @@ export const stopContainers = (containerIds: Array<String>) => {
             IDs: containerIds
         }
 
-        axios.post(url, data, {
-            headers: headers,
-        }).then(response => {
+        try {
+            const response = await axios.post(url, data, { headers: headers, });
             dispatch(stopContainersSuccess(response.data.containers));
-        }).catch(err => {
+        } catch (err) {
             err.response ?
                 dispatch(stopContainersFail(err.response.data))
                 :
                 dispatch(stopContainersFail("Server does not respond while trying to stop containers."))
-        });
+        }
     };
 };
 
@@ -181,7 +175,7 @@ export const killContainersFail = (error: string) => {
 };
 
 export const killContainers = (containerIds: Array<String>) => {
-    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         // console.log("killContainers()");
         dispatch(killContainersStart());
 
@@ -194,16 +188,15 @@ export const killContainers = (containerIds: Array<String>) => {
             IDs: containerIds
         }
 
-        axios.post(url, data, {
-            headers: headers,
-        }).then(response => {
+        try {
+            const response = await axios.post(url, data, { headers: headers, });
             dispatch(killContainersSuccess(response.data.containers));
-        }).catch(err => {
+        } catch (err) {
             err.response ?
                 dispatch(killContainersFail(err.response.data))
                 :
                 dispatch(killContainersFail("Server does not respond while trying to kill containers."))
-        });
+        }
     };
 };
 
@@ -237,7 +230,7 @@ export const containerRunFail = (error: string) => {
 };
 
 export const containerRun = (command: String) => {
-    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         dispatch(containerRunStart());
 
         const url = `${API_BASE}/container-run`;
@@ -249,9 +242,8 @@ export const containerRun = (command: String) => {
             command: command
         }
 
-        axios.post(url, data, {
-            headers: headers,
-        }).then(response => {
+        try {
+            const response = await axios.post(url, data, { headers: headers, });
             // -dt -p 8080:8080 --rm docker.io/library/alpine /bin/sh
             const parts = command.split(" ");
 
@@ -266,11 +258,11 @@ export const containerRun = (command: String) => {
                 });
             });
             dispatch(containerRunSuccess(response.data.containers));
-        }).catch(err => {
+        } catch (err) {
             err.response ?
                 dispatch(containerRunFail(err.response.data))
                 :
                 dispatch(containerRunFail("Server does not respond while trying to run container command."))
-        });
+        }
     };
 };
