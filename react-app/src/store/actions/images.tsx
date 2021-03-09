@@ -36,7 +36,7 @@ export const fetchImagesFail = (error: string) => {
 };
 
 export const fetchImages = () => {
-    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         dispatch(fetchImagesStart());
 
         const url = `${API_BASE}/images`;
@@ -45,17 +45,15 @@ export const fetchImages = () => {
             'Content-Type': 'application/json',
         }
 
-        axios.get(url, { headers: headers })
-            .then(response => {
-                dispatch(fetchImagesSuccess(response.data.images));
-            })
-            .catch(err => {
-                err.response ?
-                    dispatch(fetchImagesFail(err.response.data))
-                    :
-                    dispatch(fetchImagesFail("Server does not respond while trying to fetch images."))
-
-            });
+        try {
+            const response = await axios.get(url, { headers: headers });
+            dispatch(fetchImagesSuccess(response.data.images));
+        } catch (err) {
+            err.response ?
+                dispatch(fetchImagesFail(err.response.data))
+                :
+                dispatch(fetchImagesFail("Server does not respond while trying to fetch images."))
+        }
     };
 };
 
@@ -81,7 +79,7 @@ export const removeImagesFail = (error: string) => {
 };
 
 export const removeImages = (imageIds: Array<String>) => {
-    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         // console.log("removeImages()");
         dispatch(removeImagesStart());
 
@@ -91,19 +89,15 @@ export const removeImages = (imageIds: Array<String>) => {
             'Content-Type': 'application/json',
         }
 
-        axios.delete(url, {
-            headers: headers,
-            data: {
-                IDs: imageIds
-            }
-        }).then(response => {
+        try {
+            const response = await axios.delete(url, { headers: headers, data: { IDs: imageIds } });
             dispatch(removeImagesSuccess(response.data.images));
-        }).catch(err => {
+        } catch (err) {
             err.response ?
                 dispatch(removeImagesFail(err.response.data))
                 :
                 dispatch(removeImagesFail("Server does not respond while trying to remove images."))
-        });
+        }
     };
 };
 
@@ -129,7 +123,7 @@ export const pruneImagesFail = (error: string) => {
 };
 
 export const pruneImages = () => {
-    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         // console.log("pruneImages()");
         dispatch(pruneImagesStart());
 
@@ -139,16 +133,15 @@ export const pruneImages = () => {
             'Content-Type': 'application/json',
         }
 
-        axios.delete(url, {
-            headers: headers,
-        }).then(response => {
+        try {
+            const response = await axios.delete(url, { headers: headers, });
             dispatch(pruneImagesSuccess(response.data.images));
-        }).catch(err => {
+        } catch (err) {
             err.reponse ?
                 dispatch(pruneImagesFail(err.response.data))
                 :
                 dispatch(pruneImagesFail("Server does not respond while trying to prune images."))
-        });
+        }
     };
 };
 
@@ -174,7 +167,7 @@ export const pullImageFail = (error: string) => {
 };
 
 export const pullImage = (name: string) => {
-    return (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         // console.log("pullImage()");
         dispatch(pullImageStart());
 
@@ -189,15 +182,14 @@ export const pullImage = (name: string) => {
             name: name
         }
 
-        axios.post(url, data, {
-            headers: headers,
-        }).then(response => {
+        try {
+            const response = await axios.post(url, data, { headers: headers, })
             dispatch(pullImageSuccess(response.data.images));
-        }).catch(err => {
+        } catch (err) {
             err.reponse ?
                 dispatch(pullImageFail(err.response.data))
                 :
                 dispatch(pullImageFail("Server does not respond while trying to pull image."))
-        });
+        }
     };
 };
