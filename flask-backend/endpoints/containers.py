@@ -23,10 +23,16 @@ def podman_ps():
     output_error = output.stderr
 
     if len(output_containers) == 0 and ("does not exist in database" in output_error):
-        output_containers = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 
+        output = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 
                                 stdout=subprocess.PIPE, 
-                                universal_newlines=True).stdout
+                                universal_newlines=True)
     
+    output_containers = output.stdout
+    output_error = output.stderr
+
+    if len(output_containers) == 0:
+        return [], output_error
+
     podman_containers_array = output_containers.split('\n')
     # Removing the last '' empty part after split
     podman_containers_array.pop()
@@ -47,7 +53,7 @@ def podman_ps():
 
         containers["containers"].append(container)
 
-    return containers
+    return containers, ""
 
 ##############################################################
 # REST API
@@ -58,7 +64,9 @@ def podman_ps():
 # GET /containers
 @containers_api.route('/api/containers', methods=['GET'])
 def get_containers():
-    containers = podman_ps()
+    containers, error_ps = podman_ps()
+    if len(error_ps) > 0:
+        return handle_error_containers(400, error_ps)
     return jsonify(containers)
 
 # DELETE /containers
@@ -79,7 +87,9 @@ def remove_containers():
     if len(error_remove) != 0:
         return handle_error_containers(400, error_remove)
 
-    containers = podman_ps()
+    containers, error_ps = podman_ps()
+    if len(error_ps) > 0:
+        return handle_error_containers(400, error_ps)
     return jsonify(containers)
 
 # POST /container-run
@@ -98,7 +108,9 @@ def container_run():
     if len(error_run) != 0:
         return handle_error_containers(400, error_run)
 
-    containers = podman_ps()
+    containers, error_ps = podman_ps()
+    if len(error_ps) > 0:
+        return handle_error_containers(400, error_ps)
     return jsonify(containers)
 
 # POST /containers/stop
@@ -119,7 +131,9 @@ def containers_stop():
     if len(error_stop) != 0:
         return handle_error_containers(400, error_stop)
     
-    containers = podman_ps()
+    containers, error_ps = podman_ps()
+    if len(error_ps) > 0:
+        return handle_error_containers(400, error_ps)
     return jsonify(containers)
 
 # POST /containers/kill
@@ -141,7 +155,9 @@ def containers_kill():
         return handle_error_containers(400, error_kill)
     
     
-    containers = podman_ps()
+    containers, error_ps = podman_ps()
+    if len(error_ps) > 0:
+        return handle_error_containers(400, error_ps)
     return jsonify(containers)
 
 # Errors
