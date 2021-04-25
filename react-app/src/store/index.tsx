@@ -12,6 +12,7 @@ import { routerMiddleware } from 'connected-react-router';
 import imagesReducer from './reducers/images';
 import containersReducer from './reducers/containers';
 import volumesReducer from './reducers/volumes';
+import connectionsReducer from './reducers/connections';
 
 
 declare global {
@@ -31,6 +32,7 @@ const rootReducer = (history) => combineReducers({
     images: imagesReducer,
     containers: containersReducer,
     volumes: volumesReducer,
+    connections: connectionsReducer,
     router: connectRouter(history),
 });
 

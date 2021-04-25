@@ -1,0 +1,40 @@
+@import '../../Variables.css';
+
+.Error {
+    color: red;
+    white-space: pre;
+    text-align: left !important;
+}
+
+.Active {
+    pointer-events: none;
+    margin-left: 0.7rem !important;
+}
+
+.Close {
+    margin-top: 2rem !important;
+    margin-left: 0.7rem !important;
+}
+
+.Key {
+    margin-top: 0.7rem !important;
+}
+
+.ConnectionAdd {
+    margin-top: 0.25rem !important;
+    margin-bottom: 0.7rem !important;
+    margin-left: 0.7rem !important;
+}
+
+.Connection {
+    margin-left: 0.7rem !important;
+}
+
+.ConnectionActions {
+    margin-top: 0.25rem !important;
+    margin-bottom: 0.7rem !important;
+}
+
+.ConnectionAction {
+    margin-left: 0.7rem !important;
+}

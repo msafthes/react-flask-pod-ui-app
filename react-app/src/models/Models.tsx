@@ -30,3 +30,9 @@ export interface Volume {
     Scope: string,          // "local"
     UID: number,            // 0
 }
+
+export interface Connection {
+    username: string,
+    ip: string,
+    podmanSocketPath: string,
+}

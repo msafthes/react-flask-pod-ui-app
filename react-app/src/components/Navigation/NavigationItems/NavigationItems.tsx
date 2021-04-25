@@ -2,6 +2,8 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import css from './NavigationItems.module.css';
+import MenuConnections from '../../../components/MaterialCustomized/MenuConnections';
+
 
 const NavigationItems = props => (
     <ul className={css.List}>
@@ -53,6 +55,7 @@ const NavigationItems = props => (
                 Volumes
             </NavLink>
         </li>
+        <MenuConnections />
     </ul>
 );
 

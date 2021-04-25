@@ -1,4 +1,4 @@
-import { Image, Container, Volume } from "../../models/Models";
+import { Image, Container, Volume, Connection } from "../../models/Models";
 
 // See all available actions
 // Images Action Types
@@ -53,6 +53,23 @@ export const CREATE_VOLUME_FAIL = 'CREATE_VOLUME_FAIL';
 export const REMOVE_VOLUMES_START = 'REMOVE_VOLUMES_START';
 export const REMOVE_VOLUMES_SUCCESS = 'REMOVE_VOLUMES_SUCCESS';
 export const REMOVE_VOLUMES_FAIL = 'REMOVE_VOLUMES_FAIL';
+
+// Connections Action Types
+export const FETCH_KEY_START = 'FETCH_KEY_START';
+export const FETCH_KEY_SUCCESS = 'FETCH_KEY_SUCCESS';
+export const FETCH_KEY_FAIL = 'FETCH_KEY_FAIL';
+
+export const ADD_CONNECTION_START = 'ADD_CONNECTION_START';
+export const ADD_CONNECTION_SUCCESS = 'ADD_CONNECTION_SUCCESS';
+export const ADD_CONNECTION_FAIL = 'ADD_CONNECTION_FAIL';
+
+export const REMOVE_CONNECTION_START = 'REMOVE_CONNECTION_START';
+export const REMOVE_CONNECTION_SUCCESS = 'REMOVE_CONNECTION_SUCCESS';
+export const REMOVE_CONNECTION_FAIL = 'REMOVE_CONNECTION_FAIL';
+
+export const ACTIVATE_CONNECTION_START = 'ACTIVATE_CONNECTION_START';
+export const ACTIVATE_CONNECTION_SUCCESS = 'ACTIVATE_CONNECTION_SUCCESS';
+export const ACTIVATE_CONNECTION_FAIL = 'ACTIVATE_CONNECTION_FAIL';
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -291,6 +308,84 @@ export interface IRemoveVolumesFailAction {
 }
 
 export type RemoveVolumesTypes = IRemoveVolumesStartAction | IRemoveVolumesSuccessAction | IRemoveVolumesFailAction;
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Connections State
+export interface IConnectionsState {
+    connections: Connection[],
+    key: string,
+    activeConnection: Connection,
+    error: string,
+    loading: boolean
+}
+
+// Key Fetch
+export interface IFetchKeyStartAction {
+    type: typeof FETCH_KEY_START
+}
+
+export interface IFetchKeySuccessAction {
+    type: typeof FETCH_KEY_SUCCESS,
+    key: string
+}
+
+export interface IFetchKeyFailAction {
+    type: typeof FETCH_KEY_FAIL,
+    error: string
+}
+
+export type FetchKeyTypes = IFetchKeyStartAction | IFetchKeySuccessAction | IFetchKeyFailAction;
+
+// Connection Add
+export interface IAddConnectionStartAction {
+    type: typeof ADD_CONNECTION_START
+}
+
+export interface IAddConnectionSuccessAction {
+    type: typeof ADD_CONNECTION_SUCCESS,
+    connection: Connection
+}
+
+export interface IAddConnectionFailAction {
+    type: typeof ADD_CONNECTION_FAIL,
+    error: string
+}
+
+export type AddConnectionTypes = IAddConnectionStartAction | IAddConnectionSuccessAction | IAddConnectionFailAction;
+
+// Connection Remove
+export interface IRemoveConnectionStartAction {
+    type: typeof REMOVE_CONNECTION_START
+}
+
+export interface IRemoveConnectionSuccessAction {
+    type: typeof REMOVE_CONNECTION_SUCCESS,
+    connection: Connection
+}
+
+export interface IRemoveConnectionFailAction {
+    type: typeof REMOVE_CONNECTION_FAIL,
+    error: string
+}
+
+export type RemoveConnectionTypes = IRemoveConnectionStartAction | IRemoveConnectionSuccessAction | IRemoveConnectionFailAction;
+
+// Connection Activate
+export interface IActivateConnectionStartAction {
+    type: typeof ACTIVATE_CONNECTION_START
+}
+
+export interface IActivateConnectionSuccessAction {
+    type: typeof ACTIVATE_CONNECTION_SUCCESS,
+    connection: Connection
+}
+
+export interface IActivateConnectionFailAction {
+    type: typeof ACTIVATE_CONNECTION_FAIL,
+    error: string
+}
+
+export type ActivateConnectionTypes = IActivateConnectionStartAction | IActivateConnectionSuccessAction | IActivateConnectionFailAction;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////

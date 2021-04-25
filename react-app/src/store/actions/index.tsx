@@ -19,3 +19,10 @@ export {
     createVolume,
     removeVolumes,
 } from './volumes';
+
+export {
+    fetchKey,
+    addConnection,
+    removeConnection,
+    activateConnection
+} from './connections';
