@@ -68,9 +68,7 @@ def get_hello():
 # WebSockets
 
 async_mode = None
-# socket_ = SocketIO(app, async_mode=async_mode, cors_allowed_origins="*")
-socket_ = SocketIO(app, async_mode=async_mode, cors_allowed_origins=["http://localhost:3000", "http://localhost:5000", "http://127.0.0.1:5000", "http://192.168.16.33/"])
-# socketio.init_app(app, cors_allowed_origins=["http://localhost:3000", "https://your-production-domain.com"])
+socket_ = SocketIO(app, async_mode=async_mode, cors_allowed_origins="*")
 
 @socket_.on('event://update-logs')
 def update_logs(data):
@@ -85,4 +83,4 @@ def update_logs(data):
 if __name__ == '__main__':
     # app.run(debug=True)
     # app.run()
-    socket_.run(app, debug=True)
+    socket_.run(app, host="192.168.16.33", debug=True)
