@@ -42,7 +42,7 @@ def podman_logs(id):
     if(len(id) == 0):
         return ''
 
-    command = "podman logs {0}".format(id)
+    command = "podman --remote logs {0}".format(id)
 
     logs = subprocess.run("{0}".format(command), shell=True,
                           capture_output=True).stdout.decode('utf-8')

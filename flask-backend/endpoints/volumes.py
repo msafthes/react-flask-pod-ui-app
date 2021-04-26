@@ -10,7 +10,7 @@ volumes_api = Blueprint('volumes_api', __name__)
 ##############################################################
 
 def podman_volumes():
-    command = "podman volume inspect -a"
+    command = "podman --remote volume inspect -a"
 
     output = subprocess.run("{0}".format(
         command), shell=True, capture_output=True, universal_newlines=True)
@@ -47,7 +47,7 @@ def volumes_get():
 def volumes_create():
     name = request.get_json().get("name")
     length = len(name)
-    command = "podman volume create {0}".format(name)
+    command = "podman --remote volume create {0}".format(name)
 
     error_create = ''
 
@@ -71,7 +71,7 @@ def volumes_remove():
     names = request.get_json().get("names")
     length = len(names)
     all_names = " ".join(names)
-    command = "podman volume rm {0}".format(all_names)
+    command = "podman --remote volume rm {0}".format(all_names)
 
     error_remove = ''
 

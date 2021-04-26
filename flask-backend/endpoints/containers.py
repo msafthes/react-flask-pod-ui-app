@@ -12,7 +12,7 @@ containers_api = Blueprint('containers_api', __name__)
 def podman_ps():
     # Example: separating each info with #
     # 54a48d41f6d9#registry.fedoraproject.org/f29/httpd:latest#/usr/bin/run-http...#2 minutes ago#0.0.0.0:8080->8080/tcp#laughing_bassi#Running
-    command = 'podman ps -a --format "{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}"'
+    command = 'podman --remote ps -a --format "{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}"'
     output = ''
 
     output = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 
@@ -76,7 +76,7 @@ def remove_containers():
     length = len(container_ids)
     all_ids = " ".join(container_ids)
 
-    command = "podman rm {0}".format(all_ids)
+    command = "podman --remote rm {0}".format(all_ids)
 
     error_remove = ''
 
@@ -97,7 +97,7 @@ def remove_containers():
 def container_run():
     run_command = request.get_json().get("command")
     length = len(run_command)
-    command = "podman run {0}".format(run_command)
+    command = "podman --remote run {0}".format(run_command)
 
     error_run = ''
 
@@ -120,7 +120,7 @@ def containers_stop():
     length = len(container_ids)
     all_ids = " ".join(container_ids)
 
-    command = "podman stop {0}".format(all_ids)
+    command = "podman --remote stop {0}".format(all_ids)
 
     error_stop = ''
 
@@ -143,7 +143,7 @@ def containers_kill():
     length = len(container_ids)
     all_ids = " ".join(container_ids)
 
-    command = "podman kill {0}".format(all_ids)
+    command = "podman --remote kill {0}".format(all_ids)
 
     error_kill = ''
 

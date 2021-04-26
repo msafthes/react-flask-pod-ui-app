@@ -69,7 +69,7 @@ def remove_images():
     length = len(image_ids)
     all_ids = " ".join(image_ids)
 
-    command = "podman rmi {0}".format(all_ids)
+    command = "podman --remote rmi {0}".format(all_ids)
 
     error_remove = ''
 
@@ -91,7 +91,7 @@ def remove_images():
 # DELETE /images/prune
 @images_api.route('/api/images/prune', methods=['DELETE'])
 def prune_images():
-    command = "podman image prune -a -f"
+    command = "podman --remote image prune -a -f"
 
     error_prune = ''
 
@@ -113,7 +113,7 @@ def prune_images():
 def images_pull():
     name = request.get_json().get("name")
     length = len(name)
-    command = "podman pull {0}".format(name)
+    command = "podman --remote pull {0}".format(name)
 
     error_pull = ''
 
