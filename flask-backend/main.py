@@ -11,6 +11,7 @@ from flask_socketio import SocketIO, emit, disconnect
 from endpoints.images import images_api
 from endpoints.containers import containers_api
 from endpoints.volumes import volumes_api
+from endpoints.connections import connections_api
 
 app = Flask("__main__")
 CORS(app)
@@ -18,12 +19,14 @@ CORS(app)
 app.register_blueprint(images_api)
 app.register_blueprint(containers_api)
 app.register_blueprint(volumes_api)
+app.register_blueprint(connections_api)
 
 @app.route("/")
 @app.route("/images")
 @app.route("/containers")
 @app.route("/volumes")
 @app.route("/container_logs:id")
+@app.route("/connections")
 def frontend_app():
     return render_template("index.html", flask_token="Hello Flask+React")
 
