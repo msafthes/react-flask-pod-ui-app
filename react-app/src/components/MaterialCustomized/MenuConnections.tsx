@@ -14,21 +14,15 @@ import { Connection } from '../../models/Models';
 
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
-
 import DeleteIcon from '@material-ui/icons/Delete';
 import CastConnectedIcon from '@material-ui/icons/CastConnected';
 import TextField from '@material-ui/core/TextField';
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
 import { Alert, AlertTitle } from '@material-ui/lab';
-import { Typography } from '@material-ui/core';
 
 import {
     withStyles,
@@ -40,16 +34,17 @@ import { purple } from '@material-ui/core/colors';
 interface IMenuConnectionsProps {
     connections: Connection[],
     activeConnection: Connection,
-    key: string,
+    sshKey: string,
     fetchKey: any,
     addConnection: any,
     removeConnection: any,
+    activateConnection: any,
     loading: boolean,
     errorConnections: string,
 }
 
 const MenuConnections = (props: IMenuConnectionsProps) => {
-    const { key, fetchKey, connections, activeConnection, addConnection, removeConnection, loading, errorConnections } = props
+    const { sshKey, fetchKey, connections, activeConnection, activateConnection, addConnection, removeConnection, loading, errorConnections } = props
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const [showError, setShowError] = useState<boolean>(false);
@@ -58,6 +53,10 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
 
     const [openConnectionModal, setOpenConnectionModal] = useState(false);
     const [newConnection, setNewConnection] = useState<Connection>({ username: '', ip: '', podmanSocketPath: '' });
+
+    useEffect(() => {
+        fetchKey();
+    }, [fetchKey]);
 
     useEffect(() => {
         setShowBackendError(errorConnections.length > 0);
@@ -86,7 +85,10 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
     const handleAddConnection = () => {
         setOpenConnectionModal(false);
         if (!newConnection.username || !newConnection.ip || !newConnection.podmanSocketPath ||
-            connections.some(connection => connection.username === newConnection.username && connection.ip === newConnection.ip)) {
+            connections.some(connection => connection.username === newConnection.username)) {
+            handleClose();
+            setErrorInfo("Invalid details, please try again.");
+            setShowError(true);
             return;
         }
         addConnection(newConnection);
@@ -97,6 +99,10 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
         removeConnection(removedConnection);
     };
 
+    const handleActivateConnection: any = (activatedConnection: Connection) => {
+        activateConnection(activatedConnection);
+    };
+
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -104,34 +110,6 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-    const test: Connection = {
-        username: "usernameTest2",
-        ip: "123.456.789",
-        podmanSocketPath: "/run/user/1001/podman/podman.sock",
-    }
-    const test2: Connection = {
-        username: "usernameTest222222",
-        ip: "987.654.321",
-        podmanSocketPath: "/run/user/2222/podman/podman.sock",
-    }
-
-    const testKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDWVxhhQ8l4D8mWLt61ajuTPUlKCCLyS5bO4iQRMOmYaEd3LoLDQEUxepUqbdrEgQBj1NR+mdAsSq8BmCrmB8Kgi3+Spbd1lci5ZljKYiwhC7BYytQeQAty+yEP+FB05aYy4SgIE9kEDygDhCHTNNLx1oLmCVNVOerGuAB3ovEyeaSFEJHK44/foLVTr9uOYyUoBKJKsDjiIqP4bH9CiVKe0HBsaibzcKnPlNkfYf5xnhUBcGQ7TWm7PQ2d1rw/tsnggk3W+8SF1IH190xi98uus2oo4+5aJZbe0RejJh8UTeXUS+pnaPsZrUo0RX09Mj9PNaPHzrzVuqFsTrr1l0SzQy1404wSYtXtPe00gg0TeMeVu98fXZya7rP479UNJZ+VBPM0nftnBt/0ozAXhGj2drn4ZYjzFwLkHlAPPE5gt5ruJEwxzJ80ZofTLjgfKWcubaynTvB+gmlgropgErvuZmvbmXLZY6YoCKUwh2O4m0J8/fUooQalbi5XisKQHQ0= msafpc@martinpc-virtual-machine";
-
-    if (connections.length === 0) {
-        connections.push(test);
-        connections.push(test2);
-        activeConnection.username = test.username;
-        activeConnection.ip = test.ip;
-        activeConnection.podmanSocketPath = test.podmanSocketPath;
-    }
-
-    // console.log("connections:");
-    // console.log(connections);
-    // console.log("newConnection:");
-    // console.log(newConnection);
-    // console.log("activeConnection:");
-    // console.log(activeConnection);
 
     const ActiveLabel = withStyles((theme: Theme) => ({
         root: {
@@ -149,13 +127,15 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
         connectionItems = <Grid container direction="column">
             {
                 (connections.map((connection: Connection, i) => {
+                    console.log(`activeConnection.username: ${activeConnection.username}`);
+                    console.log(`connection.username: ${connection.username}`);
                     return <React.Fragment key={connection.ip}>
                         <Grid container>
                             <Grid item className={css.Connection}>{connection.username}@{connection.ip}</Grid>
                             <Grid container className={css.ConnectionActions}>
-                                {activeConnection.username === connection.username && activeConnection.ip === connection.ip ?
+                                {activeConnection.username !== connection.username ?
                                     <Button className={css.ConnectionAction} variant="contained" color="secondary" aria-controls="simple-menu" aria-haspopup="true"
-                                        onClick={handleAddConnection}>
+                                        onClick={() => handleActivateConnection(connection)}>
                                         Activate
                                 </Button>
                                     :
@@ -187,13 +167,8 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
             {showError &&
                 <Alert severity="error" onClose={() => { setShowError(!showError) }}>
                     <AlertTitle><strong>Error</strong></AlertTitle>
-                        The following containers are running and cannot be removed:
-                        {(errorInfo.length > 0) ?
-                        (errorInfo.split(' ').map((id, i) => {
-                            return <Typography key={id} variant="body1" component="div" align="left">
-                                <strong>container: {id}</strong><strong></strong>
-                            </Typography>
-                        }))
+                    {(errorInfo.length > 0) ?
+                        errorInfo
                         :
                         ''
                     }
@@ -216,7 +191,6 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {/* <MenuItem onClick={addConnection}>Add Connection</MenuItem> */}
                 <Button className={css.ConnectionAdd} variant="contained" color="primary" onClick={handleConnectionOpen}>
                     Add Connection
                         </Button>
@@ -224,14 +198,18 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
                     <DialogTitle id="form-dialog-title">New Connection</DialogTitle>
                     <DialogContent>
                         <Grid>
+                            Make sure you have a Podman Socket Service running on your machine.
+                            You can verify that the socket is listening with Podman command:<br></br> <b>podman --remote info</b>
+                        </Grid>
+                        <Grid><br></br>
                             Please add this ssh key to the authorized_keys file in your .ssh folder:
                         </Grid>
-                        {testKey.length > 0 ?
+                        {sshKey ?
                             <Button
                                 className={css.Key}
                                 variant="contained"
                                 color="primary"
-                                onClick={() => copy(testKey)}
+                                onClick={() => copy(sshKey)}
                             >
                                 Copy Key
                     </Button>
@@ -278,18 +256,16 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
                 </Dialog>
                 {connectionItems}
                 <Button className={css.Close} variant="contained" onClick={handleClose}>Close</Button>
-                {/* <MenuItem onClick={handleClose}>Close</MenuItem> */}
             </Menu>
         </div>
     )
 }
 
-
 const mapStateToProps = (state: AppState) => {
     return {
         connections: state.connections.connections,
         activeConnection: state.connections.activeConnection,
-        key: state.connections.key,
+        sshKey: state.connections.sshKey,
         loading: state.volumes.loading,
         errorConnections: state.connections.error,
     };
@@ -303,6 +279,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
             dispatch(actions.addConnection(connection)),
         removeConnection: (connection: Connection) =>
             dispatch(actions.removeConnection(connection)),
+        activateConnection: (connection: Connection) =>
+            dispatch(actions.activateConnection(connection)),
     };
 };
 

@@ -313,7 +313,7 @@ export type RemoveVolumesTypes = IRemoveVolumesStartAction | IRemoveVolumesSucce
 // Connections State
 export interface IConnectionsState {
     connections: Connection[],
-    key: string,
+    sshKey: string,
     activeConnection: Connection,
     error: string,
     loading: boolean
@@ -326,7 +326,7 @@ export interface IFetchKeyStartAction {
 
 export interface IFetchKeySuccessAction {
     type: typeof FETCH_KEY_SUCCESS,
-    key: string
+    sshKey: string
 }
 
 export interface IFetchKeyFailAction {

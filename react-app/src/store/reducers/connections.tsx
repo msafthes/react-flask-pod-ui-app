@@ -21,7 +21,7 @@ import {
 const initialState: IConnectionsState = {
     connections: [],
     activeConnection: { username: '', ip: '', podmanSocketPath: '' },
-    key: '',
+    sshKey: '',
     error: '',
     loading: false,
 };
@@ -32,7 +32,7 @@ const fetchKeyStart = (state: IConnectionsState, action: IFetchKeyStartAction): 
 };
 
 const fetchKeySuccess = (state: IConnectionsState, action: IFetchKeySuccessAction): IConnectionsState => {
-    return { ...state, key: action.key, error: '', loading: false }
+    return { ...state, sshKey: action.sshKey, error: '', loading: false }
 };
 
 const fetchKeyFail = (state: IConnectionsState, action: IFetchKeyFailAction): IConnectionsState => {
@@ -47,10 +47,6 @@ const addConnectionStart = (state: IConnectionsState, action: IAddConnectionStar
 const addConnectionSuccess = (state: IConnectionsState, action: IAddConnectionSuccessAction): IConnectionsState => {
     return {
         ...state, connections: [...state.connections, action.connection], error: '', loading: false,
-        activeConnection: (state.activeConnection.username === '') ?
-            action.connection
-            :
-            state.activeConnection
     }
 };
 
@@ -66,7 +62,7 @@ const removeConnectionStart = (state: IConnectionsState, action: IRemoveConnecti
 const removeConnectionSuccess = (state: IConnectionsState, action: IRemoveConnectionSuccessAction): IConnectionsState => {
     return {
         ...state,
-        connections: state.connections.filter(connection => connection.ip !== action.connection.ip), error: '', loading: false,
+        connections: state.connections.filter(connection => connection.username !== action.connection.username), error: '', loading: false,
         activeConnection: (state.activeConnection.username === action.connection.username && state.activeConnection.ip === action.connection.ip) ?
             { username: '', ip: '', podmanSocketPath: '' }
             :
@@ -84,6 +80,9 @@ const activateConnectionStart = (state: IConnectionsState, action: IActivateConn
 };
 
 const activateConnectionSuccess = (state: IConnectionsState, action: IActivateConnectionSuccessAction): IConnectionsState => {
+    console.log("activateConnectionSuccess");
+    console.log("action");
+    console.log(action);
     return { ...state, activeConnection: action.connection }
 };
 

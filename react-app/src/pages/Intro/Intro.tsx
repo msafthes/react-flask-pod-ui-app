@@ -12,10 +12,9 @@ const Intro = () => {
         <div className={css.Intro}>
             <div className={css.Content}>
                 <h1>Welcome to Podman Web UI Demo!</h1>
-                <h2>Navigate to images/containers/volumes pages</h2>
-                <NavLink to="/containers" className={css.Link}>
-                    Try containers!
-                </NavLink>
+                <h2>No active connection found.</h2>
+                <h3>Please add a Remote Podman connection by clicking the "CONNECTIONS" button in the navigation.</h3>
+                <h3>After that, click ACTIVATE button for one of the connections that you have added and you can then use all the pages in the navigation.</h3>
             </div>
         </div>
     );

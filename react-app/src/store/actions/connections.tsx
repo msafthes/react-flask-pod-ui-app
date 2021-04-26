@@ -21,10 +21,10 @@ export const fetchKeyStart = () => {
     };
 };
 
-export const fetchKeySuccess = (key: string) => {
+export const fetchKeySuccess = (sshKey: string) => {
     return {
         type: FETCH_KEY_SUCCESS,
-        key: key
+        sshKey: sshKey
     };
 };
 
@@ -47,7 +47,7 @@ export const fetchKey = () => {
 
         try {
             const response = await axios.get(url, { headers: headers });
-            dispatch(fetchKeySuccess(response.data.key));
+            dispatch(fetchKeySuccess(response.data.sshKey));
         } catch (err) {
             err.response ?
                 dispatch(fetchKeyFail(err.response.data))
@@ -67,6 +67,7 @@ export const addConnectionStart = () => {
 export const addConnectionSuccess = (connection: Connection) => {
     return {
         type: ADD_CONNECTION_SUCCESS,
+        connection: connection
     };
 };
 
@@ -79,6 +80,9 @@ export const addConnectionFail = (error: string) => {
 
 export const addConnection = (connection: Connection) => {
     return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+        console.log("ACTIONS addConnection");
+        console.log("connection");
+        console.log(connection);
         dispatch(addConnectionStart());
 
         const url = `${API_BASE}/connections`;
@@ -114,6 +118,7 @@ export const removeConnectionStart = () => {
 export const removeConnectionSuccess = (connection: Connection) => {
     return {
         type: REMOVE_CONNECTION_SUCCESS,
+        connection: connection
     };
 };
 
@@ -161,6 +166,7 @@ export const activateConnectionStart = () => {
 export const activateConnectionSuccess = (connection: Connection) => {
     return {
         type: ACTIVATE_CONNECTION_SUCCESS,
+        connection: connection
     };
 };
 
@@ -173,6 +179,9 @@ export const activateConnectionFail = (error: string) => {
 
 export const activateConnection = (connection: Connection) => {
     return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+        console.log("ACTIONS activateConnection");
+        console.log("connection");
+        console.log(connection);
         dispatch(activateConnectionStart());
 
         const url = `${API_BASE}/connections/activate`;
@@ -187,7 +196,7 @@ export const activateConnection = (connection: Connection) => {
         }
 
         try {
-            await axios.post(url, { headers: headers, data, });
+            await axios.post(url, data, { headers: headers, });
             dispatch(activateConnectionSuccess(connection));
         } catch (err) {
             err.response ?

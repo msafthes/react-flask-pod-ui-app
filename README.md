@@ -21,7 +21,8 @@ In the `flask-backend` folder run this command to start the Flask Server:<br  />
 
 ### `python main.py`
 
-The Frontend React project is pre-built and served through Flask.
+The Frontend React project is pre-built and served through Flask. All you need to do is set up the address to your Backend Server where your application is running
+in the `src/config.tsx` file (you can also find examples there).
 (If you want to make changes to the Frontend application and see it in this combined application, you need to run `npm run build` in the `react-app` folder. If you want to have a Hot Reload feature while making the changes, use the Separate version of the application according to the instructions below.)
 
 # Development: Separate Applications
