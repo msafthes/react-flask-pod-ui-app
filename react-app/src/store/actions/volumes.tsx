@@ -35,13 +35,15 @@ export const fetchVolumesFail = (error: string) => {
 };
 
 export const fetchVolumes = () => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
+        const activeUsername = getState().connections.activeConnection.username;
         dispatch(fetchVolumesStart());
 
         const url = `${API_BASE}/volumes`;
 
         const headers = {
             'Content-Type': 'application/json',
+            'Active-Username': activeUsername
         }
 
         try {
@@ -78,15 +80,16 @@ export const createVolumeFail = (error: string) => {
 };
 
 export const createVolume = (name: string) => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        // console.log("createVolume()");
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
+        const activeUsername = getState().connections.activeConnection.username;
         dispatch(createVolumeStart());
 
         const url = `${API_BASE}/volumes/create`;
 
         const headers = {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Active-Username': activeUsername
         }
 
         const data = {
@@ -127,15 +130,16 @@ export const removeVolumesFail = (error: string) => {
 };
 
 export const removeVolumes = (names: string[]) => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        // console.log("removeVolumes()");
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
+        const activeUsername = getState().connections.activeConnection.username;
         dispatch(removeVolumesStart());
 
         const url = `${API_BASE}/volumes`;
 
         const headers = {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Active-Username': activeUsername
         }
 
         const data = {

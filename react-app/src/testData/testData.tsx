@@ -77,11 +77,3 @@ export const test2 = {
 }
 
 export const testKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDWVxhhQ8l4D8mWLt61ajuTPUlKCCLyS5bO4iQRMOmYaEd3LoLDQEUxepUqbdrEgQBj1NR+mdAsSq8BmCrmB8Kgi3+Spbd1lci5ZljKYiwhC7BYytQeQAty+yEP+FB05aYy4SgIE9kEDygDhCHTNNLx1oLmCVNVOerGuAB3ovEyeaSFEJHK44/foLVTr9uOYyUoBKJKsDjiIqP4bH9CiVKe0HBsaibzcKnPlNkfYf5xnhUBcGQ7TWm7PQ2d1rw/tsnggk3W+8SF1IH190xi98uus2oo4+5aJZbe0RejJh8UTeXUS+pnaPsZrUo0RX09Mj9PNaPHzrzVuqFsTrr1l0SzQy1404wSYtXtPe00gg0TeMeVu98fXZya7rP479UNJZ+VBPM0nftnBt/0ozAXhGj2drn4ZYjzFwLkHlAPPE5gt5ruJEwxzJ80ZofTLjgfKWcubaynTvB+gmlgropgErvuZmvbmXLZY6YoCKUwh2O4m0J8/fUooQalbi5XisKQHQ0= msafpc@martinpc-virtual-machine";
-
-// if (connections.length === 0) {
-//     connections.push(test);
-//     connections.push(test2);
-//     activeConnection.username = test.username;
-//     activeConnection.ip = test.ip;
-//     activeConnection.podmanSocketPath = test.podmanSocketPath;
-// }

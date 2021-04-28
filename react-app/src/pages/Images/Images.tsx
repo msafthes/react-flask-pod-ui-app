@@ -115,7 +115,6 @@ const Images = (props: IImagesProps) => {
     };
 
     const handleRemoveImages = (images, imageIds) => {
-        // console.log("handleRemoveImages()");
         const usedImages = [];
         let usedImagesNames = [];
 
@@ -141,7 +140,6 @@ const Images = (props: IImagesProps) => {
     };
 
     const handleImageOperation = (selectedImages, mode: string) => {
-        // console.log(`triggered handleImageOperation(), mode: ${mode}`);
         const imageIds = extractIds(selectedImages);
 
         switch (mode.toLowerCase()) {

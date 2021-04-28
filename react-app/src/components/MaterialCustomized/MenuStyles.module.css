@@ -6,14 +6,17 @@
     text-align: left !important;
 }
 
-.Active {
-    pointer-events: none;
-    margin-left: 0.7rem !important;
+.ButtonConnections {
+    color: var(--color-purple) !important;
+    font-weight: 700 !important;
+    font-size: 1.15rem !important;
+    margin-top: 0.2rem !important;
+    text-transform: capitalize !important;
 }
 
-.Close {
-    margin-top: 2rem !important;
-    margin-left: 0.7rem !important;
+.RemoveConnection {
+    margin-left: auto;
+    padding-left: 16px;
 }
 
 .Key {
@@ -21,20 +24,5 @@
 }
 
 .ConnectionAdd {
-    margin-top: 0.25rem !important;
-    margin-bottom: 0.7rem !important;
-    margin-left: 0.7rem !important;
-}
-
-.Connection {
-    margin-left: 0.7rem !important;
-}
-
-.ConnectionActions {
-    margin-top: 0.25rem !important;
-    margin-bottom: 0.7rem !important;
-}
-
-.ConnectionAction {
-    margin-left: 0.7rem !important;
+    padding-right: 8px !important;
 }

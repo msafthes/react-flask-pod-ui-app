@@ -36,18 +36,11 @@ const Volumes = React.lazy(() => {
 });
 
 interface IAppProps {
-  activeConnection: Connection,
   isAuthenticated: boolean
 }
 
 const App = (props: IAppProps) => {
-  const { activeConnection } = props
   const [isDesktop, setIsDesktop] = useState<boolean>(window.innerWidth >= 1000);
-
-  console.log("APP, activeConnection:");
-  console.log(activeConnection);
-  console.log(activeConnection.username);
-  console.log(activeConnection.username.length);
 
   const handleWindowResize = () => {
     setIsDesktop(window.innerWidth >= 1000);
@@ -75,7 +68,7 @@ const App = (props: IAppProps) => {
     }
   }, []);
 
-  const routes = activeConnection.username.length > 0 ? (
+  const routes = (
     <Switch>
       <Route path="/" exact component={Intro} />
       <Route path="/images/" exact render={() => <Images imagesDataTest={imagesDataTest} />} />
@@ -84,13 +77,7 @@ const App = (props: IAppProps) => {
       <Route path="/volumes/" render={() => <Volumes volumesDataTest={volumesDataTest} />} />
       <Redirect to="/" />
     </Switch>
-  )
-    :
-    <Switch>
-      <Route path="/" exact component={Intro} />
-      <Redirect to="/" />
-    </Switch>
-    ;
+  );
 
   return (
     <div>
@@ -104,7 +91,6 @@ const App = (props: IAppProps) => {
 const mapStateToProps = (state: AppState) => {
   return {
     isAuthenticated: true,
-    activeConnection: state.connections.activeConnection
   };
 };
 

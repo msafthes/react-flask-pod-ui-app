@@ -66,3 +66,9 @@ code {
 .MuiAlert-root {
   margin-top: 0.5rem;
 }
+
+/* Menu */
+.MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover {
+  color: white;
+  background-color: #4CAF50 !important;
+}

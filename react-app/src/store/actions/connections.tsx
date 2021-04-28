@@ -80,9 +80,6 @@ export const addConnectionFail = (error: string) => {
 
 export const addConnection = (connection: Connection) => {
     return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("ACTIONS addConnection");
-        console.log("connection");
-        console.log(connection);
         dispatch(addConnectionStart());
 
         const url = `${API_BASE}/connections`;
@@ -178,31 +175,34 @@ export const activateConnectionFail = (error: string) => {
 };
 
 export const activateConnection = (connection: Connection) => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        console.log("ACTIONS activateConnection");
-        console.log("connection");
-        console.log(connection);
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
+        const activeUsername = getState().connections.activeConnection.username;
         dispatch(activateConnectionStart());
 
         const url = `${API_BASE}/connections/activate`;
 
         const headers = {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Active-Username': activeUsername
         }
 
         const data = {
             connection: connection
         }
 
-        try {
-            await axios.post(url, data, { headers: headers, });
+        if (activeUsername === "Local") {
             dispatch(activateConnectionSuccess(connection));
-        } catch (err) {
-            err.response ?
-                dispatch(activateConnectionFail(err.response.data))
-                :
-                dispatch(activateConnectionFail("Server does not respond while trying to activate a connection."))
+        } else {
+            try {
+                await axios.post(url, data, { headers: headers, });
+                dispatch(activateConnectionSuccess(connection));
+            } catch (err) {
+                err.response ?
+                    dispatch(activateConnectionFail(err.response.data))
+                    :
+                    dispatch(activateConnectionFail("Server does not respond while trying to activate a connection."))
+            }
         }
     };
 };

@@ -36,13 +36,15 @@ export const fetchImagesFail = (error: string) => {
 };
 
 export const fetchImages = () => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
+        const activeUsername = getState().connections.activeConnection.username;
         dispatch(fetchImagesStart());
 
         const url = `${API_BASE}/images`;
 
         const headers = {
             'Content-Type': 'application/json',
+            'Active-Username': activeUsername
         }
 
         try {
@@ -79,14 +81,15 @@ export const removeImagesFail = (error: string) => {
 };
 
 export const removeImages = (imageIds: Array<String>) => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        // console.log("removeImages()");
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
+        const activeUsername = getState().connections.activeConnection.username;
         dispatch(removeImagesStart());
 
         const url = `${API_BASE}/images`;
 
         const headers = {
             'Content-Type': 'application/json',
+            'Active-Username': activeUsername
         }
 
         try {
@@ -123,14 +126,15 @@ export const pruneImagesFail = (error: string) => {
 };
 
 export const pruneImages = () => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        // console.log("pruneImages()");
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
+        const activeUsername = getState().connections.activeConnection.username;
         dispatch(pruneImagesStart());
 
         const url = `${API_BASE}/images/prune`;
 
         const headers = {
             'Content-Type': 'application/json',
+            'Active-Username': activeUsername
         }
 
         try {
@@ -167,15 +171,16 @@ export const pullImageFail = (error: string) => {
 };
 
 export const pullImage = (name: string) => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        // console.log("pullImage()");
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
+        const activeUsername = getState().connections.activeConnection.username;
         dispatch(pullImageStart());
 
         const url = `${API_BASE}/images/pull`;
 
         const headers = {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Active-Username': activeUsername
         }
 
         const data = {

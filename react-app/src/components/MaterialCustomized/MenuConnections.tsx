@@ -14,6 +14,7 @@ import { Connection } from '../../models/Models';
 
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CastConnectedIcon from '@material-ui/icons/CastConnected';
@@ -23,12 +24,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Alert, AlertTitle } from '@material-ui/lab';
-
-import {
-    withStyles,
-    Theme,
-} from '@material-ui/core/styles';
-import { purple } from '@material-ui/core/colors';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 
 interface IMenuConnectionsProps {
@@ -111,60 +107,38 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
         setAnchorEl(null);
     };
 
-    const ActiveLabel = withStyles((theme: Theme) => ({
-        root: {
-            color: theme.palette.getContrastText(purple[500]),
-            backgroundColor: purple[500],
-            '&:hover': {
-                backgroundColor: purple[700],
-            },
-        },
-    }))(Button);
-
     let connectionItems = null;
 
     if (connections && connections.length > 0) {
         connectionItems = <Grid container direction="column">
             {
                 (connections.map((connection: Connection, i) => {
-                    console.log(`activeConnection.username: ${activeConnection.username}`);
-                    console.log(`connection.username: ${connection.username}`);
                     return <React.Fragment key={connection.ip}>
-                        <Grid container>
-                            <Grid item className={css.Connection}>{connection.username}@{connection.ip}</Grid>
-                            <Grid container className={css.ConnectionActions}>
-                                {activeConnection.username !== connection.username ?
-                                    <Button className={css.ConnectionAction} variant="contained" color="secondary" aria-controls="simple-menu" aria-haspopup="true"
-                                        onClick={() => handleActivateConnection(connection)}>
-                                        Activate
-                                </Button>
-                                    :
-                                    <ActiveLabel variant="contained" color="primary" className={css.Active}>
-                                        Active
-                                    </ActiveLabel>
-                                }
-                                <Button className={css.ConnectionAction} variant="contained" color="secondary" aria-controls="simple-menu" aria-haspopup="true"
-                                    startIcon={<DeleteIcon />}
-                                    onClick={() => handleRemoveConnection(connection)}>
-                                    Remove
-                            </Button>
-                            </Grid>
-                        </Grid>
+                        {< MenuItem
+                            onClick={activeConnection.username !== connection.username ?
+                                () => handleActivateConnection(connection)
+                                :
+                                () => { }}
+                            selected={activeConnection.username === connection.username}>
+                            {connection.username}{connection.username !== "Local" && "@"}{connection.ip}
+                            {connection.username !== "Local" && <DeleteIcon onClick={() => handleRemoveConnection(connection)} color="secondary" className={css.RemoveConnection} />}
+                        </MenuItem>}
                     </React.Fragment>
                 }))
             }
-        </Grid>
+        </Grid >
     }
 
     return (
         <div>
-            <Button color="secondary" aria-controls="simple-menu" aria-haspopup="true"
+            <Button variant="text" color="primary" aria-controls="simple-menu" aria-haspopup="true" className={css.ButtonConnections}
                 startIcon={<CastConnectedIcon />}
                 onClick={handleClick}>
                 Connections
             </Button>
 
-            {showError &&
+            {
+                showError &&
                 <Alert severity="error" onClose={() => { setShowError(!showError) }}>
                     <AlertTitle><strong>Error</strong></AlertTitle>
                     {(errorInfo.length > 0) ?
@@ -175,7 +149,8 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
                 </Alert>
             }
 
-            {showBackendError &&
+            {
+                showBackendError &&
                 <Alert severity="error" onClose={() => { setShowBackendError(!showBackendError) }}>
                     <AlertTitle><strong>Backend Error</strong></AlertTitle>
                     {errorConnections.length > 0 &&
@@ -191,9 +166,7 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <Button className={css.ConnectionAdd} variant="contained" color="primary" onClick={handleConnectionOpen}>
-                    Add Connection
-                        </Button>
+                <MenuItem onClick={handleConnectionOpen}><AddCircleIcon color="primary" className={css.ConnectionAdd} />Add Connection</MenuItem>
                 <Dialog open={openConnectionModal} onClose={handleConnectionClose} aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">New Connection</DialogTitle>
                     <DialogContent>
@@ -255,9 +228,8 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
                     </DialogActions>
                 </Dialog>
                 {connectionItems}
-                <Button className={css.Close} variant="contained" onClick={handleClose}>Close</Button>
             </Menu>
-        </div>
+        </div >
     )
 }
 

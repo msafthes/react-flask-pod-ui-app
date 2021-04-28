@@ -118,7 +118,6 @@ const Containers = (props: IContainersProps) => {
     };
 
     const handleRemoveContainers = (selectedContainers, containerIds) => {
-        // console.log("handleRemoveContainers()");
         let runningContainersIds = [];
         containers.forEach((container) => {
             if ((selectedContainers[container.containerId] === true) && (container.status.startsWith('Up '))) {
@@ -137,7 +136,6 @@ const Containers = (props: IContainersProps) => {
 
     // Function to handle various container operations, ready to be used for "all" containers as well
     const handleContainerOperation = (selectedContainers, mode: string) => {
-        // console.log(`triggered handleContainerOperation(), mode: ${mode}`);
         const containerIds = extractSelected(selectedContainers);
 
         switch (mode.toLowerCase()) {

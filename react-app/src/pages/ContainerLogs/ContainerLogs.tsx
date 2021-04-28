@@ -7,7 +7,7 @@ import { AppState } from '../../store';
 import { withRouter } from 'react-router-dom';
 import { WebSocketContext } from '../../WebSocket';
 import { LazyLog } from 'react-lazylog';
-import { v4 as uuidv4 } from 'uuid';
+import { Connection } from '../../models/Models';
 
 import css from './ContainerLogs.module.css';
 import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
@@ -21,15 +21,15 @@ interface IContainerLogsProps {
     match: any,
     params: any,
     id: string,
+    activeConnection: Connection
 }
 
 const ContainerLogs = (props: IContainerLogsProps) => {
-    const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
+    const { activeConnection } = props;
     const ws = useContext(WebSocketContext);
 
     const updateLogs = () => {
-        console.log(">>> updateLogs()");
-        ws.updateLogs(props.match.params.id);
+        ws.updateLogs(props.match.params.id, activeConnection.username);
     }
 
     useEffect(() => {
@@ -64,7 +64,8 @@ const ContainerLogs = (props: IContainerLogsProps) => {
 
 const mapStateToProps = (state: AppState) => {
     return {
-        containerLogs: state.containers.containerLogs
+        containerLogs: state.containers.containerLogs,
+        activeConnection: state.connections.activeConnection
     };
 };
 

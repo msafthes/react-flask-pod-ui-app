@@ -40,13 +40,15 @@ export const fetchContainersFail = (error: string) => {
 };
 
 export const fetchContainers = () => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
+        const activeUsername = getState().connections.activeConnection.username;
         dispatch(fetchContainersStart());
 
         const url = `${API_BASE}/containers`;
 
         const headers = {
             'Content-Type': 'application/json',
+            'Active-Username': activeUsername
         }
 
         try {
@@ -83,15 +85,16 @@ export const removeContainersFail = (error: string) => {
 };
 
 export const removeContainers = (containerIds: Array<String>) => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        // console.log("removeContainers()");
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
+        const activeUsername = getState().connections.activeConnection.username;
         dispatch(removeContainersStart());
 
         const url = `${API_BASE}/containers`;
 
         const headers = {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Active-Username': activeUsername
         }
 
         try {
@@ -128,14 +131,15 @@ export const stopContainersFail = (error: string) => {
 };
 
 export const stopContainers = (containerIds: Array<String>) => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        // console.log("stopContainers()");
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
+        const activeUsername = getState().connections.activeConnection.username;
         dispatch(stopContainersStart());
 
         const url = `${API_BASE}/containers/stop`;
         const headers = {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Active-Username': activeUsername
         }
         const data = {
             IDs: containerIds
@@ -175,14 +179,15 @@ export const killContainersFail = (error: string) => {
 };
 
 export const killContainers = (containerIds: Array<String>) => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-        // console.log("killContainers()");
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
+        const activeUsername = getState().connections.activeConnection.username;
         dispatch(killContainersStart());
 
         const url = `${API_BASE}/containers/kill`;
         const headers = {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Active-Username': activeUsername
         }
         const data = {
             IDs: containerIds
@@ -230,13 +235,15 @@ export const containerRunFail = (error: string) => {
 };
 
 export const containerRun = (command: String) => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
+        const activeUsername = getState().connections.activeConnection.username;
         dispatch(containerRunStart());
 
         const url = `${API_BASE}/container-run`;
         const headers = {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Active-Username': activeUsername
         }
         const data = {
             command: command
@@ -250,7 +257,6 @@ export const containerRun = (command: String) => {
             parts.forEach(part => {
                 response.data.containers.forEach(container => {
                     const image = container.image.split(":")[0];
-                    // console.log(`part: ${part} | image: ${image} | ID: ${container.containerId} | imageRaw: ${container.image}`);
 
                     if (part === container.containerId || part === container.image || part === image) {
                         dispatch(push(`/container_logs/${container.containerId}`));

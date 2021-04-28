@@ -15,9 +15,10 @@ export default ({ children }) => {
 
     const dispatch = useDispatch();
 
-    const updateLogs = (id) => {
+    const updateLogs = (id, username) => {
         const payload = {
-            id: id
+            id: id,
+            username: username
         }
         socket.emit("event://update-logs", payload);
     }

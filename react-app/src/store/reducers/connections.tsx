@@ -19,8 +19,8 @@ import {
 } from '../actions/actionTypes';
 
 const initialState: IConnectionsState = {
-    connections: [],
-    activeConnection: { username: '', ip: '', podmanSocketPath: '' },
+    connections: [{ username: 'Local', ip: '', podmanSocketPath: '' }],
+    activeConnection: { username: 'Local', ip: '', podmanSocketPath: '' },
     sshKey: '',
     error: '',
     loading: false,
@@ -80,9 +80,6 @@ const activateConnectionStart = (state: IConnectionsState, action: IActivateConn
 };
 
 const activateConnectionSuccess = (state: IConnectionsState, action: IActivateConnectionSuccessAction): IConnectionsState => {
-    console.log("activateConnectionSuccess");
-    console.log("action");
-    console.log(action);
     return { ...state, activeConnection: action.connection }
 };
 
