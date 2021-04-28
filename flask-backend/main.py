@@ -38,11 +38,15 @@ def page_not_found(e):
 # Functions
 ##############################################################
 
-def podman_logs(id):
+def podman_logs(username, id):
     if(len(id) == 0):
         return ''
 
-    command = "podman --remote logs {0}".format(id)
+    podman_command = "podman --remote"
+    if username == "Local":
+        podman_command = "podman"
+
+    command = "{0} logs {1}".format(podman_command, id)
 
     logs = subprocess.run("{0}".format(command), shell=True,
                           capture_output=True).stdout.decode('utf-8')
@@ -73,8 +77,9 @@ socket_ = SocketIO(app, async_mode=async_mode, cors_allowed_origins="*")
 @socket_.on('event://update-logs')
 def update_logs(data):
     id = data.get('id')
+    username = data.get('username')
 
-    logs = podman_logs(id)
+    logs = podman_logs(username, id)
     logs_data = {}
     logs_data[id] = logs
 

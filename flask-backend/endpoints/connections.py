@@ -47,7 +47,7 @@ def connections_add():
     ip = connection['ip']
     podman_socket_path = connection['podmanSocketPath']
 
-    command = "podman-remote system connection add {0} \
+    command = "podman --remote system connection add {0} \
         --identity ~/.ssh/id_rsa \
             ssh://{0}@{1}{2}".format(username, ip, podman_socket_path)
 

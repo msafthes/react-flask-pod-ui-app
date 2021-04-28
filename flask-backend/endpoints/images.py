@@ -9,12 +9,23 @@ images_api = Blueprint('images_api', __name__)
 # Functions
 ##############################################################
 
-def podman_images():
+def podman_images(username):
     # Example: separating each info with #
     # docker.io/library/nginx#latest#6678c7c2e56c#4 weeks ago #131 MB
-    output = subprocess.run(['podman', 'images', '--format', '{{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}'],
-                              capture_output=True,
-                              universal_newlines=True)
+    podman_command = "podman --remote"
+    if username == "Local":
+        podman_command = "podman"
+
+
+    command = "{0} images --format '{{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}'".format(podman_command)
+
+    # output = subprocess.run(['podman', 'images', '--format', '{{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}'],
+    #                           capture_output=True,
+    #                           universal_newlines=True)
+
+    output = subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True, universal_newlines=True)
+
 
     error_images = output.stderr
 
@@ -55,7 +66,8 @@ def podman_images():
 # GET /images
 @images_api.route('/api/images', methods=['GET'])
 def get_images():
-    images, error_images = podman_images()
+    username = request.headers.get('Active-Username')
+    images, error_images = podman_images(username)
 
     if len(error_images) != 0:
         return handle_error_images(400, error_images)
@@ -69,7 +81,13 @@ def remove_images():
     length = len(image_ids)
     all_ids = " ".join(image_ids)
 
-    command = "podman --remote rmi {0}".format(all_ids)
+    username = request.headers.get('Active-Username')
+    podman_command = "podman --remote"
+    if username == "Local":
+        podman_command = "podman"
+
+
+    command = "{0} rmi {1}".format(podman_command, all_ids)
 
     error_remove = ''
 
@@ -80,7 +98,7 @@ def remove_images():
     if len(error_remove) != 0:
         return handle_error_images(400, error_remove)
 
-    images, error_images = podman_images()
+    images, error_images = podman_images(username)
 
     if len(error_images) != 0:
         return handle_error_images(400, error_images)
@@ -91,7 +109,14 @@ def remove_images():
 # DELETE /images/prune
 @images_api.route('/api/images/prune', methods=['DELETE'])
 def prune_images():
-    command = "podman --remote image prune -a -f"
+    username = request.headers.get('Active-Username')
+
+    podman_command = "podman --remote"
+    if username == "Local":
+        podman_command = "podman"
+
+
+    command = "{0} image prune -a -f".format(podman_command)
 
     error_prune = ''
 
@@ -101,7 +126,7 @@ def prune_images():
     if len(error_prune) != 0:
         return handle_error_images(400, error_prune)
 
-    images, error_images = podman_images()
+    images, error_images = podman_images(username)
 
     if len(error_images) != 0:
         return handle_error_images(400, error_images)
@@ -113,7 +138,14 @@ def prune_images():
 def images_pull():
     name = request.get_json().get("name")
     length = len(name)
-    command = "podman --remote pull {0}".format(name)
+
+    username = request.headers.get('Active-Username')
+
+    podman_command = "podman --remote"
+    if username == "Local":
+        podman_command = "podman"
+
+    command = "{0} pull {1}".format(podman_command, name)
 
     error_pull = ''
 
@@ -124,7 +156,7 @@ def images_pull():
     if len(error_pull) != 0:
         return handle_error_images(400, error_pull)
 
-    images, error_images = podman_images()
+    images, error_images = podman_images(username)
 
     if len(error_images) != 0:
         return handle_error_images(400, error_images)

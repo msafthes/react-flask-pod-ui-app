@@ -9,23 +9,35 @@ containers_api = Blueprint('containers_api', __name__)
 # Functions
 ##############################################################
 
-def podman_ps():
+def podman_ps(username):
     # Example: separating each info with #
     # 54a48d41f6d9#registry.fedoraproject.org/f29/httpd:latest#/usr/bin/run-http...#2 minutes ago#0.0.0.0:8080->8080/tcp#laughing_bassi#Running
-    command = 'podman --remote ps -a --format "{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}"'
+    podman_command = "podman --remote"
+    if username == "Local":
+        podman_command = "podman"
+
+    
+    command = '{0} ps -a --format "{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}"'.format(podman_command)
     output = ''
 
-    output = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 
-                                capture_output=True,
-                                universal_newlines=True)
+    # output = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 
+    #                             capture_output=True,
+    #                             universal_newlines=True)
+
+    output = subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True, universal_newlines=True)
 
     output_containers = output.stdout
     output_error = output.stderr
 
     if len(output_containers) == 0 and ("does not exist in database" in output_error):
-        output = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 
-                                stdout=subprocess.PIPE, 
-                                universal_newlines=True)
+        output = subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True, universal_newlines=True)
+
+    # if len(output_containers) == 0 and ("does not exist in database" in output_error):
+    #     output = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 
+    #                             stdout=subprocess.PIPE, 
+    #                             universal_newlines=True)
     
     output_containers = output.stdout
     output_error = output.stderr
@@ -64,7 +76,8 @@ def podman_ps():
 # GET /containers
 @containers_api.route('/api/containers', methods=['GET'])
 def get_containers():
-    containers, error_ps = podman_ps()
+    username = request.headers.get('Active-Username')
+    containers, error_ps = podman_ps(username)
     if len(error_ps) > 0:
         return handle_error_containers(400, error_ps)
     return jsonify(containers)
@@ -76,7 +89,13 @@ def remove_containers():
     length = len(container_ids)
     all_ids = " ".join(container_ids)
 
-    command = "podman --remote rm {0}".format(all_ids)
+    username = request.headers.get('Active-Username')
+    podman_command = "podman --remote"
+    if username == "Local":
+        podman_command = "podman"
+
+
+    command = "{0} rm {1}".format(podman_command, all_ids)
 
     error_remove = ''
 
@@ -87,7 +106,7 @@ def remove_containers():
     if len(error_remove) != 0:
         return handle_error_containers(400, error_remove)
 
-    containers, error_ps = podman_ps()
+    containers, error_ps = podman_ps(username)
     if len(error_ps) > 0:
         return handle_error_containers(400, error_ps)
     return jsonify(containers)
@@ -97,7 +116,14 @@ def remove_containers():
 def container_run():
     run_command = request.get_json().get("command")
     length = len(run_command)
-    command = "podman --remote run {0}".format(run_command)
+
+    username = request.headers.get('Active-Username')
+    podman_command = "podman --remote"
+    if username == "Local":
+        podman_command = "podman"
+
+
+    command = "{0} run {1}".format(podman_command, run_command)
 
     error_run = ''
 
@@ -108,7 +134,7 @@ def container_run():
     if len(error_run) != 0:
         return handle_error_containers(400, error_run)
 
-    containers, error_ps = podman_ps()
+    containers, error_ps = podman_ps(username)
     if len(error_ps) > 0:
         return handle_error_containers(400, error_ps)
     return jsonify(containers)
@@ -120,7 +146,13 @@ def containers_stop():
     length = len(container_ids)
     all_ids = " ".join(container_ids)
 
-    command = "podman --remote stop {0}".format(all_ids)
+    username = request.headers.get('Active-Username')
+    podman_command = "podman --remote"
+    if username == "Local":
+        podman_command = "podman"
+
+
+    command = "{0} stop {1}".format(podman_command, all_ids)
 
     error_stop = ''
 
@@ -131,7 +163,7 @@ def containers_stop():
     if len(error_stop) != 0:
         return handle_error_containers(400, error_stop)
     
-    containers, error_ps = podman_ps()
+    containers, error_ps = podman_ps(username)
     if len(error_ps) > 0:
         return handle_error_containers(400, error_ps)
     return jsonify(containers)
@@ -143,7 +175,12 @@ def containers_kill():
     length = len(container_ids)
     all_ids = " ".join(container_ids)
 
-    command = "podman --remote kill {0}".format(all_ids)
+    username = request.headers.get('Active-Username')
+    podman_command = "podman --remote"
+    if username == "Local":
+        podman_command = "podman"
+
+    command = "{0} kill {1}".format(podman_command, all_ids)
 
     error_kill = ''
 
@@ -155,7 +192,7 @@ def containers_kill():
         return handle_error_containers(400, error_kill)
     
     
-    containers, error_ps = podman_ps()
+    containers, error_ps = podman_ps(username)
     if len(error_ps) > 0:
         return handle_error_containers(400, error_ps)
     return jsonify(containers)
