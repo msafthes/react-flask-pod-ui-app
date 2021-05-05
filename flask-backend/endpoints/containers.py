@@ -16,8 +16,8 @@ def podman_ps(username):
     if username == "Local":
         podman_command = "podman"
 
-    
-    command = '{0} ps -a --format "{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}"'.format(podman_command)
+    command = podman_command + " ps -a --format {{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}"
+
     output = ''
 
     # output = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 

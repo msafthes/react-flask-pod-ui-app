@@ -17,7 +17,7 @@ def podman_images(username):
         podman_command = "podman"
 
 
-    command = "{0} images --format '{{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}'".format(podman_command)
+    command = podman_command + " images --format {{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}"
 
     # output = subprocess.run(['podman', 'images', '--format', '{{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}'],
     #                           capture_output=True,
