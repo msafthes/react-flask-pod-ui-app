@@ -24,7 +24,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Alert, AlertTitle } from '@material-ui/lab';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import AddIcon from '@material-ui/icons/Add';
 
 
 interface IMenuConnectionsProps {
@@ -166,7 +166,7 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleConnectionOpen}><AddCircleIcon color="primary" className={css.ConnectionAdd} />Add Connection</MenuItem>
+                <MenuItem onClick={handleConnectionOpen}><AddIcon color="primary" fontSize="large" className={css.ConnectionAdd} />Add Connection</MenuItem>
                 <Dialog open={openConnectionModal} onClose={handleConnectionClose} aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">New Connection</DialogTitle>
                     <DialogContent>
