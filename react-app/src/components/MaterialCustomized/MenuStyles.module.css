@@ -8,10 +8,11 @@
 
 .ButtonConnections {
     color: var(--color-purple) !important;
-    font-weight: 700 !important;
-    font-size: 1.15rem !important;
-    margin-top: 0.2rem !important;
     text-transform: capitalize !important;
+    letter-spacing: 0 !important;
+    padding: 8px 24px !important;
+    font-size: 1.5rem !important;
+    margin-top: 4px !important;
 }
 
 .RemoveConnection {
