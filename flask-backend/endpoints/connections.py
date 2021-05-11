@@ -38,11 +38,7 @@ def connections_key_get():
 # POST /connections
 @connections_api.route('/api/connections', methods=['POST'])
 def connections_add():
-    print("request.get_json()")
-    print(request.get_json())
     connection = request.get_json().get("connection")
-    print("connection:")
-    print(connection)
     username = connection['username']
     ip = connection['ip']
     podman_socket_path = connection['podmanSocketPath']
@@ -80,22 +76,8 @@ def connections_remove():
 # POST /connections/activate
 @connections_api.route('/api/connections/activate', methods=['POST'])
 def connections_activate():
-    print("request.get_json()")
-    print(request.get_json())
     connection = request.get_json().get("connection")
-    print("connection:")
-    print(connection)
     username = connection['username']
-    # print("request")
-    # print(request)
-    # print("request.get_json()")
-    # print(request.get_json())
-    # connection = request.get_json().get("connection")
-    # print("connection:")
-    # print(connection)
-    # username = connection['username']
-    # print("username:")
-    # print(username)
 
     command = "podman --remote system connection default {0}".format(username)
 
@@ -110,5 +92,5 @@ def connections_activate():
 # Errors
 @connections_api.errorhandler(400)
 def handle_error_connections(e, text):
-    print("errorhandler, e, text:", e, text)
+    # print("errorhandler, e, text:", e, text)
     return text, e

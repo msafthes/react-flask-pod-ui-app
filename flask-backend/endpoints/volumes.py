@@ -111,5 +111,5 @@ def volumes_remove():
 # Errors
 @volumes_api.errorhandler(400)
 def handle_error_volumes(e, text):
-    print("errorhandler, e, text:", e, text)
+    # print("errorhandler, e, text:", e, text)
     return text, e

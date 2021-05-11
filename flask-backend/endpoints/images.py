@@ -166,5 +166,5 @@ def images_pull():
 # Errors
 @images_api.errorhandler(400)
 def handle_error_images(e, text):
-    print("errorhandler, e, text:", e, text)
+    # print("errorhandler, e, text:", e, text)
     return text, e

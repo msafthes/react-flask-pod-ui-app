@@ -200,5 +200,5 @@ def containers_kill():
 # Errors
 @containers_api.errorhandler(400)
 def handle_error_containers(e, text):
-    print("errorhandler, e, text:", e, text)
+    # print("errorhandler, e, text:", e, text)
     return text, e
