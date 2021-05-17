@@ -236,7 +236,7 @@ const Volumes = (props: IVolumesProps) => {
                             <DialogTitle id="form-dialog-title">Create</DialogTitle>
                             <DialogContent>
                                 <DialogContentText>
-                                    Enter the name of volume you want to create"
+                                    Enter the name of volume you want to create
                             </DialogContentText>
                                 <TextField
                                     autoFocus

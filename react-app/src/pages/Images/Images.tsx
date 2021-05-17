@@ -304,7 +304,7 @@ const Images = (props: IImagesProps) => {
                             <DialogTitle id="form-dialog-title">Pull</DialogTitle>
                             <DialogContent>
                                 <DialogContentText>
-                                    Enter the image you want to pull"
+                                    Enter the image you want to pull
                             </DialogContentText>
                                 <TextField
                                     autoFocus
