@@ -111,8 +111,8 @@ def remove_containers():
         return handle_error_containers(400, error_ps)
     return jsonify(containers)
 
-# POST /container-run
-@containers_api.route('/api/container-run', methods=['POST'])
+# POST /containers/run
+@containers_api.route('/api/containers/run', methods=['POST'])
 def container_run():
     run_command = request.get_json().get("command")
     length = len(run_command)

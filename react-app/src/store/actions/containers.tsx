@@ -239,7 +239,7 @@ export const containerRun = (command: String) => {
         const activeUsername = getState().connections.activeConnection.username;
         dispatch(containerRunStart());
 
-        const url = `${API_BASE}/container-run`;
+        const url = `${API_BASE}/containers/run`;
         const headers = {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',

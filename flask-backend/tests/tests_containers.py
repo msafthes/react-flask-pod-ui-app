@@ -134,7 +134,7 @@ class ContainersTests(unittest.TestCase):
         with patch('endpoints.containers.podman_ps', Mock(return_value=containers_output)), \
             patch('endpoints.containers.subprocess.run', Mock(return_value=Output)), \
             patch('endpoints.containers.request', MagicMock(return_value=["123456"])):
-            response = app.test_client(self).post("/api/container-run")
+            response = app.test_client(self).post("/api/containers/run")
             result = response.json
             status = response.status_code
             self.assertEqual(status, SUCCESS)
@@ -148,7 +148,7 @@ class ContainersTests(unittest.TestCase):
         with patch('endpoints.containers.podman_ps', Mock(return_value=containers_output)),\
             patch('endpoints.containers.subprocess.run', Mock(return_value=Output)),\
             patch('endpoints.containers.request', MockedRequest()):
-            response = app.test_client(self).post("/api/container-run")
+            response = app.test_client(self).post("/api/containers/run")
             result = response.data.decode('utf-8')
             status = response.status_code
             self.assertEqual(status, ERROR)
