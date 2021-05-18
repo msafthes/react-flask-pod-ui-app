@@ -1,11 +1,7 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, render_template
 from flask_cors import CORS
-
-import subprocess
-
-import json
-
 from flask_socketio import SocketIO, emit, disconnect
+import subprocess
 
 # API Endpoints
 from endpoints.images import images_api
@@ -66,7 +62,7 @@ def podman_logs(username, id):
 # REST API
 ##############################################################
 
-# GET /
+# GET /api
 @app.route('/api', methods=['GET', 'POST'])
 def get_hello():
     return "Podman REST API"
@@ -89,6 +85,4 @@ def update_logs(data):
     emit('event://get-logs', logs_data)
 
 if __name__ == '__main__':
-    # app.run(debug=True)
-    # app.run()
     socket_.run(app, host=ip_address, debug=True)
