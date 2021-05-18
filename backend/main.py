@@ -21,6 +21,9 @@ app.register_blueprint(containers_api)
 app.register_blueprint(volumes_api)
 app.register_blueprint(connections_api)
 
+# Default host IP address is localhost (127.0.01)
+ip_address = "127.0.0.1"
+
 @app.route("/")
 @app.route("/images")
 @app.route("/containers")
@@ -88,4 +91,4 @@ def update_logs(data):
 if __name__ == '__main__':
     # app.run(debug=True)
     # app.run()
-    socket_.run(app, host="192.168.16.33", debug=True)
+    socket_.run(app, host=ip_address, debug=True)
