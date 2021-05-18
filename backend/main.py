@@ -22,7 +22,7 @@ app.register_blueprint(volumes_api)
 app.register_blueprint(connections_api)
 
 # Default host IP address is localhost (127.0.01)
-ip_address = "127.0.0.1"
+ip_address = "localhost"
 
 @app.route("/")
 @app.route("/images")
