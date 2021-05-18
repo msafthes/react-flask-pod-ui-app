@@ -67,6 +67,7 @@ This will start a React application that communicates with the Flask server sepa
 
 ### REST API
 Full REST API documentation for all Endpoints was created in Swagger<br/>https://app.swaggerhub.com/apis/M1362/Podman-UI/1.0.0<br/>It also contains examples of input parameters, returned results, as well as the objects that are used in the application such as Images, Containers, Volumes, and Connections.
+
 ### Backend Structure
 Here is a quick summary of the backend project structure and the meaning of its contents.
 `requirements.txt` = contains all Python dependencies used in this application.
@@ -77,7 +78,34 @@ Here is a quick summary of the backend project structure and the meaning of its 
 `tests` = contains all unit test files and a `mock.py` file for mocking functions, objects, and classes.
 
 ## Frontend
-x
+`config`, `scripts` and `public` = common folders in a React project, containing configurations such as for starting or building the app. 
+Other folders/files that are very common in a React app are not discussed in detail here. The following folders/files are important to this app.
+`tests` = a folder containing unit tests. The tests currently only cover some page/component rendering tests and events where a user clicks a button.
+Folders:
+`src` = a folder containing the actual application.
+`src/pages` = contains page components for Intro, Images, Containers, Volumes, Container Logs.
+`src/components` = contains UI components such as navigation, dropdowns menus, general layour or a loading indicator.
+`src/models` = contains TypeScript interface definitions for Image, Container, Volume and Connection objects.
+`src/helpers` = contains a file with helper functions, especially those that are re-used in multiple components.
+`src/testData` = contains a file with prepared objects for offline testing purposes (instead of live REST API).
+
+### Notable files in src folder (root level):
+`App.tsx` = contains the main application component (App), Routing and Redirecting configuration, 
+`config.tsx` = configuration file, discussed in detail earlier in this document in the `Configuration Files` section.
+`index.tsx` = configures Redux Store, makes the app store the Redux state in browser's Local Storage to prevent loss of data on page refresh. Also applies the WebSocket (see Viewport.tsx details), Viewport and Routing functionalities and renders the main App component to the DOM.
+`Viewport.tsx` = configures a way to allow screen size based conditional rendering instead of CSS "display: none". The advantage is that the elements that is conditionally rendered can prevent it from being rendered to the DOM while "display: none" only hides it while the elements are still processed and rendered. This application allows for both approaches, whichever the developers prefer.
+`WebSocket` = configures WebSocket functionality, it is used for periodically updating container logs. It is used together with Redux to store the data.
+
+### Redux
+All folders/file were designed in a way to make it explicit and modular, making it clear what happens where.
+`src/store` = a folder containg all files for Redux (State Management).
+* `index.tsx` = contains Redux Store configuration, combines Reducers, enables Redux Development Tools in browser, enables storing Redux state in browser's Local Storage and also asynchronous actions (using redux-thunk).
+* `actions` = all files related to Redux actions.
+* `actions/actionTypes.tsx` = a file with all action types and TypeScript interface definitions for action creators and states.
+* `actions/images`, `containers`, `volumes`, `connections` = files with action creator functions, this is also where Axios is used to make asynchronous requests to the REST API as well as any functions that affect the global state (Redux Store).
+* `actions/index.tsx` = exports all action creator functions in one place, making it easy to see what is available to be used anywhere in the application.
+* `reducers` = all files related to Redux reducers.
+* `reducers/images`, `containers`, `volumes`, `connections` = files with reducers. This is where actual changes to Redux Store are made based on which action was dispatched.
 
 ## Tests
 Frontend tests can be run in the `frontend` folder by executing `npm test` command.<br/>The tests cover some basic rendering as well as basic user interaction (for example clicking a button).
