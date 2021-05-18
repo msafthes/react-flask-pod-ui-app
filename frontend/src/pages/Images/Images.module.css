@@ -107,9 +107,6 @@
 
 /* desktop 1200 + */
 @media (min-width: 1200px) {
-    * {
-        /* color: red; */
-    }
     .Images {
         margin-top: 10rem;
     }
@@ -151,12 +148,7 @@
 }
 
 /* tabletLandscape 900 - 1199 */
-/* @media (min-width: 900px) and (max-width: 1199px) { */
 @media (max-width: 1199px) {
-    * {
-        /* color: blue; */
-    }
-    /* IMAGES */
     .Repository {
         width: 20rem;
     }
@@ -179,12 +171,7 @@
 }
 
 /* tabletPortrait 600 - 899 */
-/* @media (min-width: 600px) and (max-width: 899px) { */
 @media (max-width: 899px) {
-    * {
-        /* color: purple; */
-    }
-    /* IMAGES */
     .Repository {
         width: 17rem;
     }
@@ -193,7 +180,6 @@
     }
     .Buttons {
         flex-direction: column-reverse;
-        /* margin-top: 1rem; */
     }
     .Button {
         margin-top: 0.75rem !important;
@@ -205,12 +191,8 @@
 
 /* phone < 600 */
 @media (max-width: 599px) {
-    * {
-        /* color: green; */
-    }
     .Repository {
         width: fit-content;
-        /* width: auto; */
         word-break: break-word;
         margin-bottom: 1rem;
         margin-right: 0;

@@ -251,7 +251,6 @@ export const containerRun = (command: String) => {
 
         try {
             const response = await axios.post(url, data, { headers: headers, });
-            // -dt -p 8080:8080 --rm docker.io/library/alpine /bin/sh
             const parts = command.split(" ");
 
             parts.forEach(part => {
