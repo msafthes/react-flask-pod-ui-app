@@ -31,11 +31,11 @@ ip_address = "127.0.0.1"
 @app.route("/container_logs:id")
 @app.route("/connections")
 def frontend_app():
-    return render_template("index.html", flask_token="Hello Flask+React")
+    return render_template("index.html", flask_token="Podman UI Token")
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template("index.html", flask_token="Hello Flask+React")
+    return render_template("index.html", flask_token="Podman UI Token")
 
 ##############################################################
 # Functions
