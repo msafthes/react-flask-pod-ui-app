@@ -1,10 +1,8 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
 import throttle from 'lodash.throttle';
 
 import './App.css';
-import { AppState } from './store';
 import { imagesDataTest, containersDataTest, volumesDataTest } from './testData/testData';
 
 import Layout from './components/Layout/Layout';
@@ -34,11 +32,8 @@ const Volumes = React.lazy(() => {
   return import('./pages/Volumes/Volumes');
 });
 
-interface IAppProps {
-  isAuthenticated: boolean
-}
 
-const App = (props: IAppProps) => {
+const App = () => {
   const [isDesktop, setIsDesktop] = useState<boolean>(window.innerWidth >= 1000);
 
   const handleWindowResize = () => {
@@ -87,14 +82,4 @@ const App = (props: IAppProps) => {
   );
 }
 
-const mapStateToProps = (state: AppState) => {
-  return {
-    isAuthenticated: true,
-  };
-};
-
-export default withRouter(
-  connect(
-    mapStateToProps,
-  )(App)
-);
+export default withRouter(App);
