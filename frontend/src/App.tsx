@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import throttle from 'lodash.throttle';
 
 import './App.css';
-import { Connection } from './models/Models';
 import { AppState } from './store';
 import { imagesDataTest, containersDataTest, volumesDataTest } from './testData/testData';
 
