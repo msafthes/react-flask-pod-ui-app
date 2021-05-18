@@ -3,12 +3,17 @@ import subprocess
 import json
 
 
+# For detailed information about what each Endpoint does, 
+# see the Swagger REST API Documentation (link in README.md)
+
+# allows to be imported in the main.py file
 volumes_api = Blueprint('volumes_api', __name__)
 
 ##############################################################
 # Functions
 ##############################################################
 
+# Get a list of all available volumes
 def podman_volumes(username):
     podman_command = "podman --remote"
     if username == "Local":
@@ -111,5 +116,4 @@ def volumes_remove():
 # Errors
 @volumes_api.errorhandler(400)
 def handle_error_volumes(e, text):
-    # print("errorhandler, e, text:", e, text)
     return text, e

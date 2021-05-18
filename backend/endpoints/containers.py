@@ -3,12 +3,17 @@ import subprocess
 import json
 
 
+# For detailed information about what each Endpoint does, 
+# see the Swagger REST API Documentation (link in README.md)
+
+# allows to be imported in the main.py file
 containers_api = Blueprint('containers_api', __name__)
 
 ##############################################################
 # Functions
 ##############################################################
 
+# Get a list of all available containers
 def podman_ps(username):
     # Example: separating each info with #
     # 54a48d41f6d9#registry.fedoraproject.org/f29/httpd:latest#/usr/bin/run-http...#2 minutes ago#0.0.0.0:8080->8080/tcp#laughing_bassi#Running
@@ -20,10 +25,6 @@ def podman_ps(username):
 
     output = ''
 
-    # output = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 
-    #                             capture_output=True,
-    #                             universal_newlines=True)
-
     output = subprocess.run("{0}".format(command), shell=True,
                        capture_output=True, universal_newlines=True)
 
@@ -34,11 +35,6 @@ def podman_ps(username):
         output = subprocess.run("{0}".format(command), shell=True,
                        capture_output=True, universal_newlines=True)
 
-    # if len(output_containers) == 0 and ("does not exist in database" in output_error):
-    #     output = subprocess.run(['podman', 'ps', '-a', '--format', '{{.ID}}#{{.Image}}#{{.Command}}#{{.RunningFor}}#{{.Ports}}#{{.Names}}#{{.Status}}'], 
-    #                             stdout=subprocess.PIPE, 
-    #                             universal_newlines=True)
-    
     output_containers = output.stdout
     output_error = output.stderr
 
@@ -73,6 +69,7 @@ def podman_ps(username):
 
 ##############################################################
 # Containers
+
 # GET /containers
 @containers_api.route('/api/containers', methods=['GET'])
 def get_containers():
@@ -200,5 +197,4 @@ def containers_kill():
 # Errors
 @containers_api.errorhandler(400)
 def handle_error_containers(e, text):
-    # print("errorhandler, e, text:", e, text)
     return text, e

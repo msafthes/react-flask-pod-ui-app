@@ -6,7 +6,7 @@ from main import app
 from tests.mocks import *
 
 
-# CONNECTIONS
+# Tests for the CONNECTIONS Endpoints
 class ConnectionsTests(unittest.TestCase):
     def test_connections_key_get_success(self):
         Output.stdout = "123456"

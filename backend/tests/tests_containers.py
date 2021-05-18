@@ -7,7 +7,7 @@ from endpoints.containers import podman_ps
 from tests.mocks import *
 
 
-# CONTAINERS
+# Tests for the CONTAINERS Endpoints
 class ContainersTests(unittest.TestCase):
     def test_podman_ps_success(self):
         expected = {"containers": [{'containerId': "54a48d41f6d9", 'image': "registry.fedoraproject.org/f29/httpd:latest", 'command': "/usr/bin/run-http...", 'created': "2 minutes ago", 'ports': "0.0.0.0:8080->8080/tcp", 'names': "laughing_bassi", 'status': "Running"}]}

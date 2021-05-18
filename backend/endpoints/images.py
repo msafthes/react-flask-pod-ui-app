@@ -3,12 +3,17 @@ import subprocess
 import json
 
 
+# For detailed information about what each Endpoint does, 
+# see the Swagger REST API Documentation (link in README.md)
+
+# allows to be imported in the main.py file
 images_api = Blueprint('images_api', __name__)
 
 ##############################################################
 # Functions
 ##############################################################
 
+# Get a list of all available images
 def podman_images(username):
     # Example: separating each info with #
     # docker.io/library/nginx#latest#6678c7c2e56c#4 weeks ago #131 MB
@@ -19,13 +24,8 @@ def podman_images(username):
 
     command = podman_command + " images --format {{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}"
 
-    # output = subprocess.run(['podman', 'images', '--format', '{{.Repository}}#{{.Tag}}#{{.ID}}#{{.Created}}#{{.Size}}'],
-    #                           capture_output=True,
-    #                           universal_newlines=True)
-
     output = subprocess.run("{0}".format(command), shell=True,
                        capture_output=True, universal_newlines=True)
-
 
     error_images = output.stderr
 
@@ -166,5 +166,4 @@ def images_pull():
 # Errors
 @images_api.errorhandler(400)
 def handle_error_images(e, text):
-    # print("errorhandler, e, text:", e, text)
     return text, e
