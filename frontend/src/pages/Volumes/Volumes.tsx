@@ -41,7 +41,7 @@ interface IVolumesProps {
 
 const Volumes = (props: IVolumesProps) => {
     const { fetchVolumes, createVolume, removeVolumes, volumes, errorVolumes, loading } = props;
-    const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
+    const { tabletLandscape, desktop } = useViewport();
 
     // used for selected volumes initialization
     const defaultSelectedVolumes = {};
