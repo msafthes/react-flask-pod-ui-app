@@ -15,6 +15,8 @@ import volumesReducer from './reducers/volumes';
 import connectionsReducer from './reducers/connections';
 
 
+// For more details about the whole Redux setup, check the Documentation in README.md
+
 declare global {
     interface Window {
         __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
@@ -40,7 +42,6 @@ export const history = createBrowserHistory();
 
 const persistedReducer = persistReducer(persistConfig, rootReducer(history));
 
-// export type AppState = ReturnType<typeof rootReducer>;
 export type AppState = any;
 
 export function configureStore(): Store<AppState> {

@@ -16,6 +16,7 @@ declare global {
 }
 
 
+// These components (pages) are loaded only when first requested by the user, else it never loads
 const Images = React.lazy(() => {
   return import('./pages/Images/Images');
 });
@@ -62,6 +63,7 @@ const App = () => {
     }
   }, []);
 
+  // Setting up the Routing functionality, if no valid URL is accessed, it redirects to the home (Intro) page
   const routes = (
     <Switch>
       <Route path="/" exact component={Intro} />

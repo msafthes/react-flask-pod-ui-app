@@ -8,6 +8,8 @@ export const isAllTrue = (obj: Object) => {
     return true;
 };
 
+// The following two functions handle the main select checkbox, if there is < all elements selected, it selects all of them
+// if all elements are selected, it deselects all of them
 export const toggleSelectAll = (obj: Object, allTrue: Boolean) => {
     for (const [key, value] of Object.entries(obj)) {
         if (allTrue) {
@@ -26,6 +28,7 @@ export const handleSelectAll = (selectedItems: Object) => {
     return updated
 };
 
+// Checks if any element is selected
 export const isSelectedAny = (selectedItems: Object) => {
     for (const [key, value] of Object.entries(selectedItems)) {
         if (value === true) {
@@ -35,6 +38,7 @@ export const isSelectedAny = (selectedItems: Object) => {
     return false;
 };
 
+// Checks if 1 element is selected
 export const isSelectedOne = (selectedItems: Object) => {
     let count = 0;
 
@@ -47,6 +51,7 @@ export const isSelectedOne = (selectedItems: Object) => {
     return count === 1;
 };
 
+// Extracts IDs from elements and returns them as an array
 export const extractIds = (items: Object) => {
     const imageIds = [];
     for (const [key, value] of Object.entries(items)) {
@@ -57,6 +62,7 @@ export const extractIds = (items: Object) => {
     return imageIds;
 };
 
+// Extracts selected elements and returns them as an array
 export const extractSelected = (items) => {
     const selectedItems = [];
     for (const [key, value] of Object.entries(items)) {

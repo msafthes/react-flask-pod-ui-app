@@ -4,7 +4,9 @@ import { WS_BASE } from './config';
 import { useDispatch } from 'react-redux';
 import * as actions from './store/actions/index';
 
-
+// Creating a Context to be accessible from anywhere in the application
+// This is used for two-way communication between frontend and backend to fetch and periodically
+// update the container logs information
 const WebSocketContext = createContext(null)
 
 export { WebSocketContext }

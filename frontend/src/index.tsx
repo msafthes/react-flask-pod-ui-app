@@ -15,9 +15,12 @@ import WebSocketProvider from './WebSocket';
 import { ViewportProvider } from './Viewport';
 
 
+// Configure Redux Store
 const store = configureStore();
+// Stores Redux state in browser's Local Storage to prevent loss of data on page refresh
 const persistor = persistStore(store)
 
+// Applies the Redux Store, Local Storage, WebSocket, Viewport and Routing functionality to the main App component
 const app = (
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>

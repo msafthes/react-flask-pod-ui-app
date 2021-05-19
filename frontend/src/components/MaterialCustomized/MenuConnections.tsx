@@ -50,14 +50,17 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
     const [openConnectionModal, setOpenConnectionModal] = useState(false);
     const [newConnection, setNewConnection] = useState<Connection>({ username: '', ip: '', podmanSocketPath: '' });
 
+    // fetch SSH key from Backend
     useEffect(() => {
         fetchKey();
     }, [fetchKey]);
 
+    // checks if there is an error from backend
     useEffect(() => {
         setShowBackendError(errorConnections.length > 0);
     }, [errorConnections]);
 
+    // handles opening and closing of the form for adding a new connection
     const handleConnectionOpen = () => {
         setOpenConnectionModal(true);
     };
@@ -66,6 +69,7 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
         setOpenConnectionModal(false);
     };
 
+    // the following 3 functions deal with input changes based on what user types
     const onChangeNewUsername = (e) => {
         setNewConnection({ ...newConnection, username: e.target.value });
     };
@@ -78,6 +82,7 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
         setNewConnection({ ...newConnection, podmanSocketPath: e.target.value });
     };
 
+    // handles adding a new Remote Podman connection
     const handleAddConnection = () => {
         setOpenConnectionModal(false);
         if (!newConnection.username || !newConnection.ip || !newConnection.podmanSocketPath ||
@@ -91,14 +96,17 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
         setNewConnection({ username: '', ip: '', podmanSocketPath: '' });
     };
 
+    // triggers the Redux action to remove a specific connection
     const handleRemoveConnection = (removedConnection: Connection) => {
         removeConnection(removedConnection);
     };
 
+    // triggers the Redux action to activate a specific connection
     const handleActivateConnection: any = (activatedConnection: Connection) => {
         activateConnection(activatedConnection);
     };
 
+    // the following 2 functions handle opening and closing of this dropdown menu
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -233,6 +241,7 @@ const MenuConnections = (props: IMenuConnectionsProps) => {
     )
 }
 
+// Redux Store variables
 const mapStateToProps = (state: AppState) => {
     return {
         connections: state.connections.connections,
@@ -243,6 +252,7 @@ const mapStateToProps = (state: AppState) => {
     };
 };
 
+// Redux Store actions
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
         fetchKey: () =>

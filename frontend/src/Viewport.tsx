@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import throttle from 'lodash.throttle';
 
-
+// Creating a Context to be accessible from anywhere in the application
+// This is used for conditional rendering as an alternative to "display: none" in CSS
 const ViewportContext: any = createContext({});
 
 export const ViewportProvider = ({ children }) => {
