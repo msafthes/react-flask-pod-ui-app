@@ -42,6 +42,7 @@ const ContainerLogs = (props: IContainerLogsProps) => {
     const id = props.match.params.id;
     const containerLogs = props.containerLogs;
 
+    // stores the main content - information about container's logs
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>;
 
     if (containerLogs && containerLogs[id]) {
