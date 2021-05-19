@@ -12,8 +12,6 @@ import { Connection } from '../../models/Models';
 import css from './ContainerLogs.module.css';
 import LoadingIndicator from '../../components/UI/LoadingIndicator/LoadingIndicator';
 
-import { useViewport } from '../../Viewport';
-
 
 interface IContainerLogsProps {
     containerLogs: any,
@@ -26,15 +24,16 @@ interface IContainerLogsProps {
 
 const ContainerLogs = (props: IContainerLogsProps) => {
     const { activeConnection } = props;
-    const ws = useContext(WebSocketContext);
 
+    // getting the WebSocket context to use for fetching and updating container logs
+    const ws = useContext(WebSocketContext);
     const updateLogs = () => {
         ws.updateLogs(props.match.params.id, activeConnection.username);
     }
 
     useEffect(() => {
         const interval = setInterval(() => updateLogs(), 5000);
-        // returned function will be called on component unmount 
+        // this returned function will be called on component unmount, clearing the interval
         return () => {
             clearInterval(interval)
         }
@@ -62,6 +61,7 @@ const ContainerLogs = (props: IContainerLogsProps) => {
     );
 };
 
+// Redux Store variables
 const mapStateToProps = (state: AppState) => {
     return {
         containerLogs: state.containers.containerLogs,
@@ -69,9 +69,10 @@ const mapStateToProps = (state: AppState) => {
     };
 };
 
+// Redux Store actions
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        //
+        // nothing needed yet
     };
 };
 
