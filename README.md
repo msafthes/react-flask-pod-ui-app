@@ -78,6 +78,7 @@ Here is a quick summary of the backend project structure and the meaning of its 
 `tests` = contains all unit test files and a `mock.py` file for mocking functions, objects, and classes.
 
 ## Frontend
+The application uses TypeScript, it covers most of the important parts of code, however, the coverage is not 100% and it is recommended to improve and extend it eventually.
 `config`, `scripts` and `public` = common folders in a React project, containing configurations such as for starting or building the app. 
 Other folders/files that are very common in a React app are not discussed in detail here. The following folders/files are important to this app.
 `tests` = a folder containing unit tests. The tests currently only cover some page/component rendering tests and events where a user clicks a button.
