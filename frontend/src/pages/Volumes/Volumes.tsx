@@ -43,27 +43,34 @@ const Volumes = (props: IVolumesProps) => {
     const { fetchVolumes, createVolume, removeVolumes, volumes, errorVolumes, loading } = props;
     const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
 
+    // used for selected volumes initialization
     const defaultSelectedVolumes = {};
 
+    // by default no volumes are selected
     for (const [key, value] of Object.entries(volumes)) {
         defaultSelectedVolumes[value.Name] = false
     }
 
+    // local state
     const [selectedVolumes, setSelectedVolumes] = useState<any>({ ...defaultSelectedVolumes });
     const [openCreateVolumeModal, setOpenCreateVolumeModal] = useState(false);
     const [createVolumeName, setCreateVolumeName] = useState("");
     const [showBackendError, setShowBackendError] = useState<boolean>(false);
 
+    // tracks if all volumes are selected in which case the main select checkbox becomes checked
     const allTrue = isAllTrue(selectedVolumes);
 
+    // fetch information about volumes
     useEffect(() => {
         fetchVolumes();
     }, [fetchVolumes]);
 
+    // checks if there is an error from backend
     useEffect(() => {
         setShowBackendError(errorVolumes.length > 0);
     }, [errorVolumes]);
 
+    // whenever volumes data updates, add them to the selected volumes state, false by default
     useEffect(() => {
         const newSelected = {};
         for (const [key, value] of Object.entries(volumes)) {
@@ -72,6 +79,7 @@ const Volumes = (props: IVolumesProps) => {
         setSelectedVolumes({ ...newSelected });
     }, [volumes]);
 
+    // handles select volume checkbox event
     const handleCheckboxChange = changeEvent => {
         const { id } = changeEvent.target;
         const old = { ...selectedVolumes };
@@ -85,6 +93,8 @@ const Volumes = (props: IVolumesProps) => {
         setSelectedVolumes(old);
     };
 
+    // the following 4 functions handle the "create volume" functionality, opening and closing the modal,
+    // changing its name value as user types and triggers the appropriate Redux action to actually create the volume.
     const handleCreateVolumeOpen = () => {
         setOpenCreateVolumeModal(true);
     };
@@ -106,6 +116,7 @@ const Volumes = (props: IVolumesProps) => {
         setCreateVolumeName('');
     };
 
+    // handles various volume operations triggered from the ACTIONS button for a specific volume (not using the select feature)
     const handleVolumeOperation = (selectedVolumes, mode: string) => {
         const volumesNames = extractIds(selectedVolumes);
 
@@ -126,15 +137,18 @@ const Volumes = (props: IVolumesProps) => {
         setSelectedVolumes(updated);
     };
 
+    // marks all volumes as selected
     const selectAll = () => {
         const updated = handleSelectAll(selectedVolumes);
         setSelectedVolumes(updated);
     };
 
+    // if there is a selected volume, the operations that require selection become available
     const isSelected = isSelectedAny(selectedVolumes);
 
     const volumesTitleClasses = [css.Content, css.Heading];
 
+    // stores the main content - information about volumes
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>
 
     if (volumes) {
@@ -287,6 +301,7 @@ const Volumes = (props: IVolumesProps) => {
     );
 };
 
+// Redux Store variables
 const mapStateToProps = (state: AppState) => {
     return {
         volumes: state.volumes.volumes,
@@ -295,6 +310,7 @@ const mapStateToProps = (state: AppState) => {
     };
 };
 
+// Redux Store actions
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
         fetchVolumes: () =>
