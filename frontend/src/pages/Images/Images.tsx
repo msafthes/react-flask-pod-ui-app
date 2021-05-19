@@ -14,7 +14,6 @@ import { isAllTrue, handleSelectAll, isSelectedAny, extractIds } from '../../hel
 import { useViewport } from '../../Viewport';
 
 // Material UI
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
@@ -46,7 +45,7 @@ interface IImagesProps {
 
 const Images = (props: IImagesProps) => {
     const { fetchImages, removeImages, pruneImages, pullImage, images, containers, fetchContainers, errorContainers, errorImages, loading } = props;
-    const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
+    const { phone, tabletLandscape, desktop } = useViewport();
 
     // used for selected images initialization
     const defaultSelectedImages = {};
@@ -182,12 +181,6 @@ const Images = (props: IImagesProps) => {
     const isSelected = isSelectedAny(selectedImages);
 
     const imagesTitleClasses = [css.Content, css.Heading];
-    const useStyles = makeStyles({
-        buttonGroup: {
-            alignSelf: "flex-start",
-        }
-    });
-    const classes = useStyles();
 
     // stores the main content - information about images
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>
