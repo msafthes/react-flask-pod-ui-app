@@ -14,7 +14,6 @@ import { isAllTrue, handleSelectAll, isSelectedAny, extractSelected } from '../.
 import { useViewport } from '../../Viewport';
 
 // Material UI
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
@@ -50,7 +49,7 @@ interface IContainersProps {
 
 const Containers = (props: IContainersProps) => {
     const { fetchContainers, removeContainers, stopContainers, killContainers, containerRun, containers, errorContainers, loading } = props;
-    const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
+    const { phone, tabletLandscape, desktop } = useViewport();
 
     // used for selected containers initialization
     const defaultSelectedContainers = {};
@@ -183,12 +182,6 @@ const Containers = (props: IContainersProps) => {
     const isSelected = isSelectedAny(selectedContainers);
 
     const containersTitleClasses = [css.Content, css.Heading];
-    const useStyles = makeStyles({
-        buttonGroup: {
-            alignSelf: "flex-start"
-        }
-    });
-    const classes = useStyles();
 
     // stores the main content - information about containers
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>
