@@ -52,12 +52,15 @@ const Containers = (props: IContainersProps) => {
     const { fetchContainers, removeContainers, stopContainers, killContainers, containerRun, containers, errorContainers, loading } = props;
     const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
 
+    // used for selected containers initialization
     const defaultSelectedContainers = {};
 
+    // by default no containers are selected
     for (const [key, value] of Object.entries(containers)) {
         defaultSelectedContainers[value.containerId] = false
     }
 
+    // local state
     const [selectedContainers, setSelectedContainers] = useState<any>({ ...defaultSelectedContainers });
     const [openRunModal, setOpenRunModal] = useState(false);
     const [runCommand, setRunCommand] = useState("");
@@ -65,12 +68,20 @@ const Containers = (props: IContainersProps) => {
     const [showBackendError, setShowBackendError] = useState<boolean>(false);
     const [errorInfo, setErrorInfo] = useState<string>("");
 
+    // tracks if all containers are selected in which case the main select checkbox becomes checked
     const allTrue = isAllTrue(selectedContainers);
 
+    // fetch information about containers
     useEffect(() => {
         fetchContainers();
     }, [fetchContainers]);
 
+    // checks if there is an error from backend
+    useEffect(() => {
+        setShowBackendError(errorContainers.length > 0);
+    }, [errorContainers]);
+
+    // whenever containers data updates, add them to the selected containers state, false by default
     useEffect(() => {
         const newSelected = {};
         for (const [key, value] of Object.entries(containers)) {
@@ -79,10 +90,22 @@ const Containers = (props: IContainersProps) => {
         setSelectedContainers({ ...newSelected });
     }, [containers]);
 
-    useEffect(() => {
-        setShowBackendError(errorContainers.length > 0);
-    }, [errorContainers]);
+    // handles select container checkbox event
+    const handleCheckboxChange = changeEvent => {
+        const { id } = changeEvent.target;
+        const old = { ...selectedContainers };
 
+        for (const [key, value] of Object.entries(old)) {
+            if (id === key) {
+                old[key] = !old[key];
+            }
+        }
+
+        setSelectedContainers(old);
+    };
+
+    // the following 4 functions handle the "run" functionality for a container, opening and closing the modal,
+    // changing its name value as user types and triggers the appropriate Redux action to actually run the container command.
     const handleRunOpen = () => {
         setOpenRunModal(true);
     };
@@ -104,19 +127,7 @@ const Containers = (props: IContainersProps) => {
         setRunCommand('');
     };
 
-    const handleCheckboxChange = changeEvent => {
-        const { id } = changeEvent.target;
-        const old = { ...selectedContainers };
-
-        for (const [key, value] of Object.entries(old)) {
-            if (id === key) {
-                old[key] = !old[key];
-            }
-        }
-
-        setSelectedContainers(old);
-    };
-
+    // handles deletion of all selected containers, if there is a container that is currently running, an error is shown
     const handleRemoveContainers = (selectedContainers, containerIds) => {
         let runningContainersIds = [];
         containers.forEach((container) => {
@@ -134,7 +145,7 @@ const Containers = (props: IContainersProps) => {
         }
     };
 
-    // Function to handle various container operations, ready to be used for "all" containers as well
+    // handles various container operations triggered from the ACTIONS button for a specific container (not using the select feature)
     const handleContainerOperation = (selectedContainers, mode: string) => {
         const containerIds = extractSelected(selectedContainers);
 
@@ -162,11 +173,13 @@ const Containers = (props: IContainersProps) => {
         setSelectedContainers(updated);
     };
 
+    // marks all containers as selected
     const selectAll = () => {
         const updated = handleSelectAll(selectedContainers);
         setSelectedContainers(updated);
     };
 
+    // if there is a selected container, the operations that require selection become available
     const isSelected = isSelectedAny(selectedContainers);
 
     const containersTitleClasses = [css.Content, css.Heading];
@@ -177,6 +190,7 @@ const Containers = (props: IContainersProps) => {
     });
     const classes = useStyles();
 
+    // stores the main content - information about containers
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>
 
     if (containers) {
@@ -375,6 +389,7 @@ const Containers = (props: IContainersProps) => {
     );
 };
 
+// Redux Store variables
 const mapStateToProps = (state: AppState) => {
     return {
         containers: state.containers.containers,
@@ -383,6 +398,7 @@ const mapStateToProps = (state: AppState) => {
     };
 };
 
+// Redux Store actions
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
         fetchContainers: () =>
