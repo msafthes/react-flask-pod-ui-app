@@ -48,12 +48,15 @@ const Images = (props: IImagesProps) => {
     const { fetchImages, removeImages, pruneImages, pullImage, images, containers, fetchContainers, errorContainers, errorImages, loading } = props;
     const { width, phone, tabletPortrait, tabletLandscape, desktop } = useViewport();
 
+    // used for selected images initialization
     const defaultSelectedImages = {};
 
+    // by default no images are selected
     for (const [key, value] of Object.entries(images)) {
         defaultSelectedImages[value.id] = false
     }
 
+    // local state
     const [selectedImages, setSelectedImages] = useState<any>({ ...defaultSelectedImages });
     const [showError, setShowError] = useState<boolean>(false);
     const [showBackendError, setShowBackendError] = useState<boolean>(false);
@@ -61,17 +64,21 @@ const Images = (props: IImagesProps) => {
     const [openPullModal, setOpenPullModal] = useState(false);
     const [pullImageName, setPullImageName] = useState("");
 
+    // tracks if all images are selected in which case the main select checkbox becomes checked
     const allTrue = isAllTrue(selectedImages);
 
+    // fetch information about images and containers
     useEffect(() => {
         fetchImages();
         fetchContainers();
     }, [fetchImages, fetchContainers]);
 
+    // checks if there is an error from backend
     useEffect(() => {
         setShowBackendError(errorContainers.length > 0 || errorImages.length > 0);
     }, [errorContainers, errorImages]);
 
+    // whenever images data updates, add them to the selected images state, false by default
     useEffect(() => {
         const newSelected = {};
         for (const [key, value] of Object.entries(images)) {
@@ -80,6 +87,7 @@ const Images = (props: IImagesProps) => {
         setSelectedImages({ ...newSelected });
     }, [images]);
 
+    // handles select image checkbox event
     const handleCheckboxChange = changeEvent => {
         const { id } = changeEvent.target;
         const old = { ...selectedImages };
@@ -93,6 +101,8 @@ const Images = (props: IImagesProps) => {
         setSelectedImages(old);
     };
 
+    // the following 4 functions handle the "pull" functionality for an image, opening and closing the modal,
+    // changing its name value as user types and triggers the appropriate Redux action to actually pull the image.
     const handlePullOpen = () => {
         setOpenPullModal(true);
     };
@@ -114,6 +124,8 @@ const Images = (props: IImagesProps) => {
         setPullImageName('');
     };
 
+    // handles deletion of all selected images, if there is a container that depends on this image, an error message
+    // is displayed, letting the user know which of the images cannot be deleted.
     const handleRemoveImages = (images, imageIds) => {
         const usedImages = [];
         let usedImagesNames = [];
@@ -139,6 +151,7 @@ const Images = (props: IImagesProps) => {
         }
     };
 
+    // handles various image operations triggered from the ACTIONS button for a specific image (not using the select feature)
     const handleImageOperation = (selectedImages, mode: string) => {
         const imageIds = extractIds(selectedImages);
 
@@ -159,11 +172,13 @@ const Images = (props: IImagesProps) => {
         setSelectedImages(updated);
     };
 
+    // marks all images as selected
     const selectAll = () => {
         const updated = handleSelectAll(selectedImages);
         setSelectedImages(updated);
     };
 
+    // if there is a selected image, the operations that require selection become available
     const isSelected = isSelectedAny(selectedImages);
 
     const imagesTitleClasses = [css.Content, css.Heading];
@@ -174,6 +189,7 @@ const Images = (props: IImagesProps) => {
     });
     const classes = useStyles();
 
+    // stores the main content - information about images
     let content = <div className={css.Wrapper}><LoadingIndicator /></div>
 
     if (images) {
@@ -382,6 +398,7 @@ const Images = (props: IImagesProps) => {
     );
 };
 
+// Redux Store variables
 const mapStateToProps = (state: AppState) => {
     return {
         images: state.images.images,
@@ -392,6 +409,7 @@ const mapStateToProps = (state: AppState) => {
     };
 };
 
+// Redux Store actions
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
         fetchImages: () =>
