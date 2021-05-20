@@ -175,8 +175,8 @@ export const activateConnectionFail = (error: string) => {
 };
 
 export const activateConnection = (connection: Connection) => {
-    return async (dispatch: ThunkDispatch<any, any, AnyAction>, getState) => {
-        const activeUsername = getState().connections.activeConnection.username;
+    return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+        const activeUsername = connection.username;
         dispatch(activateConnectionStart());
 
         const url = `${API_BASE}/connections/activate`;
