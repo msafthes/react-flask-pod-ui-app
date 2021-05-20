@@ -141,7 +141,7 @@ export const pruneImages = () => {
             const response = await axios.delete(url, { headers: headers, });
             dispatch(pruneImagesSuccess(response.data.images));
         } catch (err) {
-            err.reponse ?
+            err.response ?
                 dispatch(pruneImagesFail(err.response.data))
                 :
                 dispatch(pruneImagesFail("Server does not respond while trying to prune images."))
@@ -191,7 +191,7 @@ export const pullImage = (name: string) => {
             const response = await axios.post(url, data, { headers: headers, });
             dispatch(pullImageSuccess(response.data.images));
         } catch (err) {
-            err.reponse ?
+            err.response ?
                 dispatch(pullImageFail(err.response.data))
                 :
                 dispatch(pullImageFail("Server does not respond while trying to pull image."))
