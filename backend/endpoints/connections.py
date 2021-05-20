@@ -34,7 +34,7 @@ def connections_key_get():
     error_connections = ''
     error_connections = output.stderr
 
-    if len(error_connections) != 0:
+    if output.returncode != 0:
         return handle_error_connections(400, error_connections)
 
     result = {"sshKey": key}
@@ -54,10 +54,11 @@ def connections_add():
             ssh://{0}@{1}{2}".format(username, ip, podman_socket_path)
 
 
-    error_connections = subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True, universal_newlines=True).stderr
+    output = subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True, universal_newlines=True)
 
-    if len(error_connections) != 0:
+    error_connections = output.stderr
+    if output.returncode != 0:
         return handle_error_connections(400, error_connections)
     
     return "success"
@@ -71,10 +72,11 @@ def connections_remove():
     command = "podman --remote system connection remove {0}".format(username)
 
 
-    error_connections = subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True, universal_newlines=True).stderr
+    output = subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True, universal_newlines=True)
 
-    if len(error_connections) != 0:
+    error_connections = output.stderr
+    if output.returncode != 0:
         return handle_error_connections(400, error_connections)
     
     return "success"
@@ -87,10 +89,11 @@ def connections_activate():
 
     command = "podman --remote system connection default {0}".format(username)
 
-    error_connections = subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True, universal_newlines=True).stderr
+    output = subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True, universal_newlines=True)
 
-    if len(error_connections) != 0:
+    error_connections = output.stderr
+    if output.returncode != 0:
         return handle_error_connections(400, error_connections)
     
     return "success"

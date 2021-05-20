@@ -26,7 +26,7 @@ def podman_volumes(username):
     
     error_volumes = output.stderr
 
-    if len(error_volumes) != 0:
+    if output.returncode != 0:
         return {}, error_volumes
 
     volumes = output.stdout
@@ -56,7 +56,6 @@ def volumes_get():
 @volumes_api.route('/api/volumes/create', methods=['POST'])
 def volumes_create():
     name = request.get_json().get("name")
-    length = len(name)
 
     username = request.headers.get('Active-Username')
     podman_command = "podman --remote"
@@ -66,13 +65,11 @@ def volumes_create():
 
     command = "{0} volume create {1}".format(podman_command, name)
 
-    error_create = ''
+    output = subprocess.run("{0}".format(command), shell=True,
+                    capture_output=True, universal_newlines=True)
 
-    if length != 0:
-        error_create = subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True, universal_newlines=True).stderr
-
-    if len(error_create) != 0:
+    error_create = output.stderr
+    if output.returncode != 0:
         return handle_error_volumes(400, error_create)
 
     volumes, error_volumes = podman_volumes(username)
@@ -86,7 +83,6 @@ def volumes_create():
 @volumes_api.route('/api/volumes', methods=['DELETE'])
 def volumes_remove():
     names = request.get_json().get("names")
-    length = len(names)
     all_names = " ".join(names)
 
     username = request.headers.get('Active-Username')
@@ -97,13 +93,11 @@ def volumes_remove():
 
     command = "{0} volume rm {1}".format(podman_command, all_names)
 
-    error_remove = ''
+    output = subprocess.run("{0}".format(command), shell=True,
+                    capture_output=True, universal_newlines=True)
 
-    if length != 0:
-        error_remove = subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True, universal_newlines=True).stderr
-
-    if len(error_remove) != 0:
+    error_remove = output.stderr
+    if output.returncode != 0:
         return handle_error_volumes(400, error_remove)
 
     volumes, error_volumes = podman_volumes(username)

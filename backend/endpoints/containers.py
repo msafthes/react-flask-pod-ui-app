@@ -31,6 +31,7 @@ def podman_ps(username):
     output_containers = output.stdout
     output_error = output.stderr
 
+    # for WSL2 to ignore database error
     if len(output_containers) == 0 and ("does not exist in database" in output_error):
         output = subprocess.run("{0}".format(command), shell=True,
                        capture_output=True, universal_newlines=True)
@@ -38,7 +39,7 @@ def podman_ps(username):
     output_containers = output.stdout
     output_error = output.stderr
 
-    if len(output_containers) == 0:
+    if output.returncode != 0:
         return [], output_error
 
     podman_containers_array = output_containers.split('\n')
@@ -83,7 +84,6 @@ def get_containers():
 @containers_api.route('/api/containers', methods=['DELETE'])
 def remove_containers():
     container_ids = request.get_json().get("IDs")
-    length = len(container_ids)
     all_ids = " ".join(container_ids)
 
     username = request.headers.get('Active-Username')
@@ -94,13 +94,12 @@ def remove_containers():
 
     command = "{0} rm {1}".format(podman_command, all_ids)
 
-    error_remove = ''
 
-    if length != 0:
-        error_remove = subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True, universal_newlines=True).stderr
+    output = subprocess.run("{0}".format(command), shell=True,
+                    capture_output=True, universal_newlines=True)
 
-    if len(error_remove) != 0:
+    error_remove = output.stderr
+    if output.returncode != 0:
         return handle_error_containers(400, error_remove)
 
     containers, error_ps = podman_ps(username)
@@ -112,7 +111,6 @@ def remove_containers():
 @containers_api.route('/api/containers/run', methods=['POST'])
 def container_run():
     run_command = request.get_json().get("command")
-    length = len(run_command)
 
     username = request.headers.get('Active-Username')
     podman_command = "podman --remote"
@@ -122,13 +120,12 @@ def container_run():
 
     command = "{0} run {1}".format(podman_command, run_command)
 
-    error_run = ''
 
-    if length != 0:
-        error_run = subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True, universal_newlines=True).stderr
+    output = subprocess.run("{0}".format(command), shell=True,
+                    capture_output=True, universal_newlines=True)
 
-    if len(error_run) != 0:
+    error_run = output.stderr
+    if output.returncode != 0:
         return handle_error_containers(400, error_run)
 
     containers, error_ps = podman_ps(username)
@@ -140,7 +137,6 @@ def container_run():
 @containers_api.route('/api/containers/stop', methods=['POST'])
 def containers_stop():
     container_ids = request.get_json().get("IDs")
-    length = len(container_ids)
     all_ids = " ".join(container_ids)
 
     username = request.headers.get('Active-Username')
@@ -151,13 +147,11 @@ def containers_stop():
 
     command = "{0} stop {1}".format(podman_command, all_ids)
 
-    error_stop = ''
+    output = subprocess.run("{0}".format(command), shell=True,
+                    capture_output=True, universal_newlines=True)
 
-    if length != 0:
-        error_stop = subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True, universal_newlines=True).stderr
-
-    if len(error_stop) != 0:
+    error_stop = output.stderr
+    if output.returncode != 0:
         return handle_error_containers(400, error_stop)
     
     containers, error_ps = podman_ps(username)
@@ -169,7 +163,6 @@ def containers_stop():
 @containers_api.route('/api/containers/kill', methods=['POST'])
 def containers_kill():
     container_ids = request.get_json().get("IDs")
-    length = len(container_ids)
     all_ids = " ".join(container_ids)
 
     username = request.headers.get('Active-Username')
@@ -179,13 +172,12 @@ def containers_kill():
 
     command = "{0} kill {1}".format(podman_command, all_ids)
 
-    error_kill = ''
 
-    if length != 0:
-        error_kill = subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True, universal_newlines=True).stderr
+    output = subprocess.run("{0}".format(command), shell=True,
+                    capture_output=True, universal_newlines=True)
 
-    if len(error_kill) != 0:
+    error_kill = output.stderr
+    if output.returncode != 0:
         return handle_error_containers(400, error_kill)
     
     

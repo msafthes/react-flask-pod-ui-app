@@ -29,7 +29,7 @@ def podman_images(username):
 
     error_images = output.stderr
 
-    if len(error_images) != 0:
+    if output.returncode != 0:
         return [], error_images
 
     output_images = output.stdout
@@ -78,7 +78,6 @@ def get_images():
 @images_api.route('/api/images', methods=['DELETE'])
 def remove_images():
     image_ids = request.get_json().get("IDs")
-    length = len(image_ids)
     all_ids = " ".join(image_ids)
 
     username = request.headers.get('Active-Username')
@@ -89,13 +88,11 @@ def remove_images():
 
     command = "{0} rmi {1}".format(podman_command, all_ids)
 
-    error_remove = ''
+    output = subprocess.run("{0}".format(command), shell=True,
+                    capture_output=True, universal_newlines=True)
 
-    if length != 0:
-        error_remove = subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True, universal_newlines=True).stderr
-
-    if len(error_remove) != 0:
+    error_remove = output.stderr
+    if output.returncode != 0:
         return handle_error_images(400, error_remove)
 
     images, error_images = podman_images(username)
@@ -120,10 +117,11 @@ def prune_images():
 
     error_prune = ''
 
-    error_prune = subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True, universal_newlines=True).stderr
+    output = subprocess.run("{0}".format(command), shell=True,
+                       capture_output=True, universal_newlines=True)
 
-    if len(error_prune) != 0:
+    error_prune = output.stderr
+    if output.returncode != 0:
         return handle_error_images(400, error_prune)
 
     images, error_images = podman_images(username)
@@ -137,7 +135,6 @@ def prune_images():
 @images_api.route('/api/images/pull', methods=['POST'])
 def images_pull():
     name = request.get_json().get("name")
-    length = len(name)
 
     username = request.headers.get('Active-Username')
 
@@ -147,13 +144,11 @@ def images_pull():
 
     command = "{0} pull {1}".format(podman_command, name)
 
-    error_pull = ''
+    output = subprocess.run("{0}".format(command), shell=True,
+                    capture_output=True, universal_newlines=True)
 
-    if length != 0:
-        error_pull = subprocess.run("{0}".format(command), shell=True,
-                       capture_output=True, universal_newlines=True).stderr
-
-    if len(error_pull) != 0:
+    error_pull = output.stderr
+    if output.returncode != 0:
         return handle_error_images(400, error_pull)
 
     images, error_images = podman_images(username)
