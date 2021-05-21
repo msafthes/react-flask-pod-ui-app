@@ -64,7 +64,7 @@ const removeConnectionSuccess = (state: IConnectionsState, action: IRemoveConnec
         ...state,
         connections: state.connections.filter(connection => connection.username !== action.connection.username), error: '', loading: false,
         activeConnection: (state.activeConnection.username === action.connection.username && state.activeConnection.ip === action.connection.ip) ?
-            { username: '', ip: '', podmanSocketPath: '' }
+            { username: 'Local', ip: '', podmanSocketPath: '' }
             :
             state.activeConnection
     }
