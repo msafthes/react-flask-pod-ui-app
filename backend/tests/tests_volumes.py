@@ -22,6 +22,7 @@ class VolumesTests(unittest.TestCase):
             "Options": {}
         }]
         Output.stderr = ""
+        Output.returncode = 0
         with patch('subprocess.run', Mock(return_value=Output)),\
             patch('endpoints.volumes.json', MockedJson()):
             volumes, error = podman_volumes("Local")
@@ -40,6 +41,7 @@ class VolumesTests(unittest.TestCase):
         expected = {}
         Output.stdout = ""
         Output.stderr = "ERROR"
+        Output.returncode = 1
         with patch('subprocess.run', Mock(return_value=Output)):
             volumes, error = podman_volumes("Local")
             self.assertEqual(volumes, expected)
@@ -65,6 +67,7 @@ class VolumesTests(unittest.TestCase):
         expected = {"volumes": [{ "Name": "test1", "Driver": "local", "Mountpoint": "/home/msafpc/.local/share/containers/storage/volumes/test1/_data", "CreatedAt": "2021-04-21T19:07:42.648999442+02:00", "Labels": {}, "Scope": "local", "Options": {} }]}
         volumes_output = (expected, "")
         Output.stderr = ""
+        Output.returncode = 0
 
         with patch('endpoints.volumes.podman_volumes', Mock(return_value=volumes_output)), \
             patch('endpoints.volumes.subprocess.run', Mock(return_value=Output)), \
@@ -79,6 +82,7 @@ class VolumesTests(unittest.TestCase):
         expected = "ERROR"
         volumes_output = (expected, "")
         Output.stderr = "ERROR"
+        Output.returncode = 1
         
         with patch('endpoints.volumes.podman_volumes', Mock(return_value=volumes_output)),\
             patch('endpoints.volumes.subprocess.run', Mock(return_value=Output)),\
@@ -93,6 +97,7 @@ class VolumesTests(unittest.TestCase):
         expected = {"volumes": [{ "Name": "test1", "Driver": "local", "Mountpoint": "/home/msafpc/.local/share/containers/storage/volumes/test1/_data", "CreatedAt": "2021-04-21T19:07:42.648999442+02:00", "Labels": {}, "Scope": "local", "Options": {} }]}
         volumes_output = (expected, "")
         Output.stderr = ""
+        Output.returncode = 0
 
         with patch('endpoints.volumes.podman_volumes', Mock(return_value=volumes_output)), \
             patch('endpoints.volumes.subprocess.run', Mock(return_value=Output)), \
@@ -107,6 +112,7 @@ class VolumesTests(unittest.TestCase):
         expected = "ERROR"
         volumes_output = (expected, "")
         Output.stderr = "ERROR"
+        Output.returncode = 1
         
         with patch('endpoints.volumes.podman_volumes', Mock(return_value=volumes_output)),\
             patch('endpoints.volumes.subprocess.run', Mock(return_value=Output)),\

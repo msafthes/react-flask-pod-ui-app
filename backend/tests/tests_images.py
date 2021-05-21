@@ -15,6 +15,7 @@ class ImagesTests(unittest.TestCase):
         # Mocked Output
         Output.stdout = "docker.io/library/nginx#latest#62d49f9bab67#3 weeks ago#137 MB\ndocker.io/library/busybox#latest#491198851f0c#2 months ago#1.45 MB"
         Output.stderr = ""
+        Output.returncode = 0
         # Mock, Call, Assert
         with patch('subprocess.run', Mock(return_value=Output)):
             images, error = podman_images("Local")
@@ -25,6 +26,7 @@ class ImagesTests(unittest.TestCase):
         expected = []
         Output.stdout = ""
         Output.stderr = "ERROR"
+        Output.returncode = 1
         with patch('subprocess.run', Mock(return_value=Output)):
             images, error = podman_images("Local")
             self.assertEqual(images, expected)
@@ -50,6 +52,7 @@ class ImagesTests(unittest.TestCase):
         expected = {"images": []}
         images_output = (expected, "")
         Output.stderr = ""
+        Output.returncode = 0
 
         with patch('endpoints.images.podman_images', Mock(return_value=images_output)), \
             patch('endpoints.images.subprocess.run', Mock(return_value=Output)), \
@@ -64,6 +67,7 @@ class ImagesTests(unittest.TestCase):
         expected = "ERROR"
         images_output = (expected, "")
         Output.stderr = "ERROR"
+        Output.returncode = 1
         
         with patch('endpoints.images.podman_images', Mock(return_value=images_output)),\
             patch('endpoints.images.subprocess.run', Mock(return_value=Output)),\
@@ -78,6 +82,7 @@ class ImagesTests(unittest.TestCase):
         expected = {"images": []}
         images_output = (expected, "")
         Output.stderr = ""
+        Output.returncode = 0
         
         with patch('endpoints.images.podman_images', Mock(return_value=images_output)), \
             patch('endpoints.images.subprocess.run', Mock(return_value=Output)), \
@@ -92,6 +97,7 @@ class ImagesTests(unittest.TestCase):
         expected = "ERROR"
         images_output = (expected, "")
         Output.stderr = "ERROR"
+        Output.returncode = 1
         
         with patch('endpoints.images.podman_images', Mock(return_value=images_output)),\
             patch('endpoints.images.subprocess.run', Mock(return_value=Output)),\
@@ -106,6 +112,7 @@ class ImagesTests(unittest.TestCase):
         expected = {"images": []}
         images_output = (expected, "")
         Output.stderr = ""
+        Output.returncode = 0
         
         with patch('endpoints.images.podman_images', Mock(return_value=images_output)), \
             patch('endpoints.images.subprocess.run', Mock(return_value=Output)), \
@@ -120,6 +127,7 @@ class ImagesTests(unittest.TestCase):
         expected = "ERROR"
         images_output = (expected, "")
         Output.stderr = "ERROR"
+        Output.returncode = 1
         
         with patch('endpoints.images.podman_images', Mock(return_value=images_output)),\
             patch('endpoints.images.subprocess.run', Mock(return_value=Output)),\

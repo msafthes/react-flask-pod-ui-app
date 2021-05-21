@@ -11,6 +11,7 @@ class ConnectionsTests(unittest.TestCase):
     def test_connections_key_get_success(self):
         Output.stdout = "123456"
         Output.stderr = ""
+        Output.returncode = 0
         expected = {"sshKey": "123456"}
         with patch('endpoints.connections.subprocess.run', Mock(return_value=Output)):
             response = app.test_client(self).get("/api/connections/key")
@@ -22,6 +23,7 @@ class ConnectionsTests(unittest.TestCase):
     def test_connections_key_get_error(self):
         Output.stdout = ""
         Output.stderr = "ERROR"
+        Output.returncode = 1
         expected = "ERROR"
         with patch('endpoints.connections.subprocess.run', Mock(return_value=Output)):
             response = app.test_client(self).get("/api/connections/key")
@@ -31,6 +33,7 @@ class ConnectionsTests(unittest.TestCase):
     def test_connections_add_success(self):
         expected = "success"
         Output.stderr = ""
+        Output.returncode = 0
 
         with patch('endpoints.connections.subprocess.run', Mock(return_value=Output)), \
             patch('endpoints.connections.request', MockedRequestConnections()),\
@@ -44,6 +47,7 @@ class ConnectionsTests(unittest.TestCase):
     def test_cconnections_add_error(self):
         expected = "ERROR"
         Output.stderr = "ERROR"
+        Output.returncode = 1
         
         with patch('endpoints.connections.subprocess.run', Mock(return_value=Output)),\
             patch('endpoints.connections.request', MockedRequestConnections()),\
@@ -57,6 +61,7 @@ class ConnectionsTests(unittest.TestCase):
     def test_connections_remove_success(self):
         expected = "success"
         Output.stderr = ""
+        Output.returncode = 0
 
         with patch('endpoints.connections.subprocess.run', Mock(return_value=Output)), \
             patch('endpoints.connections.request', MockedRequestConnections()),\
@@ -70,6 +75,7 @@ class ConnectionsTests(unittest.TestCase):
     def test_cconnections_remove_error(self):
         expected = "ERROR"
         Output.stderr = "ERROR"
+        Output.returncode = 1
         
         with patch('endpoints.connections.subprocess.run', Mock(return_value=Output)),\
             patch('endpoints.connections.request', MockedRequestConnections()),\
@@ -83,6 +89,7 @@ class ConnectionsTests(unittest.TestCase):
     def test_connections_activate_success(self):
         expected = "success"
         Output.stderr = ""
+        Output.returncode = 0
 
         with patch('endpoints.connections.subprocess.run', Mock(return_value=Output)), \
             patch('endpoints.connections.request', MockedRequestConnections()),\
@@ -96,6 +103,7 @@ class ConnectionsTests(unittest.TestCase):
     def test_cconnections_activate_error(self):
         expected = "ERROR"
         Output.stderr = "ERROR"
+        Output.returncode = 1
         
         with patch('endpoints.connections.subprocess.run', Mock(return_value=Output)),\
             patch('endpoints.connections.request', MockedRequestConnections()),\

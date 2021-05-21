@@ -5,6 +5,7 @@
 class Output:
             stdout = ""
             stderr = ""
+            returncode = 0
 
 class MockedGet:
     def get(self, something):

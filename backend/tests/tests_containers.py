@@ -13,6 +13,7 @@ class ContainersTests(unittest.TestCase):
         expected = {"containers": [{'containerId': "54a48d41f6d9", 'image': "registry.fedoraproject.org/f29/httpd:latest", 'command': "/usr/bin/run-http...", 'created': "2 minutes ago", 'ports': "0.0.0.0:8080->8080/tcp", 'names': "laughing_bassi", 'status': "Running"}]}
         Output.stdout = "54a48d41f6d9#registry.fedoraproject.org/f29/httpd:latest#/usr/bin/run-http...#2 minutes ago#0.0.0.0:8080->8080/tcp#laughing_bassi#Running\n"
         Output.stderr = ""
+        Output.returncode = 0
         with patch('subprocess.run', Mock(return_value=Output)):
             containers, error = podman_ps("Local")
             self.assertEqual(containers, expected)
@@ -21,6 +22,7 @@ class ContainersTests(unittest.TestCase):
         expected = []
         Output.stdout = ""
         Output.stderr = "ERROR"
+        Output.returncode = 1
         with patch('subprocess.run', Mock(return_value=Output)):
             containers, error = podman_ps("Local")
             self.assertEqual(containers, expected)
@@ -46,6 +48,7 @@ class ContainersTests(unittest.TestCase):
         expected = {"containers": []}
         containers_output = (expected, "")
         Output.stderr = ""
+        Output.returncode = 0
 
         with patch('endpoints.containers.podman_ps', Mock(return_value=containers_output)), \
             patch('endpoints.containers.subprocess.run', Mock(return_value=Output)), \
@@ -60,6 +63,7 @@ class ContainersTests(unittest.TestCase):
         expected = "ERROR"
         containers_output = (expected, "")
         Output.stderr = "ERROR"
+        Output.returncode = 1
         
         with patch('endpoints.containers.podman_ps', Mock(return_value=containers_output)),\
             patch('endpoints.containers.subprocess.run', Mock(return_value=Output)),\
@@ -74,6 +78,7 @@ class ContainersTests(unittest.TestCase):
         expected = {"containers": []}
         containers_output = (expected, "")
         Output.stderr = ""
+        Output.returncode = 0
 
         with patch('endpoints.containers.podman_ps', Mock(return_value=containers_output)), \
             patch('endpoints.containers.subprocess.run', Mock(return_value=Output)), \
@@ -88,6 +93,7 @@ class ContainersTests(unittest.TestCase):
         expected = "ERROR"
         containers_output = (expected, "")
         Output.stderr = "ERROR"
+        Output.returncode = 1
         
         with patch('endpoints.containers.podman_ps', Mock(return_value=containers_output)),\
             patch('endpoints.containers.subprocess.run', Mock(return_value=Output)),\
@@ -102,6 +108,7 @@ class ContainersTests(unittest.TestCase):
         expected = {"containers": []}
         containers_output = (expected, "")
         Output.stderr = ""
+        Output.returncode = 0
 
         with patch('endpoints.containers.podman_ps', Mock(return_value=containers_output)), \
             patch('endpoints.containers.subprocess.run', Mock(return_value=Output)), \
@@ -116,6 +123,7 @@ class ContainersTests(unittest.TestCase):
         expected = "ERROR"
         containers_output = (expected, "")
         Output.stderr = "ERROR"
+        Output.returncode = 1
         
         with patch('endpoints.containers.podman_ps', Mock(return_value=containers_output)),\
             patch('endpoints.containers.subprocess.run', Mock(return_value=Output)),\
@@ -130,6 +138,7 @@ class ContainersTests(unittest.TestCase):
         expected = {"containers": []}
         containers_output = (expected, "")
         Output.stderr = ""
+        Output.returncode = 0
 
         with patch('endpoints.containers.podman_ps', Mock(return_value=containers_output)), \
             patch('endpoints.containers.subprocess.run', Mock(return_value=Output)), \
@@ -144,6 +153,7 @@ class ContainersTests(unittest.TestCase):
         expected = "ERROR"
         containers_output = (expected, "")
         Output.stderr = "ERROR"
+        Output.returncode = 1
         
         with patch('endpoints.containers.podman_ps', Mock(return_value=containers_output)),\
             patch('endpoints.containers.subprocess.run', Mock(return_value=Output)),\
