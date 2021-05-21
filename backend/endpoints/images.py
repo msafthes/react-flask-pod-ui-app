@@ -27,9 +27,8 @@ def podman_images(username):
     output = subprocess.run("{0}".format(command), shell=True,
                        capture_output=True, universal_newlines=True)
 
-    error_images = output.stderr
-
     if output.returncode != 0:
+        error_images = output.stderr
         return [], error_images
 
     output_images = output.stdout
@@ -91,8 +90,8 @@ def remove_images():
     output = subprocess.run("{0}".format(command), shell=True,
                     capture_output=True, universal_newlines=True)
 
-    error_remove = output.stderr
     if output.returncode != 0:
+        error_remove = output.stderr
         return handle_error_images(400, error_remove)
 
     images, error_images = podman_images(username)
@@ -115,13 +114,11 @@ def prune_images():
 
     command = "{0} image prune -a -f".format(podman_command)
 
-    error_prune = ''
-
     output = subprocess.run("{0}".format(command), shell=True,
                        capture_output=True, universal_newlines=True)
 
-    error_prune = output.stderr
     if output.returncode != 0:
+        error_prune = output.stderr
         return handle_error_images(400, error_prune)
 
     images, error_images = podman_images(username)
@@ -147,8 +144,8 @@ def images_pull():
     output = subprocess.run("{0}".format(command), shell=True,
                     capture_output=True, universal_newlines=True)
 
-    error_pull = output.stderr
     if output.returncode != 0:
+        error_pull = output.stderr
         return handle_error_images(400, error_pull)
 
     images, error_images = podman_images(username)

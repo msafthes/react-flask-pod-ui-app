@@ -23,10 +23,9 @@ def podman_volumes(username):
 
     output = subprocess.run("{0}".format(
         command), shell=True, capture_output=True, universal_newlines=True)
-    
-    error_volumes = output.stderr
 
     if output.returncode != 0:
+        error_volumes = output.stderr
         return {}, error_volumes
 
     volumes = output.stdout
@@ -68,8 +67,8 @@ def volumes_create():
     output = subprocess.run("{0}".format(command), shell=True,
                     capture_output=True, universal_newlines=True)
 
-    error_create = output.stderr
     if output.returncode != 0:
+        error_create = output.stderr
         return handle_error_volumes(400, error_create)
 
     volumes, error_volumes = podman_volumes(username)
@@ -96,8 +95,8 @@ def volumes_remove():
     output = subprocess.run("{0}".format(command), shell=True,
                     capture_output=True, universal_newlines=True)
 
-    error_remove = output.stderr
     if output.returncode != 0:
+        error_remove = output.stderr
         return handle_error_volumes(400, error_remove)
 
     volumes, error_volumes = podman_volumes(username)

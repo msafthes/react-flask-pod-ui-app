@@ -37,9 +37,9 @@ def podman_ps(username):
                        capture_output=True, universal_newlines=True)
 
     output_containers = output.stdout
-    output_error = output.stderr
 
     if output.returncode != 0:
+        output_error = output.stderr
         return [], output_error
 
     podman_containers_array = output_containers.split('\n')
@@ -98,8 +98,8 @@ def remove_containers():
     output = subprocess.run("{0}".format(command), shell=True,
                     capture_output=True, universal_newlines=True)
 
-    error_remove = output.stderr
     if output.returncode != 0:
+        error_remove = output.stderr
         return handle_error_containers(400, error_remove)
 
     containers, error_ps = podman_ps(username)
@@ -124,8 +124,8 @@ def container_run():
     output = subprocess.run("{0}".format(command), shell=True,
                     capture_output=True, universal_newlines=True)
 
-    error_run = output.stderr
     if output.returncode != 0:
+        error_run = output.stderr
         return handle_error_containers(400, error_run)
 
     containers, error_ps = podman_ps(username)
@@ -150,8 +150,8 @@ def containers_stop():
     output = subprocess.run("{0}".format(command), shell=True,
                     capture_output=True, universal_newlines=True)
 
-    error_stop = output.stderr
     if output.returncode != 0:
+        error_stop = output.stderr
         return handle_error_containers(400, error_stop)
     
     containers, error_ps = podman_ps(username)
@@ -176,8 +176,8 @@ def containers_kill():
     output = subprocess.run("{0}".format(command), shell=True,
                     capture_output=True, universal_newlines=True)
 
-    error_kill = output.stderr
     if output.returncode != 0:
+        error_kill = output.stderr
         return handle_error_containers(400, error_kill)
     
     

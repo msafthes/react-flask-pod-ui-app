@@ -31,10 +31,9 @@ def connections_key_get():
                        capture_output=True, universal_newlines=True)
 
     key = output.stdout
-    error_connections = ''
-    error_connections = output.stderr
-
+    
     if output.returncode != 0:
+        error_connections = output.stderr
         return handle_error_connections(400, error_connections)
 
     result = {"sshKey": key}
@@ -57,8 +56,8 @@ def connections_add():
     output = subprocess.run("{0}".format(command), shell=True,
                        capture_output=True, universal_newlines=True)
 
-    error_connections = output.stderr
     if output.returncode != 0:
+        error_connections = output.stderr
         return handle_error_connections(400, error_connections)
     
     return "success"
@@ -75,8 +74,8 @@ def connections_remove():
     output = subprocess.run("{0}".format(command), shell=True,
                        capture_output=True, universal_newlines=True)
 
-    error_connections = output.stderr
     if output.returncode != 0:
+        error_connections = output.stderr
         return handle_error_connections(400, error_connections)
     
     return "success"
@@ -92,8 +91,8 @@ def connections_activate():
     output = subprocess.run("{0}".format(command), shell=True,
                        capture_output=True, universal_newlines=True)
 
-    error_connections = output.stderr
     if output.returncode != 0:
+        error_connections = output.stderr
         return handle_error_connections(400, error_connections)
     
     return "success"
